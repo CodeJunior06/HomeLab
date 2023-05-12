@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "180166012412",
+    "project_id": "homelab-33beb",
+    "storage_bucket": "homelab-33beb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180166012412:android:0e869a2478e17e29709679",
+        "android_client_info": {
+          "package_name": "com.uts.homelab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180166012412-595mjnspqu0h8dqecqa99a2jdspe0nk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uts.homelab",
+            "certificate_hash": "4ba20a7461f012165bb5bb531febca1df30a441e"
+          }
+        },
+        {
+          "client_id": "180166012412-q7svmrn3ctmulhutogp07062vrlhlcu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_oQkIN3WQSpW9cMcL8ihwG2tZhFJ-H6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180166012412-q7svmrn3ctmulhutogp07062vrlhlcu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -12,16 +12,21 @@
         android:theme="@style/Theme.HomeLab"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.HomeLab">
+            android:name=".view.SplashAnimated"
+            android:theme="@style/Theme.HomeLab"
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.HomeLab"/>
     </application>
 
 </manifest>
