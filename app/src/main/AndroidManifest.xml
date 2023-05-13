@@ -26,7 +26,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.HomeLab"/>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
