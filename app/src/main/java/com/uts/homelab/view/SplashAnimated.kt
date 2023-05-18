@@ -6,8 +6,9 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.uts.homelab.databinding.ActivitySplashAnimatedBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SplashAnimated : AppCompatActivity() {
     private lateinit var bindingSplashAnimatedBinding: ActivitySplashAnimatedBinding
     override fun onCreate(savedInstanceState: Bundle?) {

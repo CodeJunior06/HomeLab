@@ -49,4 +49,6 @@
         <item>DNI</item>
         <item>TI</item>
     </string-array>
+
+    <string name="emptyValue" translatable="false">Tienes Campos Vacios</string>
 </resources>

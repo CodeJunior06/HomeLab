@@ -9,15 +9,11 @@ import androidx.navigation.fragment.findNavController
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentLoginBinding
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
