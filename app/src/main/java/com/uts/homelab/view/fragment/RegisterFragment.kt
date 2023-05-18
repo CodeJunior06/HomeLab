@@ -1,4 +1,4 @@
-package com.uts.homelab
+package com.uts.homelab.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.uts.homelab
+package com.uts.homelab.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

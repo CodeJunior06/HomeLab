@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.uts.homelab.MainActivity
 import com.uts.homelab.databinding.ActivitySplashAnimatedBinding
 
 

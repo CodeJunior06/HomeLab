@@ -1,35 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterFragment">
+    android:background="@color/white"
+    tools:context=".view.fragment.RegisterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        >
 
-        <Button
-            android:id="@+id/button_second"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/previous"
-            app:layout_constraintBottom_toTopOf="@id/textview_second"
+            android:gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textview_second"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="TODO"
+                android:src="@drawable/home_lab_logo" />
+
+
+        </LinearLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/lorem_ipsum"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_second" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="40dp"
+                android:text="Registro"
+                android:textAlignment="center"
+                android:textColor="@color/blue_marine"
+
+                android:textSize="35sp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="110dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+               >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:nextFocusForward="@id/sp_typeDocument"
+                        android:layout_width="match_parent"
+                        android:id="@+id/et_name"
+                        android:layout_height="57dp"
+                        android:background="@drawable/edit_text_round"
+                        android:drawableStart="@drawable/ic_person"
+                        android:drawablePadding="15dp"
+                        android:hint="Nombre completo"
+                        android:inputType="text"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:nextFocusDown="@id/et_email"
+                            android:nextFocusLeft="@id/et_numberDocument"
+                            android:id="@+id/sp_typeDocument"
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="57dp"
+                            android:layout_weight="6.5"
+                            android:background="@drawable/edit_text_round"
+                            android:drawablePadding="15dp"
+                            android:paddingHorizontal="15dp"
+                            android:textColorHint="@color/black" />
+
+                        <EditText
+                            android:nextFocusDown="@id/et_email"
+                            android:id="@+id/et_numberDocument"
+                            android:layout_width="match_parent"
+                            android:layout_height="57dp"
+                            android:inputType="number"
+                            android:layout_weight="3.5"
+                            android:maxLines="1"
+                            android:background="@drawable/edit_text_round"
+                            android:hint="Numero documento"
+                            android:textAlignment="center"
+                            android:paddingHorizontal="15dp"
+                            android:textColorHint="@color/black" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:inputType="textEmailAddress"
+                        android:nextFocusUp="@id/et_numberDocument"
+                        android:nextFocusForward="@id/et_pass"
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:background="@drawable/edit_text_round"
+                        android:drawableStart="@drawable/ic_email"
+                        android:drawablePadding="15dp"
+                        android:hint="Correo electronico"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/et_pass"
+                        android:nextFocusForward="@id/et_passwordRetry"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:background="@drawable/edit_text_round"
+                        android:drawableStart="@drawable/ic_lock"
+                        android:drawablePadding="15dp"
+                        android:inputType="textPassword"
+                        android:hint="Contraseña"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/et_passwordRetry"
+                        android:imeOptions="actionDone"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:background="@drawable/edit_text_round"
+                        android:drawableStart="@drawable/ic_lock"
+                        android:drawablePadding="15dp"
+                        android:inputType="textPassword"
+                        android:hint="Confirmar contraseña"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/btnRegresar"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Regresar "
+                        android:textColor="@color/blue_marine"
+                        android:textSize="17dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_weight="5"
+                        android:backgroundTint="@color/blue_marine"
+                        android:text="Registro"
+                        android:textSize="17sp"
+                        app:cornerRadius="22dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="5"
+                android:layout_marginStart="-20dp"
+                android:layout_marginBottom="-20dp">
+
+                <LinearLayout
+                    android:background="@drawable/oval"
+                    android:layout_width="120dp"
+                    android:layout_height="100dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="-20dp"
+                android:layout_marginBottom="-20dp"
+                android:layout_weight="5">
+
+                <LinearLayout
+                    android:layout_width="90dp"
+                    android:background="@drawable/oval"
+                    android:layout_height="70dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        -->
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>
