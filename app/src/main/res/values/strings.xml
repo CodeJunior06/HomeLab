@@ -50,5 +50,16 @@
         <item>TI</item>
     </string-array>
 
-    <string name="emptyValue" translatable="false">Tienes Campos Vacios</string>
+    <string name="emptyValue" >Tienes Campos Vacios</string>
+    <string name="password_not_equals" >La contraseñas no coinciden"</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyByG20TFnHcejYKQkJ0Ykpz-bTs4xbVVr4</string>
+
+    <string name="wait">Esperando Respuesta...</string>
+
+    <string name="register_auth">Autenticando Usuario...</string>
+    <string name="register_user_firestore" >Registrando Usuario en el sistema...</string>
+
+    <string name="is_user_add">El usuario fue registrado con satisfaccion</string>
+
 </resources>

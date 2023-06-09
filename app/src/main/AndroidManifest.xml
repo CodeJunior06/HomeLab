@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:allowBackup="true"
         android:name=".App"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -14,8 +14,8 @@
         tools:targetApi="31">
         <activity
             android:name=".view.SplashAnimated"
-            android:theme="@style/Theme.HomeLab"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.HomeLab">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,24 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="false"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+
+
+        <meta-data
+            android:name="com.here.android.maps.appid"
+            android:value="eGkVdzcTK0y9SrVlnFCw" />
+        <meta-data
+            android:name="com.here.android.maps.apptoken"
+            android:value="WTzlARe9LPSHMC_5mWo2Ag" />
+        <meta-data
+            android:name="com.here.sdk.access_key_secret"
+            android:value="3Uj07QiCGpFoIdwJGXAL-KjsCaPsY1q7UfFiFRFQ54s8iSKzkv46US601lgIwKLem3LwiHv4lCj8wSr0hyU4Yg" />
+        <meta-data
+            android:name="com.here.sdk.access_key_id"
+            android:value="lRtmHSPsDp5NCpNOhuYWVg" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>
