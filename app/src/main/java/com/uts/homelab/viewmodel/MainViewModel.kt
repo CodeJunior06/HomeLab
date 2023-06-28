@@ -33,24 +33,24 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
                 isErrorToast.value = -2
             } else {
                 isProgress.value = Pair(true, 1)
-                viewModelScope.launch{
+                viewModelScope.launch {
                     when (val response = mainModel.setEmailAndPasswordByCreate(
                         valueRegister[3]!!,
                         valueRegister[4]!!
                     )) {
                         is ManagerError.Error -> {
-                            isProgress.postValue( Pair(false, 0))
+                            isProgress.postValue(Pair(false, 0))
                             informationFragment.postValue(response.error)
                         }
                         is ManagerError.Success -> {
-                            isProgress.postValue( Pair(true, 2))
+                            isProgress.postValue(Pair(true, 2))
                             setRegisterUser(
                                 valueRegister.requireNoNulls(),
                                 response.modelSuccess as FirebaseUser
                             )
                         }
                         ManagerError.IsNotInternet -> {
-                            isProgress.postValue( Pair(false, 0))
+                            isProgress.postValue(Pair(false, 0))
 
                         }
                     }
@@ -68,7 +68,50 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
                 isProgress.postValue(Pair(false, 1))
             }
             is ManagerError.Error -> {
-                isProgress.postValue( Pair(false, 0))
+                isProgress.postValue(Pair(false, 0))
+                informationFragment.postValue(response.error)
+            }
+            else -> {
+                isProgress.postValue(Pair(false, 0))
+            }
+        }
+    }
+
+    fun setLoginUser(email: String, password: String) {
+        if (email.isEmpty()) {
+            isErrorToast.value = -1
+            return
+        }
+        if (password.isEmpty()) {
+            isErrorToast.value = -2
+            return
+        }
+        isProgress.value = Pair(true, 1)
+        viewModelScope.launch {
+
+            when (val response = mainModel.getUserAuth(email, password)) {
+                is ManagerError.Success -> {
+                    isProgress.value = Pair(true, 2)
+                    isSetPetitionParallel(response.modelSuccess as String)
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(response.error)
+                }
+                else -> {
+                    isProgress.postValue(Pair(false, 0))
+                }
+            }
+        }
+    }
+
+    private suspend fun isSetPetitionParallel(email:String) {
+        when (val response = mainModel.setSession(email).getOrThrow() ){
+            is ManagerError.Success -> {
+                isProgress.postValue(Pair(false, response.modelSuccess as Int))
+            }
+            is ManagerError.Error -> {
+                isProgress.postValue(Pair(false, 0))
                 informationFragment.postValue(response.error)
             }
             else -> {

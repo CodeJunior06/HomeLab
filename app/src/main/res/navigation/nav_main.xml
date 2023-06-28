@@ -23,5 +23,17 @@
             app:popUpToInclusive="true"
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_nav_user"
+            app:destination="@id/nav_user" />
+        <action
+            android:id="@+id/action_registerFragment_to_nav_nurse"
+            app:destination="@id/nav_nurse" />
+        <action
+            android:id="@+id/action_registerFragment_to_nav_admin"
+            app:destination="@id/nav_admin" />
     </fragment>
+    <include app:graph="@navigation/nav_user" />
+    <include app:graph="@navigation/nav_nurse" />
+    <include app:graph="@navigation/nav_admin" />
 </navigation>
