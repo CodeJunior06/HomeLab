@@ -2,11 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_user"
-    app:startDestination="@id/userFragment">
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
     <fragment
-        android:id="@+id/userFragment"
-        android:name="com.uts.homelab.view.fragment.UserFragment"
-        android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        android:id="@+id/navigation_home"
+        android:name="com.uts.homelab.view.user.option.OptionUserFragment"
+        android:label="@string/title_option"
+        tools:layout="@layout/fragment_option" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.uts.homelab.view.user.history.HistoryUserFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.uts.homelab.view.user.profile.ProfileUserFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
