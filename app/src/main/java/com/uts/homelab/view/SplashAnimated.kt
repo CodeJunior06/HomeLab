@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.uts.homelab.databinding.ActivitySplashAnimatedBinding
+import com.uts.homelab.utils.extension.intentToAdminHome
+import com.uts.homelab.utils.extension.intentToNurseHome
 import com.uts.homelab.utils.extension.intentToUserHome
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +34,15 @@ class SplashAnimated : AppCompatActivity() {
                 val currentUser = auth.currentUser
 
                 if (currentUser != null) {
-                    intentToUserHome()
+                    if(!auth.currentUser!!.email!!.contains("@homelab")){
+                        intentToUserHome()
+                    }else if(auth.currentUser!!.email!!.contains("@homelab")
+                        && auth.currentUser!!.email!!.contains("admin")){
+                        intentToAdminHome()
+                    }else{
+                        intentToNurseHome()
+                    }
+
                 }else{
                     startActivity(Intent(this@SplashAnimated, MainActivity::class.java))
                 }

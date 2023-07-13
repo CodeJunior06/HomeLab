@@ -23,12 +23,5 @@
             app:popUpToInclusive="true"
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
-
-        <action
-            android:id="@+id/action_registerFragment_to_nav_nurse"
-            app:destination="@id/nav_nurse" />
-        <action
-            android:id="@+id/action_registerFragment_to_nav_admin"
-            app:destination="@id/nav_admin" />
     </fragment>
 </navigation>

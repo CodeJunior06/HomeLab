@@ -11,11 +11,15 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentLoginBinding
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
+import com.uts.homelab.utils.extension.intentToAdminHome
+import com.uts.homelab.utils.extension.intentToNurseHome
 import com.uts.homelab.utils.extension.intentToUserHome
 import com.uts.homelab.utils.extension.toastMessage
 import com.uts.homelab.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
@@ -76,10 +80,10 @@ class LoginFragment : Fragment() {
                             intentToUserHome()
                         }
                         2 -> {
-                            findNavController().navigate(R.id.action_registerFragment_to_nav_admin)
+                            intentToNurseHome()
                         }
                         3 -> {
-                            findNavController().navigate(R.id.action_registerFragment_to_nav_nurse)
+                            intentToAdminHome()
                         }
                     }
                 }
@@ -113,10 +117,11 @@ class LoginFragment : Fragment() {
             }, 3500)
             informationDialog.show(requireActivity().supportFragmentManager, "InformationFragment")
         }
-
-        mainViewModel.intentToLogin.observe(viewLifecycleOwner) {
+        
+        //BUG - FIX
+       /* mainViewModel.intentToLogin.observe(viewLifecycleOwner) {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-        }
+        }*/
 
     }
 

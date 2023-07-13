@@ -6,14 +6,14 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.uts.homelab.network.dataclass.UserRegister
 
 interface IFirebaseRepository {
-    suspend fun isSetAuthentication(email:String,password:String): AuthResult
-    suspend fun setRegisterToFirestore(model:UserRegister) : Task<Void>
+    suspend fun isSetAuthentication(email: String, password: String): AuthResult
+    suspend fun setRegisterToFirestore(model: UserRegister): Task<Void>
 
     fun closeSession()
-     suspend fun isUserAuth(email: String, password: String): AuthResult
-    suspend fun isUserAdminFirestore(email: Any) : QuerySnapshot
-    suspend fun isUserNurseFirestore(email: Any) :QuerySnapshot
-    suspend fun isUserPatientFirestore(email: Any) :QuerySnapshot
+    suspend fun isUserAuth(email: String, password: String): AuthResult
+    suspend fun isUserAdminFirestore(email: Any): QuerySnapshot
+    suspend fun isUserNurseFirestore(email: Any): QuerySnapshot
+    suspend fun isUserPatientFirestore(email: Any): QuerySnapshot
 
 
 }

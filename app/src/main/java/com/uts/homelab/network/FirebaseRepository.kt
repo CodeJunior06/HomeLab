@@ -37,21 +37,21 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun isUserAdminFirestore(email: Any) :QuerySnapshot{
+    override suspend fun isUserAdminFirestore(email: Any): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Admins").whereEqualTo("email",email).get().await()
+            firestore.collection("Admins").whereEqualTo("email", email).get().await()
         }
     }
 
-    override suspend fun isUserNurseFirestore(email: Any) :QuerySnapshot {
+    override suspend fun isUserNurseFirestore(email: Any): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Nurses").whereEqualTo("email",email).get().await()
+            firestore.collection("Nurses").whereEqualTo("email", email).get().await()
         }
     }
 
     override suspend fun isUserPatientFirestore(email: Any): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Users").whereEqualTo("email",email).get().await()
+            firestore.collection("Users").whereEqualTo("email", email).get().await()
         }
     }
 

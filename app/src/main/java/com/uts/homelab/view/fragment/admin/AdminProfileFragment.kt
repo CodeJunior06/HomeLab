@@ -1,4 +1,4 @@
-package com.uts.homelab.view.fragment
+package com.uts.homelab.view.fragment.admin
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.uts.homelab.R
 
 
-class AdminFragment : Fragment() {
+class AdminProfileFragment : Fragment() {
 
 
     override fun onCreateView(
@@ -16,7 +16,7 @@ class AdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin, container, false)
+        return inflater.inflate(R.layout.fragment_admin_profile, container, false)
     }
 
 }
