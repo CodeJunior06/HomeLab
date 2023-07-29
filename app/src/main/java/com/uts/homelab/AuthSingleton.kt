@@ -1,9 +1,19 @@
 package com.uts.homelab
 
-import javax.inject.Singleton
+import com.google.firebase.auth.FirebaseUser
 
-
-@Singleton
 class AuthSingleton {
     var uid:String = ""
+    var model:FirebaseUser? = null
+    var token:String? = null
+    companion object {
+
+        @Volatile
+        private var instance: AuthSingleton? = null
+        fun getInstance(): AuthSingleton {
+            return instance ?: synchronized(this) {
+                instance ?: AuthSingleton().also { instance = it }
+            }
+        }
+    }
 }

@@ -53,6 +53,8 @@ class LoginFragment : Fragment() {
             )
         }
 
+        //mainViewModel.isSetNewInstall()
+
         observers()
     }
 

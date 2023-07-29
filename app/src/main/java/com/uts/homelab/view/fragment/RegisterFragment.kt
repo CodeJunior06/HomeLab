@@ -100,17 +100,17 @@ class RegisterFragment : Fragment() {
         }
 
         mainViewModel.informationFragment.observe(viewLifecycleOwner) {
-            traslate(it)
+
             informationDialog = when (it) {
-                getString(R.string.register_auth) -> {
+                getString(R.string.is_user_add) -> {
                     InformationFragment.getInstance(
-                        "EXITO ...",
+                        "EXITO",
                         it
                     )
                 }
                 else -> {
                     InformationFragment.getInstance(
-                        "ATENCION ...",
+                        "ATENCION",
                         it
                     )
                 }
@@ -126,7 +126,7 @@ class RegisterFragment : Fragment() {
                         mainViewModel.intentToLogin.postValue(Unit)
                     }
                 }
-            }, 3500)
+            }, 3000)
             informationDialog.show(requireActivity().supportFragmentManager, "InformationFragment")
         }
 
@@ -144,10 +144,6 @@ class RegisterFragment : Fragment() {
             2 -> getString(R.string.register_user_firestore)
             else -> ""
         }
-    }
-
-    fun traslate(it: String) {
-
     }
 
     private fun spinner() {

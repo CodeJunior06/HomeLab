@@ -1,7 +1,6 @@
 package com.uts.homelab.network.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Query
 import com.uts.homelab.network.db.entity.UserSession
 

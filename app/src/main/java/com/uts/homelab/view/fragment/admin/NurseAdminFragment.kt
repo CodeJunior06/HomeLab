@@ -25,7 +25,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
 
 
     private lateinit var binding: FragmentNurseAdminBinding
-    private lateinit var googleMap:GoogleMap
+    private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
@@ -33,7 +33,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNurseAdminBinding.inflate(inflater,container,false)
+        binding = FragmentNurseAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,13 +51,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return
         }
 
@@ -65,7 +59,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap) {
-       googleMap  = map
+        googleMap = map
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -78,8 +72,9 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
 
             return
         }
-      //  map.isMyLocationEnabled = true
-        fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()
+        map.isMyLocationEnabled = true
+        fusedLocationClient.lastLocation.addOnSuccessListener(
+            requireActivity()
         ) { location ->
             Log.e("SANTI", "location succes" + location.longitude + location.latitude)
             val l = LatLng(location.latitude, location.longitude)
@@ -88,7 +83,8 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
                     .position(l)
                     .title("Mi Ubicación")
                     .draggable(false)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.nurse_women_location)))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.nurse_women_location))
+            )
             googleMap.uiSettings.isMapToolbarEnabled = false
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l, 15.0f))

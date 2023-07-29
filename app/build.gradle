@@ -100,6 +100,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    //DataStore (sharedPreferences)
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }
 
 kapt {

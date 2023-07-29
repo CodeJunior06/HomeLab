@@ -3,17 +3,21 @@ package com.uts.homelab.network
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.QuerySnapshot
+import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
 
 interface IFirebaseRepository {
     suspend fun isSetAuthentication(email: String, password: String): AuthResult
-    suspend fun setRegisterToFirestore(model: UserRegister): Task<Void>
+    suspend fun isSetAuthenticationToken(token: String): AuthResult
 
-    fun closeSession()
-    suspend fun isUserAuth(email: String, password: String): AuthResult
+    suspend fun isAuth(email: String, password: String): AuthResult
+    suspend fun setRegisterUserToFirestore(model: UserRegister): Task<Void>
+    suspend fun setRegisterNurseToFirestore(model: NurseRegister): Task<Void>
+    suspend fun getToken(): String
+
     suspend fun isUserAdminFirestore(email: Any): QuerySnapshot
     suspend fun isUserNurseFirestore(email: Any): QuerySnapshot
     suspend fun isUserPatientFirestore(email: Any): QuerySnapshot
 
-
+    fun closeSession()
 }
