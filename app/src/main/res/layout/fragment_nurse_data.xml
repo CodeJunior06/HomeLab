@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.nurse.NurseDataFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E n f e r m e r o"
+                android:textAllCaps="true"
+                android:textColor="@color/blue_marine"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/nameNurse"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="NAME NURSE"
+                android:textColor="@color/black"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <!-- TODO: Update blank fragment layout -->
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:text="¡Complete los datos por favor!"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <EditText
+                        android:id="@+id/et_edad"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:layout_weight="6.5"
+                        android:background="@drawable/edit_text_round"
+                        android:hint="Edad"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:nextFocusDown="@id/et_email"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+                    <EditText
+                        android:id="@+id/et_numberDocument"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:layout_weight="3.5"
+                        android:background="@drawable/edit_text_round"
+                        android:hint="Experiencia (meses)"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:nextFocusDown="@id/et_email"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="15dp"
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="57dp"
+                    android:background="@drawable/edit_text_round"
+                    android:drawableStart="@drawable/ic_person"
+                    android:drawablePadding="15dp"
+                    android:hint="Direccion"
+                    android:inputType="text"
+                    android:nextFocusForward="@id/sp_typeDocument"
+                    android:paddingHorizontal="15dp"
+                    android:textColorHint="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/et_idVehicule"
+                    android:layout_width="match_parent"
+                    android:layout_height="57dp"
+                    android:background="@drawable/edit_text_round"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="15dp"
+                    android:hint="Direccion"
+                    android:inputType="text|number"
+                    android:nextFocusForward="@id/sp_typeDocument"
+                    android:paddingHorizontal="15dp"
+                    android:textColorHint="@color/black" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".view.NurseActivity" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="30dp"
+                android:backgroundTint="@color/blue_marine"
+                android:text="GUARDAR"
+                app:cornerRadius="10dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

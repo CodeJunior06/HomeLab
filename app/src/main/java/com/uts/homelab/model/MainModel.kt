@@ -3,6 +3,7 @@ package com.uts.homelab.model
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.QuerySnapshot
 import com.uts.homelab.network.FirebaseRepository
+import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.network.db.entity.UserSession
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class MainModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository,
     private val roomRepository: DataBaseHome,
-    private val dataStore:DataStoreManager
+    private val dataStore: DataStoreManager
 ) {
     suspend fun setEmailAndPasswordByCreate(email: String, password: String): ManagerError {
         return runCatching {
@@ -66,8 +67,13 @@ class MainModel @Inject constructor(
 
         }.fold(
             onSuccess = {
-                dataStore.setStringDataStore(DataStoreManager.PREF_USER_AUTH,DataStoreManager.passAuth ,password)
-                ManagerError.Success(it.user!!.email!!) },
+                dataStore.setStringDataStore(
+                    DataStoreManager.PREF_USER_AUTH,
+                    DataStoreManager.passAuth,
+                    password
+                )
+                ManagerError.Success(it.user!!.email!!)
+            },
             onFailure = { ManagerError.Error(it.message!!) }
         )
     }
@@ -99,13 +105,11 @@ class MainModel @Inject constructor(
             if (!resUser.isEmpty) {
                 ManagerError.Success(1)
             } else if (!resNurse.isEmpty) {
+                roomRepository.nurseSessionDao()
+                    .insertNurseSession(resNurse.toObjects(NurseRegister::class.java)[0])
                 ManagerError.Success(2)
             } else {
-
-                withContext(Dispatchers.IO) {
-                    roomRepository.mainDao().insertUser(querySnapshot(resAdmin))
-                }
-
+                roomRepository.userSessionDao().insertUser(querySnapshot(resAdmin))
                 ManagerError.Success(3)
             }
         }.onFailure {
@@ -119,9 +123,5 @@ class MainModel @Inject constructor(
             document.documents[0].get("name").toString(),
             document.documents[0].get("email").toString()
         )
-    }
-
-    suspend fun isSetInstall(value: Boolean) {
-        dataStore.setBoolDataStore(DataStoreManager.PREF_APP_INFO,DataStoreManager.isNewInstall,value)
     }
 }

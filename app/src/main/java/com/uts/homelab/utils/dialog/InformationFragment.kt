@@ -22,6 +22,7 @@ class InformationFragment: DialogFragment() {
         private  lateinit var btnDoneMessage:String
         private  lateinit var btnCancelMessage:String
         private var isButtons = false
+        private var isOnlyButton = false
         private lateinit var callback: (op: Int) -> Unit
 
 
@@ -41,6 +42,17 @@ class InformationFragment: DialogFragment() {
             this.btnDoneMessage = btnDone
             this.btnCancelMessage = btnCancel
             this.isButtons = buttons
+            this.callback = callback
+            if (INSTANCE == null) {
+                INSTANCE = InformationFragment()
+            }
+            return INSTANCE!!
+        }
+        fun getInstance(title:String, message:String, btnDone:String, callback:(op:Int)->Unit): InformationFragment {
+            this.title = title
+            this.message = message
+            this.btnDoneMessage = btnDone
+            this.isOnlyButton = true
             this.callback = callback
             if (INSTANCE == null) {
                 INSTANCE = InformationFragment()
@@ -83,13 +95,21 @@ class InformationFragment: DialogFragment() {
             dialogBinding.llButtons.visibility = View.GONE
         }
 
+        if(isOnlyButton){
+            dialogBinding.btnOnlyAction.text = btnDoneMessage
+            dialogBinding.llOnlyButton.visibility = View.VISIBLE
+        }else{
+            dialogBinding.llOnlyButton.visibility = View.GONE
+        }
+
+        dialogBinding.btnOnlyAction.setOnClickListener {
+            callback(0)
+        }
         dialogBinding.btnCancel.setOnClickListener {
             callback(0)
         }
         dialogBinding.btnExit.setOnClickListener {
             callback(1)
-
         }
     }
-
 }

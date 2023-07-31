@@ -1,6 +1,5 @@
 package com.uts.homelab.model
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.uts.homelab.AuthSingleton
 import com.uts.homelab.network.FirebaseRepository
@@ -50,10 +49,6 @@ class AdminModel @Inject constructor(
     suspend fun setRegisterNurse(email: String, password: String): ManagerError {
 
         return kotlin.runCatching {
-                AuthSingleton.getInstance().model = FirebaseAuth.getInstance().currentUser
-
-                AuthSingleton.getInstance().token = firebaseRepository.getToken()
-
                 firebaseRepository.isSetAuthentication(email, password)
             }.fold(
                 onSuccess = {

@@ -66,9 +66,12 @@
 
     <string name="get_data_user_auth">Obteniendo informacion del usuario...</string>
 
-    <string name="title_activity_users">UsersActivity</string>
     <string name="title_option">Option</string>
     <string name="title_history">History</string>
     <string name="title_profile">Profile</string>
+
+    <string name="title_home">Inicio</string>
+    <string name="title_history_nurse">Historial</string>
+    <string name="title_profile_nurse">Perfil</string>
 
 </resources>

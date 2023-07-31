@@ -1,11 +1,7 @@
 package com.uts.homelab
 
-import com.google.firebase.auth.FirebaseUser
-
 class AuthSingleton {
-    var uid:String = ""
-    var model:FirebaseUser? = null
-    var token:String? = null
+    var uid: String = ""
     companion object {
 
         @Volatile
