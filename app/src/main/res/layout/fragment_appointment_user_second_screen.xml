@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.user.appointment.AppointmentUserFragment">
+    tools:context=".view.user.appointment.AppointmentUserSecondScreenFragment">
 
     <ImageView
         android:id="@+id/logo_view"
@@ -38,41 +38,66 @@
         app:layout_constraintTop_toBottomOf="@+id/text_home">
 
         <EditText
-            android:id="@+id/et_tipo_muestra"
+            android:id="@+id/et_eps"
             android:layout_width="match_parent"
             android:layout_height="57dp"
             android:layout_margin="15dp"
             android:background="@drawable/edit_text_round"
             android:drawableStart="@drawable/ic_person"
             android:drawablePadding="15dp"
-            android:hint="Tipo de examen a tomar"
+            android:hint="EPS"
             android:inputType="text"
             android:paddingHorizontal="15dp"
             android:textColorHint="@color/black" />
 
+        <EditText
+            android:id="@+id/et_telefono"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/edit_text_round"
+            android:drawableStart="@drawable/ic_person"
+            android:drawablePadding="15dp"
+            android:hint="Telefono"
+            android:inputType="number"
+            android:paddingHorizontal="15dp"
+            android:textColorHint="@color/black" />
+
         <TextView
+            android:id="@+id/tv_select_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:drawablePadding="15dp"
-            android:textColorHint="@color/black"
-            android:textSize="24sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Seleccione la dirección en donde se va a tomar la muestra"/>
+            android:layout_gravity="center_horizontal"
+            android:paddingHorizontal="15dp"
+            android:text="Selecciona la fecha y la hora que deseas tener la cita" />
 
-        <FrameLayout
+        <TextView
+            android:id="@+id/tv_time_selected"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="57dp"
+            android:drawablePadding="15dp"
+            android:layout_margin="15dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/edit_text_round"
+            android:paddingHorizontal="15dp"
+            android:text="2023-8-13 11:23" />
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/map_appointment"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="15dp"
-                tools:context=".MapsActivity" />
-        </FrameLayout>
+        <EditText
+            android:id="@+id/et_descriçion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/edit_text_round"
+            android:drawableStart="@drawable/ic_person"
+            android:lines="5"
+            android:drawablePadding="15dp"
+            android:hint="Comentarios y sugerencias"
+            android:layout_gravity="center|top"
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="15dp"
+            android:textColorHint="@color/black" />
+
     </LinearLayout>
 
     <Button
@@ -80,11 +105,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:text="Continuar"
+        android:text="Agendar cita"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

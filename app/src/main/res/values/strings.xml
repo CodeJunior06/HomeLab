@@ -67,8 +67,10 @@
     <string name="get_data_user_auth">Obteniendo informacion del usuario...</string>
 
     <string name="title_activity_users">UsersActivity</string>
-    <string name="title_option">Option</string>
-    <string name="title_history">History</string>
-    <string name="title_profile">Profile</string>
+    <string name="title_appointment">Citas</string>
+    <string name="title_history">Historial de citas</string>
+    <string name="title_profile">Perfil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

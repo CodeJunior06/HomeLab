@@ -7,9 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.uts.homelab.view.user.option.OptionUserFragment"
-        android:label="@string/title_option"
-        tools:layout="@layout/fragment_option" />
+        android:name="com.uts.homelab.view.user.appointment.AppointmentUserFragment"
+        android:label="@string/title_appointment"
+        tools:layout="@layout/fragment_option">
+        <action
+            android:id="@+id/action_navigation_home_to_appointmentUserSecondScreenFragment"
+            app:destination="@id/appointmentUserSecondScreenFragment">
+            <argument android:name="type" app:argType="string"/>
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +28,11 @@
         android:name="com.uts.homelab.view.user.profile.ProfileUserFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/appointmentUserSecondScreenFragment"
+        android:name="com.uts.homelab.view.user.appointment.AppointmentUserSecondScreenFragment"
+        android:label="fragment_appointment_user_second_screen"
+        tools:layout="@layout/fragment_appointment_user_second_screen">
+        <argument android:name="type" app:argType="string"/>
+    </fragment>
 </navigation>

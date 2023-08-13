@@ -9,7 +9,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.uts.homelab.R
 import com.uts.homelab.databinding.ActivityUsersBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersBinding

@@ -5,6 +5,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.uts.homelab.network.dataclass.AppoimentUserModel
 import com.uts.homelab.network.dataclass.UserRegister
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -24,6 +25,12 @@ class FirebaseRepository @Inject constructor(
     override suspend fun setRegisterToFirestore(model: UserRegister): Task<Void> {
         return withContext(Dispatchers.IO) {
             firestore.collection("Users").document().set(model)
+        }
+    }
+
+    override suspend fun setAppointmentToFirestore(appoimentUserModel: AppoimentUserModel): Task<Void> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Appointment").document().set(appoimentUserModel)
         }
     }
 
