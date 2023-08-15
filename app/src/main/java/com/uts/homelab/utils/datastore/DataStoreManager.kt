@@ -14,8 +14,9 @@ import javax.inject.Singleton
 
 @Singleton
 class DataStoreManager @Inject constructor(@ApplicationContext private val context: Context) {
-
+    @get:Singleton
      private val Context.dataStoreUserAuth by preferencesDataStore(name = "UserAuth")
+    @get:Singleton
      private val Context.dataStoreAppInfo by preferencesDataStore(name = "AppInfo")
 
     companion object {
@@ -65,7 +66,7 @@ class DataStoreManager @Inject constructor(@ApplicationContext private val conte
         }
     }
 
-
+    @Synchronized
     fun getStringDataStore(namePref: Int, key: String): Flow<String?> {
         val pref = when (namePref) {
             0 -> context.dataStoreUserAuth
@@ -78,7 +79,7 @@ class DataStoreManager @Inject constructor(@ApplicationContext private val conte
         }
     }
 
-
+    @Synchronized
      fun getBoolDataStore(namePref: Int, key: String): Flow<Boolean?> {
         val pref = when (namePref) {
             0 -> context.dataStoreUserAuth

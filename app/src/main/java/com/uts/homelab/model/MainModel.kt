@@ -12,8 +12,8 @@ import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainModel @Inject constructor(
@@ -122,6 +122,22 @@ class MainModel @Inject constructor(
             document.documents[0].get("id").toString(),
             document.documents[0].get("name").toString(),
             document.documents[0].get("email").toString()
+        )
+    }
+
+    suspend fun isTrueSetNewInstall(bool: Boolean) {
+        dataStore.setBoolDataStore(
+            DataStoreManager.PREF_APP_INFO,
+            DataStoreManager.isNewInstall,
+            bool
+        )
+    }
+
+
+    fun isGetNewInstall(): Flow<Boolean?> {
+       return  dataStore.getBoolDataStore(
+            DataStoreManager.PREF_APP_INFO,
+            DataStoreManager.isNewInstall
         )
     }
 }

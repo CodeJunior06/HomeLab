@@ -5,8 +5,10 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.uts.homelab.network.dataclass.Job
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
+import com.uts.homelab.network.dataclass.WorkingDayNurse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -43,7 +45,27 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun setRegisterNurseToFirestore(model: NurseRegister): Task<Void> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Nurses").document().set(model)
+            firestore.collection("Nurses").document(model.uid).set(model)
+        }
+    }
+
+    override suspend fun setRegisterWorkingNurse(model: WorkingDayNurse): Task<*> {
+        model.id = auth.uid!!
+        return withContext(Dispatchers.IO) {
+            firestore.collection("WorkingDay").document().set(model)
+        }
+    }
+
+    override suspend fun setRegisterAvailableAppointment(modelJob: Job): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("AvailableNurse").document().set(modelJob)
+        }
+    }
+
+
+    override suspend fun updateNurseFirestore(map: Map<String, Any>): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Nurses").document(auth.uid!!).update(map)
         }
     }
 

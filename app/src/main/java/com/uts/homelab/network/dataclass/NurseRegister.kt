@@ -1,11 +1,14 @@
 package com.uts.homelab.network.dataclass
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 
+@Parcelize
 @Entity(tableName = "nurseSession")
-class NurseRegister {
+class NurseRegister : Parcelable {
     var name: String? = ""
     var lastName: String? = ""
     var email: String? = ""
@@ -13,10 +16,10 @@ class NurseRegister {
     var gender: String? = ""
     @PrimaryKey(autoGenerate = false)
     var uid: String = ""
-    var address: String? = ""
+    var address: String = ""
     var geolocation: Geolocation = Geolocation()
     var exp: Int = 0
     var age: Int = 0
-    var isAutomobile: Boolean = false
-    var isNew = true
+    var newNurse = true
+    var idVehicle:String = ""
 }

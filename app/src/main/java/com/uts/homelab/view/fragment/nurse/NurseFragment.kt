@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.uts.homelab.databinding.FragmentNurseBinding
 import com.uts.homelab.utils.Cons
@@ -19,6 +20,8 @@ class NurseFragment : Fragment() {
 
     private lateinit var binding: FragmentNurseBinding
     private val viewModel: NurseViewModel by activityViewModels()
+    private var navDirections:NavDirections? =null
+
     private lateinit var informationDialog: InformationFragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,9 +40,11 @@ class NurseFragment : Fragment() {
     private fun observers() {
         viewModel.nurseModel.observe(viewLifecycleOwner) {
             binding.nameNurse.text = it.name!!
+             this.navDirections = NurseFragmentDirections.actionNurseFragmentToNurseDataFragment(it)
         }
 
-        viewModel.info.observe(viewLifecycleOwner) {
+        viewModel.informationFragmentFragment.observe(viewLifecycleOwner) {
+            if(it== null) return@observe
             println("ENTROOOOOOOOO!!! $it")
 
             informationDialog = if (it == Cons.VIEW_DIALOG_INFORMATION) {
@@ -50,7 +55,7 @@ class NurseFragment : Fragment() {
                 ) {
                     val act = requireActivity() as NurseActivity
                     act.isViewBottomNavigation(false)
-                    findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToNurseDataFragment())
+                    findNavController().navigate(navDirections!!)
                     informationDialog.dismissNow()
                 }
             } else {
@@ -61,5 +66,10 @@ class NurseFragment : Fragment() {
                 informationDialog.show(requireActivity().supportFragmentManager, "gg")
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.informationFragmentFragment.value = null
     }
 }

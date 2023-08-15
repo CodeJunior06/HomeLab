@@ -40,7 +40,13 @@ class AdminModel @Inject constructor(
                 AuthSingleton.getInstance().uid = ""
 
             }.fold(
-                onSuccess = { ManagerError.Success(it) },
+                onSuccess = {
+                    dataStore.setStringDataStore(
+                        DataStoreManager.PREF_USER_AUTH,
+                        DataStoreManager.passAuth,
+                        ""
+                    )
+                    ManagerError.Success(it) },
                 onFailure = { ManagerError.Error(it.message!!) }
             )
         }
@@ -72,6 +78,7 @@ class AdminModel @Inject constructor(
 
                 firebaseRepository.closeSession()
                 firebaseRepository.isAuth(room.userSessionDao().getUserAuth().email,dataStore.getStringDataStore(DataStoreManager.PREF_USER_AUTH,DataStoreManager.passAuth).first().toString())
+
                 val nurse = NurseRegister()
                 nurse.name = valueRegister[0]
                 nurse.lastName = valueRegister[1]
@@ -79,6 +86,7 @@ class AdminModel @Inject constructor(
                 nurse.valueDocument = valueRegister[3]
                 nurse.gender = valueRegister[4]
                 nurse.uid = firebaseUser.uid
+
                 firebaseRepository.setRegisterNurseToFirestore(nurse).await()
             }.fold(
                 onSuccess = { ManagerError.Success(1) },

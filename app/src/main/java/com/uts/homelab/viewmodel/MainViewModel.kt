@@ -8,7 +8,10 @@ import com.uts.homelab.model.MainModel
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -103,6 +106,18 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
                 isProgress.postValue(Pair(false, 0))
                 informationFragment.postValue(response.error)
             }
+        }
+    }
+
+    fun isSetNewInstall(bool:Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mainModel.isTrueSetNewInstall(bool)
+        }
+    }
+
+    suspend fun isGetNewInstall(): Flow<Boolean?> {
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+            mainModel.isGetNewInstall()
         }
     }
 }

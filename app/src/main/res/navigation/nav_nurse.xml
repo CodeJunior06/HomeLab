@@ -12,7 +12,12 @@
         tools:layout="@layout/fragment_nurse" >
         <action
             android:id="@+id/action_nurse_fragment_to_nurseDataFragment"
-            app:destination="@id/nurseDataFragment" />
+            app:destination="@id/nurseDataFragment" >
+            <argument
+                android:name="nurseModel"
+                app:argType="com.uts.homelab.network.dataclass.NurseRegister" />
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/nurse_history"
@@ -30,6 +35,13 @@
         android:id="@+id/nurseDataFragment"
         android:name="com.uts.homelab.view.fragment.nurse.NurseDataFragment"
         android:label="fragment_nurse_data"
-        tools:layout="@layout/fragment_nurse_data" />
+        tools:layout="@layout/fragment_nurse_data" >
+
+        <argument
+            android:name="nurseModel"
+            app:argType="com.uts.homelab.network.dataclass.NurseRegister" />
+
+
+    </fragment>
 
 </navigation>
