@@ -3,10 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_nurse"
-    app:startDestination="@id/nurseFragment">
+    app:startDestination="@id/nurse_fragment">
+
     <fragment
-        android:id="@+id/nurseFragment"
-        android:name="com.uts.homelab.view.fragment.NurseFragment"
-        android:label="fragment_nurse"
-        tools:layout="@layout/fragment_nurse" />
+        android:id="@+id/nurse_fragment"
+        android:name="com.uts.homelab.view.fragment.nurse.NurseFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_nurse" >
+        <action
+            android:id="@+id/action_nurse_fragment_to_nurseDataFragment"
+            app:destination="@id/nurseDataFragment" >
+            <argument
+                android:name="nurseModel"
+                app:argType="com.uts.homelab.network.dataclass.NurseRegister" />
+
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/nurse_history"
+        android:name="com.uts.homelab.view.fragment.nurse.NurseHistoryFragment"
+        android:label="@string/title_history_nurse"
+        tools:layout="@layout/fragment_nurse_history" />
+
+    <fragment
+        android:id="@+id/nurse_profile"
+        android:name="com.uts.homelab.view.fragment.nurse.NurseProfileFragment"
+        android:label="@string/title_profile_nurse"
+        tools:layout="@layout/fragment_nurse_profile" />
+
+    <fragment
+        android:id="@+id/nurseDataFragment"
+        android:name="com.uts.homelab.view.fragment.nurse.NurseDataFragment"
+        android:label="fragment_nurse_data"
+        tools:layout="@layout/fragment_nurse_data" >
+
+        <argument
+            android:name="nurseModel"
+            app:argType="com.uts.homelab.network.dataclass.NurseRegister" />
+
+
+    </fragment>
+
 </navigation>

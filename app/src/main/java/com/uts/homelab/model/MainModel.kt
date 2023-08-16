@@ -3,20 +3,23 @@ package com.uts.homelab.model
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.QuerySnapshot
 import com.uts.homelab.network.FirebaseRepository
+import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.network.db.entity.UserSession
+import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository,
-    private val roomRepository: DataBaseHome
+    private val roomRepository: DataBaseHome,
+    private val dataStore: DataStoreManager
 ) {
     suspend fun setEmailAndPasswordByCreate(email: String, password: String): ManagerError {
         return runCatching {
@@ -36,7 +39,7 @@ class MainModel @Inject constructor(
         firebaseUser: FirebaseUser
     ): ManagerError {
         return runCatching {
-            firebaseRepository.setRegisterToFirestore(
+            firebaseRepository.setRegisterUserToFirestore(
                 UserRegister(
                     valueRegister[0],
                     valueRegister[1],
@@ -57,12 +60,20 @@ class MainModel @Inject constructor(
 
     suspend fun getUserAuth(email: String, password: String): ManagerError {
         return runCatching {
-            firebaseRepository.isUserAuth(
+            firebaseRepository.isAuth(
                 email,
                 password
             )
+
         }.fold(
-            onSuccess = { ManagerError.Success(it.user!!.email!!) },
+            onSuccess = {
+                dataStore.setStringDataStore(
+                    DataStoreManager.PREF_USER_AUTH,
+                    DataStoreManager.passAuth,
+                    password
+                )
+                ManagerError.Success(it.user!!.email!!)
+            },
             onFailure = { ManagerError.Error(it.message!!) }
         )
     }
@@ -94,13 +105,11 @@ class MainModel @Inject constructor(
             if (!resUser.isEmpty) {
                 ManagerError.Success(1)
             } else if (!resNurse.isEmpty) {
+                roomRepository.nurseSessionDao()
+                    .insertNurseSession(resNurse.toObjects(NurseRegister::class.java)[0])
                 ManagerError.Success(2)
             } else {
-
-                withContext(Dispatchers.IO) {
-                    roomRepository.mainDao().insertUser(querySnapshot(resAdmin))
-                }
-
+                roomRepository.userSessionDao().insertUser(querySnapshot(resAdmin))
                 ManagerError.Success(3)
             }
         }.onFailure {
@@ -108,11 +117,27 @@ class MainModel @Inject constructor(
         }
     }
 
-    private fun MainModel.querySnapshot(document: QuerySnapshot): UserSession {
+    private fun querySnapshot(document: QuerySnapshot): UserSession {
         return UserSession(
             document.documents[0].get("id").toString(),
             document.documents[0].get("name").toString(),
             document.documents[0].get("email").toString()
+        )
+    }
+
+    suspend fun isTrueSetNewInstall(bool: Boolean) {
+        dataStore.setBoolDataStore(
+            DataStoreManager.PREF_APP_INFO,
+            DataStoreManager.isNewInstall,
+            bool
+        )
+    }
+
+
+    fun isGetNewInstall(): Flow<Boolean?> {
+       return  dataStore.getBoolDataStore(
+            DataStoreManager.PREF_APP_INFO,
+            DataStoreManager.isNewInstall
         )
     }
 }

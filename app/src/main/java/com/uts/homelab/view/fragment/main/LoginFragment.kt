@@ -1,4 +1,4 @@
-package com.uts.homelab.view.fragment
+package com.uts.homelab.view.fragment.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -52,6 +52,8 @@ class LoginFragment : Fragment() {
                 binding.etPass.text.toString()
             )
         }
+
+        mainViewModel.isSetNewInstall(true)
 
         observers()
     }

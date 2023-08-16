@@ -1,4 +1,6 @@
 package com.uts.homelab.network.dataclass
 
-class Geolocation {
-}
+data class Geolocation (
+    var longitude:String? = "",
+    var latitude:String? =""
+    )

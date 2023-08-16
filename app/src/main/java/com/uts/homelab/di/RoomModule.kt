@@ -3,7 +3,8 @@ package com.uts.homelab.di
 import android.content.Context
 import androidx.room.Room
 import com.uts.homelab.network.db.DataBaseHome
-import com.uts.homelab.network.db.dao.MainDAO
+import com.uts.homelab.network.db.dao.NurseSessionDAO
+import com.uts.homelab.network.db.dao.UserSessionDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,11 +19,17 @@ object RoomModule {
     @Provides
     fun provideDatabase(@ApplicationContext application: Context): DataBaseHome {
         return Room.databaseBuilder(application, DataBaseHome::class.java, "home.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
     @Singleton
     @Provides
-    fun provideMyDao(database: DataBaseHome): MainDAO {
-        return database.mainDao()
+    fun provideMyNurseSessionDao(database: DataBaseHome): NurseSessionDAO {
+        return database.nurseSessionDao()
+    }
+    @Singleton
+    @Provides
+    fun provideMyUserSessionDao(database: DataBaseHome): UserSessionDAO {
+        return database.userSessionDao()
     }
 }

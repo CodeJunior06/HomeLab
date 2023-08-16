@@ -1,9 +1,15 @@
 package com.uts.homelab
 
-import javax.inject.Singleton
-
-
-@Singleton
 class AuthSingleton {
-    var uid:String = ""
+    var uid: String = ""
+    companion object {
+
+        @Volatile
+        private var instance: AuthSingleton? = null
+        fun getInstance(): AuthSingleton {
+            return instance ?: synchronized(this) {
+                instance ?: AuthSingleton().also { instance = it }
+            }
+        }
+    }
 }
