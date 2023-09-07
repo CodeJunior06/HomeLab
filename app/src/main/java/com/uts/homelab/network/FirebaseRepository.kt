@@ -40,7 +40,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun setRegisterUserToFirestore(model: UserRegister): Task<Void> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Users").document().set(model)
+            firestore.collection("Users").document(model.uid).set(model)
         }
     }
 
@@ -76,6 +76,12 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    override suspend fun updateUserFirestore(map: Map<String, Any>): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Users").document(auth.uid!!).update(map)
+        }
+    }
+
     override suspend fun isAuth(email: String, password: String): AuthResult {
         return withContext(Dispatchers.IO) {
             auth.signInWithEmailAndPassword(email.trim(), password.trim()).await()
@@ -100,7 +106,17 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    override suspend fun getNursesAvailable(email: Any): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("AvailableNurse").whereEqualTo("email", email).get().await()
+        }
+    }
+
     override fun closeSession() {
         auth.signOut()
+    }
+
+    fun getAuth() : FirebaseAuth{
+        return  FirebaseAuth.getInstance()
     }
 }

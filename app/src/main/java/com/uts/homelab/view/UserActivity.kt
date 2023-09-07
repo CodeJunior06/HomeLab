@@ -1,6 +1,7 @@
 package com.uts.homelab.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -33,5 +34,13 @@ class UserActivity : AppCompatActivity() {
         )
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    fun isViewBottomNavigation(bool: Boolean) {
+        binding.navView.visibility = if (bool) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 }

@@ -57,7 +57,7 @@ class NurseModel @Inject constructor(
 
     private suspend fun insertJournal(geo: Geolocation): Result<ManagerError>{
 
-        val modelWorking = WorkingDayNurse(geolocation = geo)
+        val modelWorking = WorkingDayNurse(geo)
 
         return kotlin.runCatching {
                 firebaseRepository.setRegisterWorkingNurse(modelWorking)

@@ -20,15 +20,15 @@ interface IFirebaseRepository {
     suspend fun setRegisterWorkingNurse(model: WorkingDayNurse) : Task<*>
     suspend fun setRegisterAvailableAppointment(modelJob: Job) : Task<*>
     suspend fun updateNurseFirestore(map: Map<String,Any>): Task<*>
+    suspend fun updateUserFirestore(map: Map<String,Any>): Task<*>
     suspend fun getToken(): String
 
-    suspend fun setRegisterToFirestore(model: UserRegister): Task<Void>
     suspend fun setAppointmentToFirestore(appoimentUserModel: AppoimentUserModel): Task<Void>
-    suspend fun isUserAuth(email: String, password: String): AuthResult
-
     suspend fun isUserAdminFirestore(email: Any): QuerySnapshot
     suspend fun isUserNurseFirestore(email: Any): QuerySnapshot
     suspend fun isUserPatientFirestore(email: Any): QuerySnapshot
+    suspend fun getNursesAvailable(email: Any): QuerySnapshot
+
 
     fun closeSession()
 }

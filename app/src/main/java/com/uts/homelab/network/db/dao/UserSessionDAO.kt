@@ -1,20 +1,20 @@
 package com.uts.homelab.network.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.uts.homelab.network.dataclass.NurseRegister
-import com.uts.homelab.network.db.entity.UserSession
+import androidx.room.*
+import com.uts.homelab.network.dataclass.UserRegister
 
 @Dao
 interface UserSessionDAO {
 
-    @Query("SELECT * FROM userSession")
-    suspend fun getUserAuth() : UserSession
+    @Insert(entity = UserRegister::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNurseSession(nurseRegister: UserRegister)
 
-    @Query("DELETE FROM userSession WHERE id = :idUserSession")
-    suspend fun deleteUserAuth(idUserSession: String)
-    @Insert(entity = UserSession::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: UserSession)
+    @Query("SELECT * FROM userSession")
+    suspend fun getUserAuth(): UserRegister
+
+    @Update(entity = UserRegister::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateUserSession(nurseRegister: UserRegister)
+
+    @Delete(entity = UserRegister::class)
+    suspend fun deleteUserSession(nurseDelete: UserRegister)
 }

@@ -29,7 +29,7 @@ class RegisterFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var valueSpinner = ""
     private var progressDialog: ProgressFragment = ProgressFragment()
-    private lateinit var informationDialog: InformationFragment
+    private var informationDialog: InformationFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,15 +43,13 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        spinner()
         setObserver()
 
         binding.btnRegister.setOnClickListener {
             mainViewModel.setRegisterUserAuth(
                 arrayOf(
                     binding.etName.text.toString(),
-                    valueSpinner,
-                    binding.etNumberDocument.text.toString(),
+                    binding.etLastName.text.toString(),
                     binding.etEmail.text.toString(),
                     binding.etPass.text.toString(),
                     binding.etPasswordRetry.text.toString()
@@ -74,6 +72,8 @@ class RegisterFragment : Fragment() {
         }
 
         mainViewModel.isProgress.observe(viewLifecycleOwner) {
+            if(it == null) return@observe
+
             when (it.first) {
                 true -> {
                     if (!progressDialog.isVisible && !progressDialog.isStateSaved) {
@@ -100,16 +100,18 @@ class RegisterFragment : Fragment() {
         }
 
         mainViewModel.informationFragment.observe(viewLifecycleOwner) {
+            if(it == null) return@observe
 
-            informationDialog = when (it) {
+            informationDialog = InformationFragment();
+           when (it) {
                 getString(R.string.is_user_add) -> {
-                    InformationFragment.getInstance(
+                    informationDialog!!.getInstance(
                         "EXITO",
                         it
                     )
                 }
                 else -> {
-                    InformationFragment.getInstance(
+                    informationDialog!!.getInstance(
                         "ATENCION",
                         it
                     )
@@ -119,19 +121,24 @@ class RegisterFragment : Fragment() {
             val timer = Timer()
             timer.schedule(object : TimerTask() {
                 override fun run() {
-                    if (informationDialog.isVisible) {
-                        informationDialog.dismiss()
+                    if (informationDialog!!.isVisible) {
+                        informationDialog!!.dismiss()
                     }
                     if (it == getString(R.string.is_user_add)) {
                         mainViewModel.intentToLogin.postValue(Unit)
                     }
                 }
             }, 3000)
-            informationDialog.show(requireActivity().supportFragmentManager, "InformationFragment")
+            informationDialog!!.show(requireActivity().supportFragmentManager, "InformationFragment")
         }
 
         mainViewModel.intentToLogin.observe(viewLifecycleOwner) {
-            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            if(it == null) return@observe
+            mainViewModel.informationFragment.value = null
+            mainViewModel.isProgress.value = null
+            mainViewModel.intentToLogin.value = null
+            findNavController().popBackStack()
+
         }
         binding.btnRegresar.setOnClickListener {
             mainViewModel.intentToLogin.value = Unit
@@ -146,30 +153,11 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun spinner() {
-        val documents = listOf("CC", "DNI", "TI", "DE")
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            documents
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spTypeDocument.adapter = adapter
-        binding.spTypeDocument.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    valueSpinner = documents[p2]
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    println("")
-                }
-
-            }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mainViewModel.informationFragment.value = null
+        mainViewModel.isProgress.value = null
+        mainViewModel.intentToLogin.value = null
     }
 }

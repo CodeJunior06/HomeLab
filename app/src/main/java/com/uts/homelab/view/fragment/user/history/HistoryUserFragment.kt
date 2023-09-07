@@ -1,4 +1,4 @@
-package com.uts.homelab.view.user.history
+package com.uts.homelab.view.fragment.user.history
 
 import android.os.Bundle
 import android.view.LayoutInflater

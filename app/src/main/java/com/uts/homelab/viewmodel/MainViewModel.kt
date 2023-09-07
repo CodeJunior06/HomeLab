@@ -31,14 +31,14 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
             isErrorToast.value = -1
         } else {
 
-            if (!valueRegister[4].equals(valueRegister[5])) {
+            if (!valueRegister[3].equals(valueRegister[4])) {
                 isErrorToast.value = -2
             } else {
                 isProgress.value = Pair(true, 1)
                 viewModelScope.launch {
                     when (val response = mainModel.setEmailAndPasswordByCreate(
-                        valueRegister[3]!!,
-                        valueRegister[4]!!
+                        valueRegister[2]!!,
+                        valueRegister[3]!!
                     )) {
                         is ManagerError.Error -> {
                             isProgress.postValue(Pair(false, 0))

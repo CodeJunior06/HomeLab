@@ -45,10 +45,10 @@ class NurseFragment : Fragment() {
 
         viewModel.informationFragmentFragment.observe(viewLifecycleOwner) {
             if(it== null) return@observe
-            println("ENTROOOOOOOOO!!! $it")
 
-            informationDialog = if (it == Cons.VIEW_DIALOG_INFORMATION) {
-                InformationFragment.getInstance(
+            informationDialog = InformationFragment()
+            if (it == Cons.VIEW_DIALOG_INFORMATION) {
+                informationDialog.getInstance(
                     "ATENCION",
                     "Hemos detectado que faltan datos para continuar con el procesos",
                     "Ir a llenar"
@@ -59,7 +59,7 @@ class NurseFragment : Fragment() {
                     informationDialog.dismissNow()
                 }
             } else {
-                InformationFragment.getInstance("ATENCION", it)
+                informationDialog.getInstance("ATENCION", it)
             }
 
             if (!informationDialog.isAdded) {

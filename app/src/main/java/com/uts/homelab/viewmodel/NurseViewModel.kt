@@ -1,6 +1,5 @@
 package com.uts.homelab.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,6 @@ import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,7 +31,6 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
                 informationFragmentFragment.postValue(Cons.VIEW_DIALOG_INFORMATION)
             }
         }
-
     }
 
     fun setModel(nurseModel: NurseRegister?) {

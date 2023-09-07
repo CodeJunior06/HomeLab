@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
-import com.uts.homelab.model.AppointmentUserModel
+import com.uts.homelab.model.UserModel
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,11 +12,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @HiltViewModel
-class AppointmentUserViewModel @Inject constructor(private val appointmentUserModel: AppointmentUserModel) : ViewModel() {
+class AppointmentUserViewModel @Inject constructor(private val model: UserModel) : ViewModel() {
 
-    @Singleton
     val isProgress = MutableLiveData<Pair<Boolean, Int>>()
-    val informationFragment = MutableLiveData<String>()
+    private val informationFragment = MutableLiveData<String>()
 
     private val _text = MutableLiveData<String>().apply {
         value = "Agendar cita"
@@ -32,7 +30,7 @@ class AppointmentUserViewModel @Inject constructor(private val appointmentUserMo
         }
     }
     private suspend fun setAppointmentUser(valueAppointment: Array<String>) {
-        when (val response = appointmentUserModel.setAppointmentUserFirestore(valueAppointment)) {
+        when (val response = model.setAppointmentUserFirestore(valueAppointment)) {
             is ManagerError.Success -> {
                 isProgress.postValue(Pair(false, 1))
             }
@@ -40,9 +38,21 @@ class AppointmentUserViewModel @Inject constructor(private val appointmentUserMo
                 isProgress.postValue(Pair(false, 0))
                 informationFragment.postValue(response.error)
             }
-            else -> {
+        }
+    }
+
+    fun getNurse(toString: String, toString1: String) {
+        isProgress.value = Pair(true,1)
+        viewModelScope.launch {
+        when (val response = model.getNurseAvailable()) {
+            is ManagerError.Success -> {
+                isProgress.postValue(Pair(false, 1))
+            }
+            is ManagerError.Error -> {
                 isProgress.postValue(Pair(false, 0))
+                informationFragment.postValue(response.error)
             }
         }
+    }
     }
 }

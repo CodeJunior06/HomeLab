@@ -30,7 +30,7 @@ class AddNurseFragment : Fragment() {
     private val viewModel: AdminViewModel by activityViewModels()
 
     private var progressDialog: ProgressFragment = ProgressFragment()
-    private lateinit var informationFragment: InformationFragment
+    private  var informationFragment: InformationFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,6 +116,7 @@ class AddNurseFragment : Fragment() {
 
                 }
                 false -> {
+                    if(it.second ==-1) return@observe
                     if (progressDialog.isVisible) {
                         progressDialog.dismiss()
                     }
@@ -130,17 +131,19 @@ class AddNurseFragment : Fragment() {
             toastMessage(getString(R.string.emptyValue))
         }
         viewModel.informationFragment.observe(viewLifecycleOwner) {
+            if(it == null) return@observe
 
+            informationFragment = InformationFragment()
 
-            informationFragment = when (it) {
+            when (it) {
                 getString(R.string.is_user_add) -> {
-                    InformationFragment.getInstance(
+                    informationFragment!!.getInstance(
                         "EXITO",
                         it
                     )
                 }
                 else -> {
-                    InformationFragment.getInstance(
+                    informationFragment!!.getInstance(
                         "ATENCION",
                         it
                     )
@@ -150,24 +153,32 @@ class AddNurseFragment : Fragment() {
             val timer = Timer()
             timer.schedule(object : TimerTask() {
                 override fun run() {
-                    if (informationFragment.isVisible) {
-                        informationFragment.dismiss()
+                    if (informationFragment!!.isVisible || informationFragment!!.isAdded ) {
+                        informationFragment!!.dismiss()
                     }
 
                     if (it == getString(R.string.is_user_add)) {
                         lifecycleScope.launch(Dispatchers.Main) {
+                            informationFragment = null
+                            childFragmentManager.executePendingTransactions()
                             findNavController().popBackStack()
                         }
                     }
                 }
             }, 3000)
 
-            informationFragment.show(
-                requireActivity().supportFragmentManager,
+            informationFragment!!.showNow(
+                childFragmentManager,
                 "InformationFragment"
             )
         }
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        toastMessage("DESTORY ${javaClass.name}")
+        viewModel.informationFragment.value = null
+        viewModel.isProgress.value = Pair(false,-1)
+    }
 }

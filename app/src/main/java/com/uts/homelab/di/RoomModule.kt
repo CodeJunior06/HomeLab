@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.network.db.dao.NurseSessionDAO
-import com.uts.homelab.network.db.dao.UserSessionDAO
+import com.uts.homelab.network.db.dao.AdminSessionDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +29,7 @@ object RoomModule {
     }
     @Singleton
     @Provides
-    fun provideMyUserSessionDao(database: DataBaseHome): UserSessionDAO {
-        return database.userSessionDao()
+    fun provideMyUserSessionDao(database: DataBaseHome): AdminSessionDAO {
+        return database.adminSessionDao()
     }
 }

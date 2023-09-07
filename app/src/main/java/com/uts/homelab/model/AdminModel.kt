@@ -22,7 +22,7 @@ class AdminModel @Inject constructor(
     suspend fun getModelData(): ManagerError {
         return withContext(Dispatchers.IO) {
             kotlin.runCatching {
-                room.userSessionDao().getUserAuth()
+                room.adminSessionDao().getAdminAuth()
             }.fold(
                 onSuccess = {
                     AuthSingleton.getInstance().uid= it.id
@@ -36,7 +36,7 @@ class AdminModel @Inject constructor(
     suspend fun deleteModelData(): ManagerError {
         return withContext(Dispatchers.IO) {
             kotlin.runCatching {
-                room.userSessionDao().deleteUserAuth(AuthSingleton.getInstance().uid)
+                room.adminSessionDao().deleteAdminAuth(firebaseRepository.getAuth().uid!!)
                 AuthSingleton.getInstance().uid = ""
 
             }.fold(
@@ -77,7 +77,7 @@ class AdminModel @Inject constructor(
             runCatching {
 
                 firebaseRepository.closeSession()
-                firebaseRepository.isAuth(room.userSessionDao().getUserAuth().email,dataStore.getStringDataStore(DataStoreManager.PREF_USER_AUTH,DataStoreManager.passAuth).first().toString())
+                firebaseRepository.isAuth(room.adminSessionDao().getAdminAuth().email,dataStore.getStringDataStore(DataStoreManager.PREF_USER_AUTH,DataStoreManager.passAuth).first().toString())
 
                 val nurse = NurseRegister()
                 nurse.name = valueRegister[0]

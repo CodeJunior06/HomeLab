@@ -7,32 +7,65 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.uts.homelab.view.user.appointment.AppointmentUserFragment"
+        android:name="com.uts.homelab.view.fragment.user.appointment.AppointmentUserFragment"
         android:label="@string/title_appointment"
         tools:layout="@layout/fragment_option">
         <action
             android:id="@+id/action_navigation_home_to_appointmentUserSecondScreenFragment"
             app:destination="@id/appointmentUserSecondScreenFragment">
-            <argument android:name="type" app:argType="string"/>
+        </action>
+        <action
+            android:id="@+id/action_navigation_home_to_userDataFragment"
+            app:destination="@id/userDataFragment" >
+
+            <argument
+                android:name="userModel"
+                app:argType="com.uts.homelab.network.dataclass.UserRegister" />
+
         </action>
     </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.uts.homelab.view.user.history.HistoryUserFragment"
+        android:name="com.uts.homelab.view.fragment.user.history.HistoryUserFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.uts.homelab.view.user.profile.ProfileUserFragment"
+        android:name="com.uts.homelab.view.fragment.user.profile.ProfileUserFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/appointmentUserSecondScreenFragment"
-        android:name="com.uts.homelab.view.user.appointment.AppointmentUserSecondScreenFragment"
+        android:name="com.uts.homelab.view.fragment.user.appointment.AppointmentUserSecondScreenFragment"
         android:label="fragment_appointment_user_second_screen"
         tools:layout="@layout/fragment_appointment_user_second_screen">
-        <argument android:name="type" app:argType="string"/>
+        <action
+            android:id="@+id/action_appointmentUserSecondScreenFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDataFragment"
+        android:name="com.uts.homelab.view.fragment.user.UserDataFragment"
+        android:label="fragment_user_data"
+        tools:layout="@layout/fragment_user_data" >
+        <argument
+            android:name="userModel"
+            app:argType="com.uts.homelab.network.dataclass.UserRegister" />
+        <action
+            android:id="@+id/action_userDataFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.uts.homelab.view.fragment.user.AddressFragment"
+        android:label="AddressFragment" >
+        <action
+            android:id="@+id/action_addressFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/navigation_home"
+             />
     </fragment>
 </navigation>

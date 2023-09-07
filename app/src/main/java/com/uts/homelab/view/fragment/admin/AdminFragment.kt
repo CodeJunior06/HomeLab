@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.uts.homelab.databinding.FragmentAdminBinding
 import com.uts.homelab.utils.extension.intentToMain
+import com.uts.homelab.utils.extension.toastMessage
 import com.uts.homelab.viewmodel.AdminViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,5 +57,15 @@ class AdminFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             intentToMain()
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        toastMessage("DESTORY ${javaClass.name}")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        toastMessage("RESUME ${javaClass.name}")
+
     }
 }

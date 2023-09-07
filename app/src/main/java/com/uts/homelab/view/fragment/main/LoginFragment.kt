@@ -45,6 +45,8 @@ class LoginFragment : Fragment() {
 
         binding.btnRegistrar.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            mainViewModel.informationFragment.value = null
+            mainViewModel.isProgress.value = null
         }
         binding.btnIngresar.setOnClickListener {
             mainViewModel.setLoginUser(
@@ -60,6 +62,8 @@ class LoginFragment : Fragment() {
 
     private fun observers() {
         mainViewModel.isProgress.observe(viewLifecycleOwner) {
+            if(it == null) return@observe
+
             when (it.first) {
                 true -> {
                     if (!progressDialog.isVisible && !progressDialog.isStateSaved) {
@@ -103,7 +107,10 @@ class LoginFragment : Fragment() {
         }
 
         mainViewModel.informationFragment.observe(viewLifecycleOwner) {
-            informationDialog = InformationFragment.getInstance(
+            if(it == null) return@observe
+
+            informationDialog = InformationFragment()
+            informationDialog.getInstance(
                 "ATENCION ...",
                 it
             )
@@ -138,5 +145,7 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mainViewModel.informationFragment.value = null
+        mainViewModel.isProgress.value = null
     }
 }

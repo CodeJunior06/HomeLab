@@ -50,6 +50,13 @@
         <item>TI</item>
     </string-array>
 
+    <string-array name="typeAppoiment_array">
+        <item>Saliva</item>
+        <item>Sangre</item>
+        <item>Fecal</item>
+        <item>Drogas</item>
+    </string-array>
+
     <string name="emptyValue">Tienes Campos Vacios</string>
     <string name="emptyEmail">Correc electronico vacio</string>
     <string name="emptyPassword">Ingrese una contraseña</string>
@@ -63,6 +70,8 @@
     <string name="register_user_firestore">Registrando Usuario en el sistema...</string>
 
     <string name="is_user_add">El usuario fue registrado con satisfaccion</string>
+
+    <string name="data_update">Los datos fueron actualizados correctamente</string>
 
     <string name="get_data_user_auth">Obteniendo informacion del usuario...</string>
 

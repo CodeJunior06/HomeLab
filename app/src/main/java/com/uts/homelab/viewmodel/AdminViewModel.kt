@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.uts.homelab.model.AdminModel
-import com.uts.homelab.network.db.entity.UserSession
+import com.uts.homelab.network.db.entity.AdminSession
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : ViewModel() {
 
-    val isUserAuth = MutableLiveData<UserSession>()
+    val isUserAuth = MutableLiveData<AdminSession>()
     val intentToLogin = MutableLiveData<Unit>()
 
     val messageToast = MutableLiveData<Int>()
@@ -30,7 +30,7 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
                     informationFragment.postValue(res.error)
                 }
                 is ManagerError.Success -> {
-                    isUserAuth.postValue(res.modelSuccess as UserSession)
+                    isUserAuth.postValue(res.modelSuccess as AdminSession)
                 }
             }
         }

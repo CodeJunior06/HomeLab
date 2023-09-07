@@ -73,14 +73,14 @@
 
 
                     <EditText
-                        android:nextFocusForward="@id/sp_typeDocument"
+                        android:nextFocusForward="@id/et_lastName"
                         android:layout_width="match_parent"
                         android:id="@+id/et_name"
                         android:layout_height="57dp"
                         android:background="@drawable/edit_text_round"
                         android:drawableStart="@drawable/ic_person"
                         android:drawablePadding="15dp"
-                        android:hint="Nombre completo"
+                        android:hint="Nombres"
                         android:inputType="text"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
@@ -93,40 +93,19 @@
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
-                    <LinearLayout
+
+                    <EditText
+                        android:nextFocusForward="@id/et_email"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Spinner
-                            android:nextFocusDown="@id/et_email"
-                            android:nextFocusLeft="@id/et_numberDocument"
-                            android:id="@+id/sp_typeDocument"
-                            android:layout_marginEnd="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="57dp"
-                            android:layout_weight="6.5"
-                            android:background="@drawable/edit_text_round"
-                            android:drawablePadding="15dp"
-                            android:paddingHorizontal="15dp"
-                            android:textColorHint="@color/black" />
-
-                        <EditText
-                            android:nextFocusDown="@id/et_email"
-                            android:id="@+id/et_numberDocument"
-                            android:layout_width="match_parent"
-                            android:layout_height="57dp"
-                            android:inputType="number"
-                            android:layout_weight="3.5"
-                            android:maxLines="1"
-                            android:background="@drawable/edit_text_round"
-                            android:hint="Numero documento"
-                            android:textAlignment="center"
-                            android:paddingHorizontal="15dp"
-                            android:textColorHint="@color/black" />
-
-                    </LinearLayout>
-
+                        android:id="@+id/et_lastName"
+                        android:layout_height="57dp"
+                        android:background="@drawable/edit_text_round"
+                        android:drawableStart="@drawable/ic_person"
+                        android:drawablePadding="15dp"
+                        android:hint="Apellidos"
+                        android:inputType="text"
+                        android:paddingHorizontal="15dp"
+                        android:textColorHint="@color/black" />
 
                 </LinearLayout>
 
