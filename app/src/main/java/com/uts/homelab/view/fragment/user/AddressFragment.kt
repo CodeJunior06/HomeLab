@@ -26,6 +26,7 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAddressBinding
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
+import com.uts.homelab.view.fragment.nurse.NurseDataFragmentArgs
 import com.uts.homelab.viewmodel.UserViewModel
 import java.util.*
 
@@ -54,6 +55,11 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val validModel = AddressFragmentArgs.fromBundle(requireArguments()).appointmentModel
+        if(validModel.uidUser.isNotEmpty()){
+            viewModel.setModelAppointment(validModel)
+        }
+
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -61,13 +67,24 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         binding.btnSave.setOnClickListener {
-            viewModel.update(
-                arrayOf(
-                    binding.etAddress.text.toString(),
-                    marker!!.position.latitude.toString(),
-                    marker!!.position.longitude.toString()
+            if(validModel.uidUser.isNotEmpty()){
+                viewModel.registerAppointment(
+                    arrayOf(
+                        binding.etAddress.text.toString(),
+                        marker!!.position.latitude.toString(),
+                        marker!!.position.longitude.toString()
+                    )
                 )
-            )
+            }else{
+                viewModel.update(
+                    arrayOf(
+                        binding.etAddress.text.toString(),
+                        marker!!.position.latitude.toString(),
+                        marker!!.position.longitude.toString()
+                    )
+                )
+            }
+
         }
 
         setObserver()

@@ -3,13 +3,8 @@ package com.uts.homelab.network
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.uts.homelab.network.dataclass.Job
-import com.uts.homelab.network.dataclass.NurseRegister
-import com.uts.homelab.network.dataclass.AppoimentUserModel
-import com.uts.homelab.network.dataclass.UserRegister
-import com.uts.homelab.network.dataclass.WorkingDayNurse
+import com.google.firebase.firestore.*
+import com.uts.homelab.network.dataclass.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -44,7 +39,7 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun setAppointmentToFirestore(appoimentUserModel: AppoimentUserModel): Task<Void> {
+    override suspend fun setAppointmentToFirestore(appoimentUserModel: AppointmentUserModel): Task<Void> {
         return withContext(Dispatchers.IO) {
             firestore.collection("Appointment").document().set(appoimentUserModel)
         }
@@ -65,7 +60,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun setRegisterAvailableAppointment(modelJob: Job): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("AvailableNurse").document().set(modelJob)
+            firestore.collection("AvailableNurse").document(auth.uid!!).set(modelJob)
         }
     }
 
@@ -79,6 +74,12 @@ class FirebaseRepository @Inject constructor(
     override suspend fun updateUserFirestore(map: Map<String, Any>): Task<*> {
         return withContext(Dispatchers.IO) {
             firestore.collection("Users").document(auth.uid!!).update(map)
+        }
+    }
+
+    override suspend fun updateAvailableFirestore(job: Job, uidNurse: String): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("AvailableNurse").document(uidNurse).set(job, SetOptions.merge())
         }
     }
 
@@ -106,9 +107,21 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun getNursesAvailable(email: Any): QuerySnapshot {
+    override suspend fun getNurseAvailable(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("AvailableNurse").whereEqualTo("email", email).get().await()
+            firestore.collection("AvailableNurse").get().await()
+        }
+    }
+
+    override suspend fun getIdNurseAvailable(uid: String): DocumentSnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("AvailableNurse").document(uid).get().await()
+        }
+    }
+
+    override suspend fun getIdsNursesAvailable(list: ArrayList<String>): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Nurses").whereIn(FieldPath.documentId(),list).get().await()
         }
     }
 

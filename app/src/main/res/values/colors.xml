@@ -4,5 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="blue_marine">#0A2799</color>
+    <color name="blue_hospital">#67A9C8</color>
+
 
 </resources>

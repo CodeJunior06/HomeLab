@@ -8,19 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentUserDataBinding
-import com.uts.homelab.network.dataclass.AppoimentUserModel
-import com.uts.homelab.utils.dialog.InformationFragment
-import com.uts.homelab.utils.dialog.ProgressFragment
-import com.uts.homelab.view.fragment.nurse.NurseDataFragmentArgs
+import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.viewmodel.UserViewModel
-import com.uts.homelab.viewmodel.userViewmodel.AppointmentUserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -95,7 +89,9 @@ class UserDataFragment : Fragment() , AdapterView.OnItemSelectedListener {
             viewModel.userModel.value!!.eps = valueEPS
             viewModel.userModel.value!!.nacimiento = selectedDateTimestamp
             viewModel.saveRoom()
-           findNavController().navigate(UserDataFragmentDirections.actionUserDataFragmentToAddressFragment())
+           findNavController().navigate(UserDataFragmentDirections.actionUserDataFragmentToAddressFragment(
+               AppointmentUserModel()
+           ))
         }
     }
     private var selectedDateTimestamp = 0L

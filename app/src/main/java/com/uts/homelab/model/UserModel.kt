@@ -1,8 +1,7 @@
 package com.uts.homelab.model
 
 import com.uts.homelab.network.FirebaseRepository
-import com.uts.homelab.network.dataclass.AppoimentUserModel
-import com.uts.homelab.network.dataclass.UserRegister
+import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.tasks.await
@@ -14,20 +13,26 @@ class UserModel @Inject constructor(
 ) {
 
     suspend fun setAppointmentUserFirestore(
-        valueAppointment: Array<String>
+        valueAppointment: Array<String>,
+        appointmentUserModel: AppointmentUserModel
     ): ManagerError {
         return runCatching {
+            appointmentUserModel.typeOfExam = valueAppointment[0]
+            appointmentUserModel.hour = valueAppointment[1]
+            appointmentUserModel.date = valueAppointment[2]
+
             firebaseRepository.setAppointmentToFirestore(
-                AppoimentUserModel(
-                    valueAppointment[0],
-                    valueAppointment[1],
-                    valueAppointment[2],
-                    valueAppointment[3],
-                    valueAppointment[4]
-                )
+                appointmentUserModel
             ).await()
         }.fold(
-            onSuccess = { ManagerError.Success(0) },
+            onSuccess = {
+                updateAppointmentAvailable(
+                    appointmentUserModel.date,
+                    appointmentUserModel.uidNurse,
+                    appointmentUserModel.hour,
+                    appointmentUserModel.uidUser
+                )
+            },
             onFailure = { ManagerError.Error(it.message!!) }
         )
     }
@@ -88,10 +93,140 @@ class UserModel @Inject constructor(
 
     suspend fun getNurseAvailable(): ManagerError {
         return runCatching {
-          firebaseRepository.getAuth()
+            firebaseRepository.getNurseAvailable()
         }.fold(
-            onSuccess = { ManagerError.Success(0) },
+            onSuccess = {
+                val res = it.toObjects(Job::class.java)
+                ManagerError.Success(res)
+            },
             onFailure = { ManagerError.Error(it.message!!) }
         )
+    }
+
+    fun getConverterHour(hour: Int, hora: HourJob): Boolean {
+
+        var count = 0
+        /*val map = mapOf(
+            "8" to "ocho",
+            "9" to "nueve",
+            "10" to "diez",
+            "11" to "once",
+            "12" to "doce",
+            "13" to "trece",
+            "14" to "catorce",
+            "15" to "quince",
+            "16" to "dieciseis",
+            "17" to "diecisiete",
+            "18" to "dieciocho",
+            "19" to "diecinueve",
+            "20" to "veinte",
+            "21" to "veintiuno",
+            "22" to "veintidós",
+            )*/
+        val clavesAObtener = listOf(hour.toString(), (hour - 1).toString(), (hour + 1).toString())
+
+
+        for (clave in clavesAObtener) {
+            if (hora.map.containsKey(clave)) {
+                val valor = hora.map[clave]
+                if (valor!!.isEmpty()) {
+                    count++
+                }
+            }
+        }
+
+
+        return count == 3
+    }
+
+    suspend fun getNurseAvailableFilter(initFilter: List<String>): Any {
+        return runCatching {
+            firebaseRepository.getIdsNursesAvailable(initFilter as ArrayList<String>)
+        }.fold(
+            onSuccess = {
+                val res = it.toObjects(NurseRegister::class.java)
+                ManagerError.Success(res.toList())
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+    suspend fun getUSerAuth(): UserRegister {
+        return roomRepository.userSessionDao().getUserAuth()
+    }
+
+    suspend fun saveAppointment(
+        arrayOf: Array<String?>,
+        appointmentUserModel: AppointmentUserModel?
+    ): Any {
+        return runCatching {
+            appointmentUserModel!!.geolocation.longitude = arrayOf[2]
+            appointmentUserModel.geolocation.latitude = arrayOf[1]
+            appointmentUserModel.address = arrayOf[0]!!
+            firebaseRepository.setAppointmentToFirestore(appointmentUserModel)
+        }.fold(
+            onSuccess = {
+                ManagerError.Success("0")
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+    suspend fun updateAppointmentAvailable(
+        date: String,
+        uidNurse: String,
+        hour: String,
+        uidUser: String
+    ): ManagerError {
+        var bool = false
+        return runCatching {
+            firebaseRepository.getIdNurseAvailable(uidNurse)
+        }.fold(
+            onSuccess = {
+                var res = it.toObject(Job::class.java)
+                print(res)
+
+                lstNewDataJob.forEach {
+                    if (it == uidNurse) {
+                        bool = true
+                    }
+                }
+                var modelNew:Job = Job()
+                if (bool) {
+                    res!!.job.add(DataJob().apply { setNurseId(uidNurse, date, hour) })
+                    firebaseRepository.updateAvailableFirestore(res, uidNurse)
+                } else {
+                    modelNew = res!!.copy(res!!.job)
+                    for (itModel in modelNew.job) {
+
+                        if (itModel.date == date) {
+
+
+                            for(itMap in itModel.hora.map){
+                                val splice = hour.split(" : ")[0].toInt()
+                                val lstRangeHour = listOf(splice, splice - 1, splice + 1)
+
+                                for (range in lstRangeHour){
+                                    if (itMap.key.equals(range.toString())) {
+                                        itModel.hora.map[itMap.key] = uidUser
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    firebaseRepository.updateAvailableFirestore(modelNew, uidNurse)
+                }
+
+                ManagerError.Success("1")
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+
+    }
+
+    private var lstNewDataJob = listOf<String>()
+    fun setNurseInsert(listOfAddNewDataJob: ArrayList<String>) {
+        lstNewDataJob = listOfAddNewDataJob
     }
 }

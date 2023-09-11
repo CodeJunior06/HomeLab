@@ -43,7 +43,13 @@
         tools:layout="@layout/fragment_appointment_user_second_screen">
         <action
             android:id="@+id/action_appointmentUserSecondScreenFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            app:destination="@id/addressFragment" >
+
+            <argument
+                android:name="appointmentModel"
+                app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/userDataFragment"
@@ -67,5 +73,9 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/navigation_home"
              />
+
+        <argument
+            android:name="appointmentModel"
+            app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
     </fragment>
 </navigation>

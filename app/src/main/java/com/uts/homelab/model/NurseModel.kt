@@ -61,7 +61,7 @@ class NurseModel @Inject constructor(
 
         return kotlin.runCatching {
                 firebaseRepository.setRegisterWorkingNurse(modelWorking)
-                firebaseRepository.setRegisterAvailableAppointment(Job().apply { init() })
+                firebaseRepository.setRegisterAvailableAppointment(Job().apply { init(firebaseRepository.getAuth().uid!!) })
             ManagerError.Success(0)
         }.   onFailure {
             it.printStackTrace()

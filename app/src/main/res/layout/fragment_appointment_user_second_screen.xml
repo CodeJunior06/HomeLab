@@ -176,7 +176,7 @@
             android:layout_height="match_parent"
             >
             <TextView
-
+                android:id="@+id/messageLoading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -189,7 +189,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_nurses"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            />
 
 
     </LinearLayout>

@@ -15,6 +15,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAppointmentUserSecondScreenBinding
+import com.uts.homelab.network.dataclass.NurseRegister
+import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.dialog.InformationFragment
+import com.uts.homelab.utils.dialog.ProgressFragment
+import com.uts.homelab.view.adapter.AdapterNurseAvailable
 import com.uts.homelab.viewmodel.userViewmodel.AppointmentUserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -26,6 +31,10 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
     private val binding get() = _binding!!
 
     private var valueSpinner = ""
+    private var nurseSelect: NurseRegister? = null
+
+    private var informationDialog: InformationFragment? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,18 +50,7 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         }
 
         binding.btnAddAppointment.setOnClickListener {
-            if(binding.btnAddAppointment.text.equals("Seleccionar Direccion")){
-                findNavController().navigate(AppointmentUserSecondScreenFragmentDirections.actionAppointmentUserSecondScreenFragmentToAddressFragment())
-            }else{
-                viewModel.setAppointment(
-                    arrayOf(
-                        valueSpinner,
-                        binding.tvTimeSelected.text.toString(),
-                        binding.tvDateSelected.text.toString(),
-                    )
-                )
-            }
-
+            viewModel.sendModel()
         }
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -68,6 +66,8 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         return root
     }
 
+    private var progressDialog: ProgressFragment = ProgressFragment()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -75,6 +75,88 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
 
         binding.tvDateSelected.setOnClickListener {
             showDatePickerDialog()
+        }
+
+        setObserver()
+    }
+
+    private fun setObserver() {
+        viewModel.rvNurseAvailable.observe(viewLifecycleOwner) {
+            binding.rvNurses.adapter = AdapterNurseAvailable(it) { nurse: NurseRegister ->
+                nurseSelect = nurse
+            }
+        }
+        viewModel.modelAppointment.observe(viewLifecycleOwner) {
+            if (nurseSelect != null) {
+                if (binding.btnAddAppointment.text.equals("Seleccionar Direccion")) {
+                    findNavController().navigate(AppointmentUserSecondScreenFragmentDirections.actionAppointmentUserSecondScreenFragmentToAddressFragment(it))
+                } else {
+                    it.uidNurse = nurseSelect!!.uid
+                    viewModel.setAppointment(
+                        arrayOf(
+                            valueSpinner,
+                            binding.tvTimeSelected.text.toString(),
+                            binding.tvDateSelected.text.toString(),
+                            nurseSelect!!.uid
+                            ), it
+                    )
+                }
+            }
+        }
+
+        viewModel.isProgress.observe(viewLifecycleOwner) {
+            if (it.first) {
+
+                if(it.second==2 || it.second == 3){
+                    binding.loading.visibility = View.VISIBLE
+                    binding.rvNurses.visibility = View.GONE
+                    binding.messageLoading.setText("CARGANDO DISPONIBILIDAD . . .")
+                    if(it.second == 3){
+                        binding.messageLoading.setText("No se encuentra disponibilidad para la hora seleccionada. Intenta de nuevo")
+                    }
+                }else{
+                    if (progressDialog.isVisible) {
+                        progressDialog.dismiss()
+                    }
+                    progressDialog.show(childFragmentManager, "Progress Fragment")
+                }
+
+
+            } else {
+                if(it.second==2){
+                    binding.loading.visibility = View.GONE
+                    binding.rvNurses.visibility = View.VISIBLE
+                }else{
+                    if (progressDialog.isVisible) {
+                        progressDialog.dismiss()
+                    }
+                }
+
+            }
+        }
+
+        viewModel.informationFragment.observe(viewLifecycleOwner) {
+
+            if (it == null) return@observe
+
+            informationDialog = InformationFragment()
+            informationDialog!!.getInstance("ATENCION", if(it == "0") getString(R.string.data_update) else it )
+
+            val timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    if (informationDialog!!.isVisible) {
+                        informationDialog!!.dismiss()
+                    }
+                    if(it == "0"){
+
+                    }
+                }
+            }, 3000)
+
+            if (!informationDialog!!.isAdded) {
+                informationDialog!!.show(requireActivity().supportFragmentManager, "gg")
+            }
         }
     }
 
@@ -87,10 +169,8 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
-                val selectedDate = "$dayOfMonth / ${month + 1} / $year"
                 calendar.set(year, month, dayOfMonth)
-               // selectedDateTimestamp = calendar.timeInMillis
-                binding.tvDateSelected.text = selectedDate
+                binding.tvDateSelected.text = Utils().getCurrentDate(calendar.timeInMillis)
                 showTimePickerDialog()
 
             },
@@ -109,12 +189,12 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
 
         val datePickerDialog = TimePickerDialog(
             requireContext(),
-            object: TimePickerDialog.OnTimeSetListener{
+            object : TimePickerDialog.OnTimeSetListener {
                 override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
                     binding.tvTimeSelected.setText("$p1 : $p2")
-                    //viewModel.getNurse(binding.tvDateSelected.text.toString(),binding.tvTimeSelected.text.toString())
+                    viewModel.getNurse(binding.tvDateSelected.text.toString(), p1)
                 }
-            },currentHour,currentMinute,true
+            }, currentHour, currentMinute, true
         )
 
         datePickerDialog.show()
@@ -134,10 +214,10 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
     }
 
     override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-       valueSpinner =  adapterView?.getItemAtPosition(p2).toString()
+        valueSpinner = adapterView?.getItemAtPosition(p2).toString()
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-       println("")
+        println("")
     }
 }

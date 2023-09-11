@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uts.homelab.model.UserModel
+import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Utils
@@ -24,6 +25,8 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
     val progressDialog = MutableLiveData<Boolean>()
     val intentToMainUser = MutableLiveData<Unit>()
 
+    private var appointmentUserModel: AppointmentUserModel? = null
+
     fun init() {
         viewModelScope.launch {
             val response = model.initView()
@@ -36,6 +39,10 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
 
     fun setModel(userModel: UserRegister) {
         this.userModel.value = userModel
+    }
+
+    fun setModelAppointment(appointmentModel: AppointmentUserModel) {
+        appointmentUserModel = appointmentModel
     }
 
     fun saveRoom() {
@@ -54,7 +61,35 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
             when (val response = model.saveUserFirestore(arrayOf, userModel.value)) {
                 is ManagerError.Success -> {
                     progressDialog.postValue(false)
-                     informationFragment.postValue(response.modelSuccess as String)
+                    informationFragment.postValue(response.modelSuccess as String)
+                }
+                is ManagerError.Error -> {
+                    progressDialog.postValue(false)
+                    informationFragment.postValue(response.error)
+                }
+            }
+        }
+    }
+
+    fun registerAppointment(arrayOf: Array<String?>) {
+
+        if (Utils().isEmptyValues(arrayOf)) {
+            return
+        }
+        progressDialog.value = true
+        viewModelScope.launch {
+
+            when (val response = model.saveAppointment(arrayOf, appointmentUserModel)) {
+                is ManagerError.Success -> {
+                    progressDialog.postValue(false)
+                    model.updateAppointmentAvailable(
+                        appointmentUserModel!!.date,
+                        appointmentUserModel!!.uidNurse,
+                        appointmentUserModel!!.hour,
+                        appointmentUserModel!!.uidUser
+                    )
+                    informationFragment.postValue(response.modelSuccess as String)
+
                 }
                 is ManagerError.Error -> {
                     progressDialog.postValue(false)
