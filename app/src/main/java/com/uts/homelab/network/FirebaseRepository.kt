@@ -39,9 +39,9 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun setAppointmentToFirestore(appoimentUserModel: AppointmentUserModel): Task<Void> {
+    override suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<Void> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Appointment").document().set(appoimentUserModel)
+            firestore.collection("Appointment").document().set(appointmentUserModel)
         }
     }
 
@@ -125,8 +125,38 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    override suspend fun getAppointmentByUser(date: String): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Appointment").whereEqualTo("uidUser", auth.uid).whereEqualTo("date",date).get().await()
+        }
+    }
+
+    override suspend fun getAppointmentAllByUser(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Appointment").whereEqualTo("uidUser", auth.uid).get().await()
+        }
+    }
+
     override fun closeSession() {
         auth.signOut()
+    }
+
+    override suspend fun setTypeComment(model: Map<String, String?>): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Opinion").document().set(model)
+        }
+    }
+
+    override suspend fun requestChangePassword(email: String) {
+        return withContext(Dispatchers.IO) {
+            auth.sendPasswordResetEmail(email).await()
+        }
+    }
+
+    override suspend fun updateDataUserFirestore(userRegister: UserRegister): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Users").document(auth.currentUser!!.uid).set(userRegister, SetOptions.merge())
+        }
     }
 
     fun getAuth() : FirebaseAuth{

@@ -9,19 +9,22 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAppointmentUserSecondScreenBinding
 import com.uts.homelab.network.dataclass.NurseRegister
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.view.adapter.AdapterNurseAvailable
 import com.uts.homelab.viewmodel.userViewmodel.AppointmentUserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -52,6 +55,8 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         binding.btnAddAppointment.setOnClickListener {
             viewModel.sendModel()
         }
+
+        binding.radioButtonYes.isChecked = true
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -87,11 +92,18 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
             }
         }
         viewModel.modelAppointment.observe(viewLifecycleOwner) {
+            if (it== null) return@observe
             if (nurseSelect != null) {
+                it.uidNurse = nurseSelect!!.uid
+                it.modelNurse = nurseSelect!!
+                it.state = State.ACTIVE.name
                 if (binding.btnAddAppointment.text.equals("Seleccionar Direccion")) {
+
+                    it.typeOfExam = valueSpinner
+                    it.date =  binding.tvDateSelected.text.toString()
+                    it.hour =  binding.tvTimeSelected.text.toString()
                     findNavController().navigate(AppointmentUserSecondScreenFragmentDirections.actionAppointmentUserSecondScreenFragmentToAddressFragment(it))
                 } else {
-                    it.uidNurse = nurseSelect!!.uid
                     viewModel.setAppointment(
                         arrayOf(
                             valueSpinner,
@@ -140,7 +152,7 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
             if (it == null) return@observe
 
             informationDialog = InformationFragment()
-            informationDialog!!.getInstance("ATENCION", if(it == "0") getString(R.string.data_update) else it )
+            informationDialog!!.getInstance("ATENCION", if(it == "0") getString(R.string.register_appointment) else it )
 
             val timer = Timer()
             timer.schedule(object : TimerTask() {
@@ -150,6 +162,9 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
                     }
                     if(it == "0"){
 
+                        CoroutineScope(Dispatchers.Main).launch{
+                            findNavController().popBackStack()
+                        }
                     }
                 }
             }, 3000)
@@ -189,11 +204,9 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
 
         val datePickerDialog = TimePickerDialog(
             requireContext(),
-            object : TimePickerDialog.OnTimeSetListener {
-                override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
-                    binding.tvTimeSelected.setText("$p1 : $p2")
-                    viewModel.getNurse(binding.tvDateSelected.text.toString(), p1)
-                }
+            { _, first, second ->
+                binding.tvTimeSelected.setText("$first : $second")
+                viewModel.getNurse(binding.tvDateSelected.text.toString(), first)
             }, currentHour, currentMinute, true
         )
 
@@ -204,7 +217,7 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         val adapterTypeAppointment = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            resources.getStringArray(R.array.typeAppoiment_array)
+            resources.getStringArray(R.array.typeAppointment_array)
         )
 
         adapterTypeAppointment.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -219,5 +232,15 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         println("")
+    }
+
+    private fun clearObserver(){
+        viewModel.informationFragment.postValue(null)
+        viewModel.modelAppointment.postValue(null)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearObserver()
     }
 }

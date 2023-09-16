@@ -6,5 +6,7 @@
     <color name="blue_marine">#0A2799</color>
     <color name="blue_hospital">#67A9C8</color>
 
+    <color name="background_editText">#E9E8E8</color>
+
 
 </resources>

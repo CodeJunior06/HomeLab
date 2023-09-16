@@ -1,7 +1,6 @@
 package com.uts.homelab.model
 
 import com.google.firebase.auth.FirebaseUser
-import com.uts.homelab.AuthSingleton
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.db.DataBaseHome
@@ -25,7 +24,6 @@ class AdminModel @Inject constructor(
                 room.adminSessionDao().getAdminAuth()
             }.fold(
                 onSuccess = {
-                    AuthSingleton.getInstance().uid= it.id
                     ManagerError.Success(it)
                 },
                 onFailure = { ManagerError.Error(it.message!!) }
@@ -37,8 +35,6 @@ class AdminModel @Inject constructor(
         return withContext(Dispatchers.IO) {
             kotlin.runCatching {
                 room.adminSessionDao().deleteAdminAuth(firebaseRepository.getAuth().uid!!)
-                AuthSingleton.getInstance().uid = ""
-
             }.fold(
                 onSuccess = {
                     dataStore.setStringDataStore(

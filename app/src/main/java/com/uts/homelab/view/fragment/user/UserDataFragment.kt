@@ -144,21 +144,17 @@ class UserDataFragment : Fragment() , AdapterView.OnItemSelectedListener {
             binding.nameUser.text = it!!.name + " " + it!!.lastName.split(" ")[0]
         }
     }
-
-    private val documents = listOf("CC", "DNI", "TI", "DE")
-    private val eps = listOf("Salud total", "Sanitas", "SaludCoop", "Cafe salud")
-
     private fun spinner() {
         val adapterTypeDocument = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            documents
+            requireActivity().resources.getStringArray(R.array.typeDocument_array)
         )
 
         val adapterTypeEPS = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            eps
+            requireActivity().resources.getStringArray(R.array.typeEPS_array)
         )
         adapterTypeDocument.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adapterTypeEPS.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -172,9 +168,9 @@ class UserDataFragment : Fragment() , AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(adapter: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
         if(adapter.id == R.id.sp_typeIPS){
-            valueEPS =  eps[p2]
+            valueEPS = adapter.getItemAtPosition(p2).toString()
         }else{
-            valueSpinner = documents[p2]
+            valueSpinner = adapter.getItemAtPosition(p2).toString()
         }
     }
 

@@ -17,24 +17,57 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(private val model: UserModel) : ViewModel() {
 
     var userModel = MutableLiveData<UserRegister?>()
-
-    var toast = MutableLiveData<Unit>()
+    var listAppointmentModel= MutableLiveData<List<AppointmentUserModel>?>()
 
     val informationFragment = MutableLiveData<String?>()
 
     val progressDialog = MutableLiveData<Boolean>()
     val intentToMainUser = MutableLiveData<Unit>()
 
+    val isProgress = MutableLiveData<Pair<Boolean, Int>>()
+
     private var appointmentUserModel: AppointmentUserModel? = null
 
     fun init() {
+        isProgress.value  = Pair(true,2)
+
         viewModelScope.launch {
             val response = model.initView()
             userModel.postValue(response)
             if (response.newUser) {
                 informationFragment.postValue(Cons.VIEW_DIALOG_INFORMATION)
+            }else{
+                when (val res = model.getAppointmentByUser()){
+                    is ManagerError.Success -> {
+                        listAppointmentModel.postValue(res.modelSuccess as List<AppointmentUserModel> )
+                    }
+                    is ManagerError.Error -> {
+                        isProgress.postValue(Pair(true,3))
+                    }
+                }
             }
         }
+    }
+
+    fun getAllAppointment(){
+        progressDialog.value = true
+        viewModelScope.launch {
+            when(val res = model.getAppointmentAllByUser()){
+                is ManagerError.Success->{
+                    listAppointmentModel.postValue(res.modelSuccess as List<AppointmentUserModel> )
+                    progressDialog.postValue(false)
+                }
+                is ManagerError.Error -> {
+                    listAppointmentModel.postValue(emptyList())
+                    progressDialog.postValue(false)
+                    informationFragment.postValue("No has realizado la primera cita")
+                }
+            }
+
+
+
+        }
+
     }
 
     fun setModel(userModel: UserRegister) {
@@ -81,14 +114,15 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
 
             when (val response = model.saveAppointment(arrayOf, appointmentUserModel)) {
                 is ManagerError.Success -> {
-                    progressDialog.postValue(false)
-                    model.updateAppointmentAvailable(
-                        appointmentUserModel!!.date,
-                        appointmentUserModel!!.uidNurse,
-                        appointmentUserModel!!.hour,
-                        appointmentUserModel!!.uidUser
-                    )
-                    informationFragment.postValue(response.modelSuccess as String)
+
+                         model.updateAppointmentAvailable(
+                            appointmentUserModel!!.date,
+                            appointmentUserModel!!.uidNurse,
+                            appointmentUserModel!!.hour,
+                            appointmentUserModel!!.uidUser
+                        )
+                        progressDialog.postValue(false)
+                        informationFragment.postValue(response.modelSuccess as String)
 
                 }
                 is ManagerError.Error -> {

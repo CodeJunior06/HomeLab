@@ -8,14 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.GoogleMap
 import com.uts.homelab.databinding.FragmentOptionBinding
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
-import com.uts.homelab.view.UserActivity
+import com.uts.homelab.utils.TypeView
+import com.uts.homelab.view.adapter.AdapterUserAppointment
 import com.uts.homelab.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class AppointmentUserFragment : Fragment() {
 
     private var _binding: FragmentOptionBinding? = null
-    private lateinit var googleMap:GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel: UserViewModel by activityViewModels()
 
@@ -40,16 +40,22 @@ class AppointmentUserFragment : Fragment() {
         _binding = FragmentOptionBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-     /*   val textView: TextView = binding.textHome
-        viewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
 
         viewModel.init()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         binding.btnAddAppointment.setOnClickListener {
          findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToAppointmentUserSecondScreenFragment())
+        }
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(navDirectionsProfile)
+        }
+        binding.btnHistoryAppointment.setOnClickListener {
+            findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToNavigationDashboard())
+        }
+
+        binding.btnResult.setOnClickListener {
+            findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToResultUserFragment())
         }
         return root
     }
@@ -59,15 +65,20 @@ class AppointmentUserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private lateinit var  navDirections:NavDirections
+    private lateinit var  navDirectionsCompleteData:NavDirections
+    private lateinit var  navDirectionsProfile:NavDirections
+
+
     private fun setObserver() {
         viewModel.userModel.observe(viewLifecycleOwner){
-            navDirections = AppointmentUserFragmentDirections.actionNavigationHomeToUserDataFragment(it!!)
+            navDirectionsCompleteData = AppointmentUserFragmentDirections.actionNavigationHomeToUserDataFragment(it!!)
+            navDirectionsProfile = AppointmentUserFragmentDirections.actionNavigationHomeToNavigationNotifications(it)
+
+            binding.nameUser.text = it.name
         }
 
         viewModel.informationFragment.observe(viewLifecycleOwner){
             if(it == null ) return@observe
-
             informationDialog = InformationFragment()
             if (it == Cons.VIEW_DIALOG_INFORMATION) {
                 informationDialog!!.getInstance(
@@ -75,11 +86,9 @@ class AppointmentUserFragment : Fragment() {
                     "Hemos detectado que faltan datos para continuar con el procesos",
                     "Ir a llenar"
                 ) {
-                    val act = requireActivity() as UserActivity
-                    act.isViewBottomNavigation(false)
                     informationDialog!!.dismiss()
                     clearObservers()
-                    findNavController().navigate(navDirections)
+                    findNavController().navigate(navDirectionsCompleteData)
                 }
             } else {
                 informationDialog!!.getInstance("ATENCION", it)
@@ -88,6 +97,41 @@ class AppointmentUserFragment : Fragment() {
             informationDialog!!.show(requireActivity().supportFragmentManager, "gg")
 
         }
+
+        viewModel.isProgress.observe(viewLifecycleOwner) {
+            if (it.first) {
+
+                if(it.second==2 || it.second == 3){
+                    binding.loading.visibility = View.VISIBLE
+                    binding.rvAppointment.visibility = View.GONE
+                    binding.messageLoading.setText("CARGANDO DISPONIBILIDAD . . .")
+                    if(it.second == 3){
+                        binding.messageLoading.setText("No se encuentran citas disponibles para el dia de hoy")
+                    }
+                }
+
+            } else {
+                if(it.second==2){
+                    binding.loading.visibility = View.GONE
+                    binding.rvAppointment.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.listAppointmentModel.observe(viewLifecycleOwner){
+            if(it ==null ) return@observe
+            binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
+            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN)
+            binding.countAppointment.text = it.size.toString()
+            if(it.isEmpty()){
+                viewModel.isProgress.postValue(Pair(true,3))
+            }else{
+                binding.loading.visibility = View.GONE
+                binding.rvAppointment.visibility = View.VISIBLE
+            }
+        }
+
+
     }
     private fun clearObservers(){
         viewModel.informationFragment.value = null

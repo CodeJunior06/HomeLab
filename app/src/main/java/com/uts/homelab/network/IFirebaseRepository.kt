@@ -27,7 +27,7 @@ interface IFirebaseRepository {
 
     suspend fun getToken(): String
 
-    suspend fun setAppointmentToFirestore(appoimentUserModel: AppointmentUserModel): Task<Void>
+    suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<Void>
     suspend fun isUserAdminFirestore(email: Any): QuerySnapshot
     suspend fun isUserNurseFirestore(email: Any): QuerySnapshot
     suspend fun isUserPatientFirestore(email: Any): QuerySnapshot
@@ -36,6 +36,12 @@ interface IFirebaseRepository {
 
     suspend fun getIdsNursesAvailable(list:ArrayList<String>): QuerySnapshot
 
+    suspend fun getAppointmentByUser(date:String) : QuerySnapshot
+    suspend fun getAppointmentAllByUser() : QuerySnapshot
+
 
     fun closeSession()
+    suspend fun setTypeComment(model: Map<String, String?>) : Task<*>
+    suspend fun requestChangePassword(email: String)
+    suspend fun updateDataUserFirestore(register: UserRegister) : Task<*>
 }

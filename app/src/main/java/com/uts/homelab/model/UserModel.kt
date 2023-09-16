@@ -3,6 +3,7 @@ package com.uts.homelab.model
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.DataBaseHome
+import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -106,23 +107,7 @@ class UserModel @Inject constructor(
     fun getConverterHour(hour: Int, hora: HourJob): Boolean {
 
         var count = 0
-        /*val map = mapOf(
-            "8" to "ocho",
-            "9" to "nueve",
-            "10" to "diez",
-            "11" to "once",
-            "12" to "doce",
-            "13" to "trece",
-            "14" to "catorce",
-            "15" to "quince",
-            "16" to "dieciseis",
-            "17" to "diecisiete",
-            "18" to "dieciocho",
-            "19" to "diecinueve",
-            "20" to "veinte",
-            "21" to "veintiuno",
-            "22" to "veintidós",
-            )*/
+
         val clavesAObtener = listOf(hour.toString(), (hour - 1).toString(), (hour + 1).toString())
 
 
@@ -183,17 +168,20 @@ class UserModel @Inject constructor(
             firebaseRepository.getIdNurseAvailable(uidNurse)
         }.fold(
             onSuccess = {
-                var res = it.toObject(Job::class.java)
+                val res = it.toObject(Job::class.java)
                 print(res)
 
-                lstNewDataJob.forEach {
-                    if (it == uidNurse) {
-                        bool = true
+                lstNewDataJob.forEach {data ->
+                    run {
+                        if (data == uidNurse) {
+                            bool = true
+                        }
                     }
+
                 }
-                var modelNew:Job = Job()
+                val modelNew: Job
                 if (bool) {
-                    res!!.job.add(DataJob().apply { setNurseId(uidNurse, date, hour) })
+                    res!!.job.add(DataJob().apply { setNurseId(uidNurse,uidUser, date, hour) })
                     firebaseRepository.updateAvailableFirestore(res, uidNurse)
                 } else {
                     modelNew = res!!.copy(res!!.job)
@@ -228,5 +216,79 @@ class UserModel @Inject constructor(
     private var lstNewDataJob = listOf<String>()
     fun setNurseInsert(listOfAddNewDataJob: ArrayList<String>) {
         lstNewDataJob = listOfAddNewDataJob
+    }
+
+    suspend fun getAppointmentByUser(): ManagerError {
+        return runCatching {
+            firebaseRepository.getAppointmentByUser(Utils().getCurrentDate())
+        }.fold(
+            onSuccess = {
+                val res = it.toObjects(AppointmentUserModel::class.java).toList()
+                ManagerError.Success(res)
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+
+    suspend fun getAppointmentAllByUser(): ManagerError {
+        return runCatching {
+            firebaseRepository.getAppointmentAllByUser()
+        }.fold(
+            onSuccess = {
+                val res = it.toObjects(AppointmentUserModel::class.java).toList()
+                ManagerError.Success(res)
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+    suspend fun setOpinion(type: String, it: String) : ManagerError {
+        val model = mapOf(
+            "uidUser" to firebaseRepository.getAuth().currentUser!!.uid,
+            "message" to it,
+            "type" to type
+        )
+        return runCatching {
+                firebaseRepository.setTypeComment(model).await()
+
+        }.fold(
+            onSuccess = {
+                ManagerError.Success("1")
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+    suspend  fun sendRequestChangePassword(): ManagerError {
+        return runCatching {
+            firebaseRepository.requestChangePassword(firebaseRepository.getAuth().currentUser?.email!!)
+        }.fold(
+            onSuccess = {
+                ManagerError.Success("1")
+            },
+
+            onFailure = {
+                TODO("ERROR AL ENVIAR EL RESTABLECIMIENTO DE CONTRASEÑA")
+                ManagerError.Error(it.message!!) }
+        )
+    }
+    suspend fun updateDataUserFirestore(values: Array<String?>,userRegister: UserRegister): Any {
+
+        userRegister.eps = values[0]!!
+        userRegister.phone = values[1]!!.toLong()
+        userRegister.age = values[2]!!.toInt()
+        return runCatching {
+            firebaseRepository.updateDataUserFirestore(userRegister)
+        }.fold(
+            onSuccess = {
+                roomRepository.userSessionDao().updateUserSession(userRegister)
+                ManagerError.Success("1")
+            },
+
+            onFailure = {
+
+                ManagerError.Error(it.message!!) }
+        )
     }
 }

@@ -4,12 +4,11 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,7 +25,6 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAddressBinding
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
-import com.uts.homelab.view.fragment.nurse.NurseDataFragmentArgs
 import com.uts.homelab.viewmodel.UserViewModel
 import java.util.*
 
@@ -121,7 +119,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
                 if (progressDialog.isVisible) {
                     progressDialog.dismiss()
                 }
-                progressDialog.show(childFragmentManager, "Progress Fragment")
+                progressDialog.show(childFragmentManager, "progress ${javaClass.name}")
             } else {
                 if (progressDialog.isVisible) {
                     progressDialog.dismiss()

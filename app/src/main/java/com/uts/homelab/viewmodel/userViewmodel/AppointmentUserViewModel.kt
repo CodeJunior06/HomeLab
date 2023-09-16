@@ -1,7 +1,5 @@
 package com.uts.homelab.viewmodel.userViewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,6 +47,7 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
             model.setAppointmentUserFirestore(valueAppointment, appointmentUserModel)) {
             is ManagerError.Success -> {
                 isProgress.postValue(Pair(false, 1))
+                informationFragment.postValue("0")
             }
             is ManagerError.Error -> {
                 isProgress.postValue(Pair(false, 1))
@@ -117,6 +116,8 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
                             val res = model.getConverterHour(hour, dataJob.hora)
                             if (res) {
                                 lst.add(dataJob.uidNurse)
+                                listOfAddNewDataJob = ArrayList(LinkedHashSet(listOfAddNewDataJob))
+                                listOfAddNewDataJob.remove(dataJob.uidNurse)
                                 break
                             }else{
                                 boolIsFalse = true
@@ -184,6 +185,7 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
             model.address = response.address
             model.geolocation = response.geolocation
             model.uidUser = response.uid
+            model.modelUser = response
             modelAppointment.postValue(
                 model
             )

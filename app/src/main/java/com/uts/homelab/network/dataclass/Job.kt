@@ -20,9 +20,9 @@ data class DataJob(
     var uidNurse: String = "",
     var hora: HourJob = HourJob()
 ) {
-    fun setNurseId(uid: String, date: String, hour: String) {
+    fun setNurseId(uidNurse:String,uid: String, date: String, hour: String) {
         this.date = date
-        uidNurse = uid
+        this.uidNurse = uidNurse
         val splice = hour.split(" : ")[0].toInt()
         val lstRangeHour = listOf(splice, splice - 1, splice + 1)
         hora.map.forEach {
