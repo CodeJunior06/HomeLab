@@ -1,8 +1,12 @@
 package com.uts.homelab.network.dataclass
 
-data class WorkingDayNurse(
-     val geolocation: Geolocation,
-     val active:Boolean = false
-){
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "workingDay")
+ class WorkingDayNurse{
+    var geolocation: Geolocation = Geolocation()
+    var active:Boolean = false
+    @PrimaryKey
     var id:String = ""
 }

@@ -63,7 +63,7 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
 
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-           returnBeforePage()
+
         }
 
         observers()
@@ -82,11 +82,6 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
-    }
-    private fun returnBeforePage(){
-        val act = requireActivity() as NurseActivity
-        act.isViewBottomNavigation(true)
-        findNavController().popBackStack()
     }
 
     private fun observers() {
@@ -109,7 +104,7 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.intentToMainNurse.observe(viewLifecycleOwner){
-            returnBeforePage()
+
         }
     }
 

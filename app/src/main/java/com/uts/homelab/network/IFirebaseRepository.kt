@@ -36,7 +36,7 @@ interface IFirebaseRepository {
 
     suspend fun getIdsNursesAvailable(list:ArrayList<String>): QuerySnapshot
 
-    suspend fun getAppointmentByUser(date:String) : QuerySnapshot
+    suspend fun getAppointmentByDate(date:String,typeUser:String) : QuerySnapshot
     suspend fun getAppointmentAllByUser() : QuerySnapshot
 
 
@@ -44,4 +44,6 @@ interface IFirebaseRepository {
     suspend fun setTypeComment(model: Map<String, String?>) : Task<*>
     suspend fun requestChangePassword(email: String)
     suspend fun updateDataUserFirestore(register: UserRegister) : Task<*>
+    suspend fun getJournal() : QuerySnapshot
+    suspend fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String) : Task<*>
 }

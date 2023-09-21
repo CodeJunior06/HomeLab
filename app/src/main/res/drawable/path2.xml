@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="276dp"
+    android:height="190dp"
+    android:viewportWidth="276"
+    android:viewportHeight="190">
+  <path
+      android:pathData="M0,128V0H276V128C275.33,148.67 246.6,190 137,190C27.4,190 0,148.67 0,128Z"
+      android:fillColor="@color/blue_hospital"/>
+</vector>

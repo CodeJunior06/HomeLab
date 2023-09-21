@@ -72,7 +72,7 @@ class HistoryUserFragment : Fragment() {
         viewModel.listAppointmentModel.observe(viewLifecycleOwner){
             if(it == null) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.HISTORY)
+            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.HISTORY, AdapterUserAppointment.VIEW_USER)
 
         }
 

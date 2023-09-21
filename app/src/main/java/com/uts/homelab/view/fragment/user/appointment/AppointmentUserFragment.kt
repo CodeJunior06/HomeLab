@@ -121,7 +121,7 @@ class AppointmentUserFragment : Fragment() {
         viewModel.listAppointmentModel.observe(viewLifecycleOwner){
             if(it ==null ) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN)
+            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN,AdapterUserAppointment.VIEW_USER)
             binding.countAppointment.text = it.size.toString()
             if(it.isEmpty()){
                 viewModel.isProgress.postValue(Pair(true,3))

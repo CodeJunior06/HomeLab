@@ -5,13 +5,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
+import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.network.db.dao.AdminSessionDAO
 import com.uts.homelab.network.db.dao.NurseSessionDAO
 import com.uts.homelab.network.db.dao.UserSessionDAO
 
 import com.uts.homelab.network.db.entity.AdminSession
 
-@Database(entities = [AdminSession::class,NurseRegister::class,UserRegister::class], version = 5, exportSchema = false)
+@Database(entities = [AdminSession::class,NurseRegister::class,UserRegister::class,WorkingDayNurse::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 
 abstract class DataBaseHome : RoomDatabase() {

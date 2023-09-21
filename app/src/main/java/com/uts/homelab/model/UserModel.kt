@@ -2,6 +2,7 @@ package com.uts.homelab.model
 
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
+import com.uts.homelab.network.db.Constants
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
@@ -220,7 +221,7 @@ class UserModel @Inject constructor(
 
     suspend fun getAppointmentByUser(): ManagerError {
         return runCatching {
-            firebaseRepository.getAppointmentByUser(Utils().getCurrentDate())
+            firebaseRepository.getAppointmentByDate(Utils().getCurrentDate(),Constants.APPOINTMENT_UID_USER)
         }.fold(
             onSuccess = {
                 val res = it.toObjects(AppointmentUserModel::class.java).toList()

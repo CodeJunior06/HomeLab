@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.network.db.dao.NurseSessionDAO
 import com.uts.homelab.network.db.dao.AdminSessionDAO
+import com.uts.homelab.network.db.dao.UserSessionDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,7 @@ object RoomModule {
             .fallbackToDestructiveMigration()
             .build()
     }
+
     @Singleton
     @Provides
     fun provideMyNurseSessionDao(database: DataBaseHome): NurseSessionDAO {
@@ -29,7 +31,13 @@ object RoomModule {
     }
     @Singleton
     @Provides
-    fun provideMyUserSessionDao(database: DataBaseHome): AdminSessionDAO {
+    fun provideAdminSessionDao(database: DataBaseHome): AdminSessionDAO {
         return database.adminSessionDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMyUserSessionDao(database: DataBaseHome): UserSessionDAO {
+        return database.userSessionDao()
     }
 }

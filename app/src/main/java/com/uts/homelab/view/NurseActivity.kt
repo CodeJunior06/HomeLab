@@ -40,21 +40,7 @@ class NurseActivity : AppCompatActivity() {
         binding = ActivityNurseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_content_nurse)
-
-        navView.setupWithNavController(navController)
-
         validLocation()
-    }
-
-    fun isViewBottomNavigation(bool: Boolean) {
-        binding.navView.visibility = if (bool) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 
     private val codeLocation = 101

@@ -125,9 +125,9 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun getAppointmentByUser(date: String): QuerySnapshot {
+    override suspend fun getAppointmentByDate(date: String, typeUser: String): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Appointment").whereEqualTo("uidUser", auth.uid).whereEqualTo("date",date).get().await()
+            firestore.collection("Appointment").whereEqualTo(typeUser, auth.uid).whereEqualTo("date",date).get().await()
         }
     }
 
@@ -156,6 +156,18 @@ class FirebaseRepository @Inject constructor(
     override suspend fun updateDataUserFirestore(userRegister: UserRegister): Task<*> {
         return withContext(Dispatchers.IO) {
             firestore.collection("Users").document(auth.currentUser!!.uid).set(userRegister, SetOptions.merge())
+        }
+    }
+
+    override suspend fun getJournal(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("WorkingDay").whereEqualTo("id",auth.currentUser!!.uid).get().await()
+        }
+    }
+
+    override suspend  fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("WorkingDay").document(idDoc).set(workingDayNurse, SetOptions.merge())
         }
     }
 

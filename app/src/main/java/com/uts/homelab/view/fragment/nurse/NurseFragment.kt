@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.uts.homelab.databinding.FragmentNurseBinding
 import com.uts.homelab.utils.Cons
+import com.uts.homelab.utils.TypeView
 import com.uts.homelab.utils.dialog.InformationFragment
-import com.uts.homelab.view.NurseActivity
+import com.uts.homelab.view.adapter.AdapterUserAppointment
 import com.uts.homelab.viewmodel.NurseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +37,10 @@ class NurseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.init()
         observers()
+
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToNurseProfile())
+        }
     }
 
     private fun observers() {
@@ -43,7 +49,7 @@ class NurseFragment : Fragment() {
              this.navDirections = NurseFragmentDirections.actionNurseFragmentToNurseDataFragment(it)
         }
 
-        viewModel.informationFragmentFragment.observe(viewLifecycleOwner) {
+        viewModel.informationFragment.observe(viewLifecycleOwner) {
             if(it== null) return@observe
 
             informationDialog = InformationFragment()
@@ -53,8 +59,6 @@ class NurseFragment : Fragment() {
                     "Hemos detectado que faltan datos para continuar con el procesos",
                     "Ir a llenar"
                 ) {
-                    val act = requireActivity() as NurseActivity
-                    act.isViewBottomNavigation(false)
                     findNavController().navigate(navDirections!!)
                     informationDialog.dismissNow()
                 }
@@ -66,10 +70,49 @@ class NurseFragment : Fragment() {
                 informationDialog.show(requireActivity().supportFragmentManager, "gg")
             }
         }
+        viewModel.progressDialogRv.observe(viewLifecycleOwner){
+            if (it.first) {
+
+                if(it.second==2 || it.second == 3){
+                    binding.loading.visibility = View.VISIBLE
+                    binding.rvAppointment.visibility = View.GONE
+                    binding.messageLoading.setText("CARGANDO DISPONIBILIDAD . . .")
+                    if(it.second == 3){
+                        binding.messageLoading.setText("No se encuentran tareas para hoy")
+                    }
+                }else{
+
+                }
+
+
+            } else {
+                if(it.second==2){
+                    binding.loading.visibility = View.GONE
+                    binding.rvAppointment.visibility = View.VISIBLE
+                }else{
+
+                }
+
+            }
+        }
+
+        viewModel.setRecycler.observe(viewLifecycleOwner){
+            if(it ==null ) return@observe
+            binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
+            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN,
+                AdapterUserAppointment.VIEW_NURSE)
+            binding.countVisit.text = it.size.toString()
+            if(it.isEmpty()){
+                viewModel.progressDialogRv.postValue(Pair(true,3))
+            }else{
+                binding.loading.visibility = View.GONE
+                binding.rvAppointment.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.informationFragmentFragment.value = null
+        viewModel.informationFragment.value = null
     }
 }

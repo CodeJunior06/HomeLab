@@ -18,6 +18,12 @@
                 app:argType="com.uts.homelab.network.dataclass.NurseRegister" />
 
         </action>
+        <action
+            android:id="@+id/action_nurse_fragment_to_nurse_history"
+            app:destination="@id/nurse_history" />
+        <action
+            android:id="@+id/action_nurse_fragment_to_nurse_profile"
+            app:destination="@id/nurse_profile" />
     </fragment>
     <fragment
         android:id="@+id/nurse_history"
