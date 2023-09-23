@@ -1,10 +1,12 @@
 package com.uts.homelab.network
 
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.uts.homelab.network.dataclass.*
+import com.uts.homelab.network.db.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -168,6 +170,33 @@ class FirebaseRepository @Inject constructor(
     override suspend  fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String): Task<*> {
         return withContext(Dispatchers.IO) {
             firestore.collection("WorkingDay").document(idDoc).set(workingDayNurse, SetOptions.merge())
+        }
+    }
+
+    override suspend fun getNursesByJournal(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("WorkingDay").whereEqualTo("active",true).get().await()
+        }
+    }
+
+    fun tst(onCall: (WorkingDayNurse) -> Unit) {
+        firestore.collection(Constants.COLLECT_WORKING_DAY).addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+
+            for (dc in snapshot!!.documentChanges) {
+                when (dc.type) {
+                    DocumentChange.Type.ADDED -> Log.d(javaClass.name, "New city: ${dc.document.id}")
+                    DocumentChange.Type.MODIFIED ->{
+                        Log.d(javaClass.name, "Modified city: ${dc.document.id}")
+                        val model = dc.document.toObject(WorkingDayNurse::class.java)
+                        onCall(model)
+                    }
+                    DocumentChange.Type.REMOVED -> Log.d(javaClass.name, "Removed city: ${dc.document.id}")
+                }
+            }
+
         }
     }
 

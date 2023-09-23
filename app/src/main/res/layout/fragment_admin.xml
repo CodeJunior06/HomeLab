@@ -11,49 +11,43 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:layout_weight="0.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="40dp"
-            android:orientation="vertical">
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
 
 
             <TextView
+                android:gravity="bottom"
+
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="WELCOME"
+                android:text="Hola, "
                 android:textColor="@color/blue_marine"
                 android:textSize="45sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/btn_exit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_exit"
-                app:layout_constraintBottom_toTopOf="@+id/nameAdmin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
 
             <TextView
                 android:id="@+id/nameAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="NAME ADMIN"
+                android:text="Santiago Rueda"
+                android:gravity="bottom"
+                android:paddingBottom="1dp"
                 android:textColor="@color/black"
-                android:textSize="35sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <LinearLayout
+            android:layout_weight="1.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -62,6 +56,7 @@
             <androidx.cardview.widget.CardView
 
                 android:id="@+id/cardNurse"
+                android:layout_weight="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -70,14 +65,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="5dp">
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/enfermero"
                         app:tint="@color/white" />
@@ -86,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingVertical="5dp"
-                        android:text="Add Nurse"
+                        android:text="Añadir enfermero"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -100,6 +96,7 @@
             <androidx.cardview.widget.CardView
 
                 android:id="@+id/cardProfile"
+                android:layout_weight="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -114,8 +111,9 @@
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_admin"
                         app:tint="@color/white" />
@@ -124,7 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingVertical="5dp"
-                        android:text="Profile"
+                        android:text="Ver Perfil"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -139,16 +137,55 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_weight="1.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-
+                android:layout_weight="5"
                 android:id="@+id/cardLocation"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:backgroundTint="#67A9C8"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <!-- Media -->
+                    <ImageView
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/map_svgrepo_com"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="5dp"
+                        android:text="Ubicar a todos"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_weight="5"
+                android:layout_width="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#67A9C8"
                 app:cardCornerRadius="10dp">
@@ -161,17 +198,17 @@
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/map_svgrepo_com"
-                        app:tint="@color/white" />
+                        android:src="@drawable/ic_location" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingVertical="5dp"
-                        android:text="Nurse Location"
+                        android:text="Localizacion"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -182,6 +219,220 @@
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="1.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_weight="5"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:backgroundTint="#67A9C8"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <!-- Media -->
+                    <ImageView
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:scaleType="centerCrop"
+
+                        android:src="@drawable/ic_resolve_problem"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="5dp"
+                        android:text="Ver incidencias"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_weight="5"
+                android:layout_width="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#67A9C8"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <!-- Media -->
+                    <ImageView
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_lab" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="5dp"
+                        android:text="Laboratorio"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_weight="5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginHorizontal="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tienes, "
+                    android:textColor="@color/blue_marine"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+
+
+
+                <TextView
+                    android:id="@+id/numberNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10 enfermeros"
+                    android:gravity="bottom"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <androidx.cardview.widget.CardView
+                    android:layout_weight="5"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/blue_hospital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingVertical="5dp"
+                            android:text="8 enfermeros"
+                            android:gravity="start"
+                            android:textColor="@color/black"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingVertical="5dp"
+                            android:text="en servicio"
+                            android:gravity="start"
+                            android:textColor="@android:color/holo_green_dark"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingVertical="5dp"
+                            android:text="2 enfermeros"
+                            android:gravity="start"
+                            android:textColor="@color/black"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingVertical="5dp"
+                            android:text="fuera de servicio"
+                            android:gravity="start"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            </LinearLayout>
 
 
     </LinearLayout>

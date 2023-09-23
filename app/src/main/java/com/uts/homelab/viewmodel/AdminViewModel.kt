@@ -1,10 +1,13 @@
 package com.uts.homelab.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.uts.homelab.model.AdminModel
+import com.uts.homelab.network.dataclass.NurseLocation
+import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.network.db.entity.AdminSession
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
@@ -22,6 +25,14 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
     val messageToast = MutableLiveData<Int>()
     val isProgress = MutableLiveData<Pair<Boolean, Int>>()
     val informationFragment = MutableLiveData<String>()
+
+    val modelJournal = MutableLiveData<ArrayList<NurseLocation>>()
+    val uidChange = MutableLiveData<WorkingDayNurse>()
+
+    private val onCall = { modelWorking: WorkingDayNurse ->
+            Log.e("ONCALL", "PASAMOS")
+            uidChange.value = modelWorking
+    }
 
     fun getTextUI() {
         viewModelScope.launch {
@@ -84,5 +95,27 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
               isProgress.postValue(Pair(false,res.modelSuccess as Int))
            }
        }
+    }
+
+    fun getNurses(){
+        isProgress.value = Pair(true,1)
+
+        viewModelScope.launch {
+            when ( val res = adminModel.getWorkingDayAvailable()){
+                is ManagerError.Success -> {
+                    isProgress.postValue(Pair(false, 0))
+                    modelJournal.postValue(res.modelSuccess as ArrayList<NurseLocation>)
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(res.error)
+                }
+
+            }
+        }
+    }
+
+    fun initAsync() {
+        adminModel.getNursesChangeWorkingDay(onCall)
     }
 }

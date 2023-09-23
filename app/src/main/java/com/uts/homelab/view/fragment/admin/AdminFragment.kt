@@ -31,9 +31,9 @@ class AdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         adminViewModel.getTextUI()
-        binding.btnExit.setOnClickListener {
+       /* binding.btnExit.setOnClickListener {
             adminViewModel.deleteUserSession()
-        }
+        }*/
         observers()
 
         binding.cardLocation.setOnClickListener {

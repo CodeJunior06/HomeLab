@@ -46,4 +46,6 @@ interface IFirebaseRepository {
     suspend fun updateDataUserFirestore(register: UserRegister) : Task<*>
     suspend fun getJournal() : QuerySnapshot
     suspend fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String) : Task<*>
+
+    suspend fun getNursesByJournal() : QuerySnapshot
 }

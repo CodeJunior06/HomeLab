@@ -2,7 +2,9 @@ package com.uts.homelab.model
 
 import com.google.firebase.auth.FirebaseUser
 import com.uts.homelab.network.FirebaseRepository
+import com.uts.homelab.network.dataclass.NurseLocation
 import com.uts.homelab.network.dataclass.NurseRegister
+import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.response.ManagerError
@@ -90,4 +92,58 @@ class AdminModel @Inject constructor(
             )
         }
     }
+
+    suspend fun getWorkingDayAvailable(): ManagerError {
+
+        return kotlin.runCatching {
+            firebaseRepository.getNursesByJournal()
+        }.fold(
+            onSuccess = {
+                val modelWorking = it.toObjects(WorkingDayNurse::class.java).toList()
+                getNurseAvailable(modelWorking)
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+    private suspend fun getNurseAvailable(modelWorking: List<WorkingDayNurse>): ManagerError{
+
+        return kotlin.runCatching {
+            val lstUid = ArrayList<String>()
+            modelWorking.forEach{
+                lstUid.add(it.id)
+            }
+
+            firebaseRepository.getIdsNursesAvailable(lstUid)
+        }.fold(
+            onSuccess = {
+                val modelNurse = it.toObjects(NurseRegister::class.java).toList()
+                val lstNurseLocation = ArrayList<NurseLocation>()
+                modelNurse.forEachIndexed { index, nurseRegister ->
+                    if(modelWorking[index].id == nurseRegister.uid){
+                        val nurseLocation  = NurseLocation()
+                        nurseLocation.geolocation = modelWorking[index].geolocation
+                        nurseLocation.phone = ""
+                        nurseLocation.uidWorking = modelWorking[index].id
+                        nurseLocation.nameUser = nurseRegister.name!!
+                        nurseLocation.lastName  = nurseRegister.lastName!!
+                        lstNurseLocation.add(nurseLocation)
+                    }
+                }
+
+                ManagerError.Success(lstNurseLocation)
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+      fun getNursesChangeWorkingDay(onCall: (WorkingDayNurse) -> Unit) {
+        try {
+            firebaseRepository.tst(onCall)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+    }
+
 }
