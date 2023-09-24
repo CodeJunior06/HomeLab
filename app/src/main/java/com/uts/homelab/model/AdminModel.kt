@@ -6,6 +6,8 @@ import com.uts.homelab.network.dataclass.NurseLocation
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.network.db.DataBaseHome
+import com.uts.homelab.utils.Cons
+import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +30,7 @@ class AdminModel @Inject constructor(
                 onSuccess = {
                     ManagerError.Success(it)
                 },
-                onFailure = { ManagerError.Error(it.message!!) }
+                onFailure = { ManagerError.Error(Utils.messageErrorConverter(Cons.ROOM_GET_ERROR)) }
             )
         }
     }
@@ -45,7 +47,7 @@ class AdminModel @Inject constructor(
                         ""
                     )
                     ManagerError.Success(it) },
-                onFailure = { ManagerError.Error(it.message!!) }
+                onFailure = { ManagerError.Error(Utils.messageErrorConverter(Cons.ROOM_DELETE_ERROR))}
             )
         }
     }
@@ -59,10 +61,10 @@ class AdminModel @Inject constructor(
                     if (it.user != null) {
                         ManagerError.Success(it.user!!)
                     } else ManagerError.Error(
-                        "Error: Service Response is Failure"
+                        Utils.messageErrorConverter(-200)
                     )
                 },
-                onFailure = { ManagerError.Error(it.message!!) }
+                onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
             )
     }
 
@@ -88,7 +90,7 @@ class AdminModel @Inject constructor(
                 firebaseRepository.setRegisterNurseToFirestore(nurse).await()
             }.fold(
                 onSuccess = { ManagerError.Success(1) },
-                onFailure = { ManagerError.Error(it.message!!) }
+                onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
             )
         }
     }
@@ -100,13 +102,13 @@ class AdminModel @Inject constructor(
         }.fold(
             onSuccess = {
                 val modelWorking = it.toObjects(WorkingDayNurse::class.java).toList()
-                getNurseAvailable(modelWorking)
+                getNurseAvailableByListIds(modelWorking)
             },
-            onFailure = { ManagerError.Error(it.message!!) }
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
 
-    private suspend fun getNurseAvailable(modelWorking: List<WorkingDayNurse>): ManagerError{
+    private suspend fun getNurseAvailableByListIds(modelWorking: List<WorkingDayNurse>): ManagerError{
 
         return kotlin.runCatching {
             val lstUid = ArrayList<String>()
@@ -133,13 +135,13 @@ class AdminModel @Inject constructor(
 
                 ManagerError.Success(lstNurseLocation)
             },
-            onFailure = { ManagerError.Error(it.message!!) }
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!))}
         )
     }
 
       fun getNursesChangeWorkingDay(onCall: (WorkingDayNurse) -> Unit) {
         try {
-            firebaseRepository.tst(onCall)
+            firebaseRepository.realTimeWorkingDayAllCollection(onCall)
         }catch (e:Exception){
             e.printStackTrace()
         }

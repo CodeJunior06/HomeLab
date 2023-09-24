@@ -179,7 +179,7 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    fun tst(onCall: (WorkingDayNurse) -> Unit) {
+    fun realTimeWorkingDayAllCollection(onCall: (WorkingDayNurse) -> Unit) {
         firestore.collection(Constants.COLLECT_WORKING_DAY).addSnapshotListener { snapshot, e ->
             if (e != null) {
                 return@addSnapshotListener
@@ -187,13 +187,13 @@ class FirebaseRepository @Inject constructor(
 
             for (dc in snapshot!!.documentChanges) {
                 when (dc.type) {
-                    DocumentChange.Type.ADDED -> Log.d(javaClass.name, "New city: ${dc.document.id}")
+                    DocumentChange.Type.ADDED -> Log.d(javaClass.name, "New document from WorkingDay: ${dc.document.id}")
                     DocumentChange.Type.MODIFIED ->{
-                        Log.d(javaClass.name, "Modified city: ${dc.document.id}")
+                        Log.d(javaClass.name, "Modified document from WorkingDay: ${dc.document.id}")
                         val model = dc.document.toObject(WorkingDayNurse::class.java)
                         onCall(model)
                     }
-                    DocumentChange.Type.REMOVED -> Log.d(javaClass.name, "Removed city: ${dc.document.id}")
+                    DocumentChange.Type.REMOVED -> Log.d(javaClass.name, "Removed document from WorkingDay: ${dc.document.id}")
                 }
             }
 
@@ -201,6 +201,6 @@ class FirebaseRepository @Inject constructor(
     }
 
     fun getAuth() : FirebaseAuth{
-        return  FirebaseAuth.getInstance()
+        return  auth
     }
 }

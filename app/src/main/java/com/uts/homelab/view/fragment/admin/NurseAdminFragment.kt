@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -59,7 +60,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
 
-            return
+
         }
 
         setObserver()
@@ -68,7 +69,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
     }
     private val lstPair = ArrayList<Pair<NurseLocation,Marker>>()
     private fun setObserver() {
-        viewModel.modelJournal.observe(viewLifecycleOwner){
+        viewModel.modelNurseLocation.observe(viewLifecycleOwner){
             if(it==null)return@observe
             lstPair.clear()
             for(nurseLocation in it){
@@ -162,7 +163,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
                     .position(l)
                     .title("Mi Ubicación")
                     .draggable(false)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.nurse_women_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker())
             )
             googleMap.uiSettings.isMapToolbarEnabled = false
 
@@ -178,7 +179,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun clear() {
-        viewModel.modelJournal.value = null
+        viewModel.modelNurseLocation.value = null
         viewModel.uidChange.value = null
     }
 

@@ -3,10 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="blue_marine">#0A2799</color>
+    <color name="blue_marine">#004DA4</color>
     <color name="blue_hospital">#67A9C8</color>
 
+    <color name="blue_hospital_light">#FEFFFF</color>
+
     <color name="background_editText">#E9E8E8</color>
+
+    <color name="gray">#434141</color>
+
+    <color name="gray_light">#BC9A9999</color>
+
+    <color name="green">#00A442</color>
 
 
 </resources>

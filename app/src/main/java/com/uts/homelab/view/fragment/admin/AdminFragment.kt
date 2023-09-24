@@ -31,9 +31,7 @@ class AdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         adminViewModel.getTextUI()
-       /* binding.btnExit.setOnClickListener {
-            adminViewModel.deleteUserSession()
-        }*/
+
         observers()
 
         binding.cardLocation.setOnClickListener {
@@ -41,6 +39,9 @@ class AdminFragment : Fragment() {
         }
         binding.cardNurse.setOnClickListener {
             findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToAddNurseFragment())
+        }
+        binding.cardProfile.setOnClickListener {
+            findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToAdminProfileFragment())
         }
 
 
@@ -52,10 +53,6 @@ class AdminFragment : Fragment() {
 
             binding.nameAdmin.text = it.name
 
-        }
-        adminViewModel.intentToLogin.observe(viewLifecycleOwner) {
-            FirebaseAuth.getInstance().signOut()
-            intentToMain()
         }
     }
     override fun onDestroyView() {

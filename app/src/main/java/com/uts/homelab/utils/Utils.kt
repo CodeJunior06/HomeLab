@@ -22,7 +22,7 @@ class Utils {
         return dateFormat.format(currentDate)
     }
 
-    fun getCurrentDate(time:Long): String {
+    fun getCurrentDate(time: Long): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date(time)
         return dateFormat.format(currentDate)
@@ -85,7 +85,7 @@ class Utils {
 
             // Realiza la comparación por día del mes
             if (laEscogida < laActual) {
-               return false
+                return false
             } else return true
 
         } catch (e: Exception) {
@@ -95,7 +95,7 @@ class Utils {
     }
 
 
-    fun tst(dateChoose:String,dateArray:String): Boolean {
+    fun tst(dateChoose: String, dateArray: String): Boolean {
 
         // Define un formato para parsear las fechas
 
@@ -121,11 +121,44 @@ class Utils {
             if (diaChoose > diaArray) {
                 true
             } else {
-                 false
+                false
             }
         } catch (e: Exception) {
             System.err.println("Error al parsear las fechas: " + e.printStackTrace())
             false
+        }
+    }
+
+    companion object {
+        fun messageErrorConverter(code: Int): String {
+            return when (code) {     -1 -> "La dirección de correo electrónico está mal formateada"
+                -2 -> "La contraseña debe tener al menos 6 caracteres"
+                -3 -> "No tienes Internet, intenta nuevamente"
+                -100 -> "Error al eliminar la información de la base de datos"
+                -101 -> "Error al actualizar la información de la base de datos"
+                -102 -> "Error al insertar la información en la base de datos"
+                -103 -> "Error al obtener la información de la base de datos"
+                -200-> "Error en la insersion en el registro de autenticación"
+
+                else -> "Error, contacta al soporte"
+            }
+        }
+
+        fun messageErrorConverter(message:String): String{
+          val code = when (message) {
+              "The email address is badly formatted." -> {
+                  -1
+              }
+              "The given password is invalid. [ Password should be at least 6 characters ]" -> {
+                  -2
+              }
+              "A network error (such as timeout, interrupted connection or unreachable host) has occurred." -> {
+                  -3
+              }
+              else -> 0
+          }
+
+            return messageErrorConverter(code)
         }
     }
 }
