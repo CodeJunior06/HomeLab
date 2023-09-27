@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.uts.homelab.databinding.ActivitySplashAnimatedBinding
 import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.extension.intentToAdminHome
+import com.uts.homelab.utils.extension.intentToMain
 import com.uts.homelab.utils.extension.intentToNurseHome
 import com.uts.homelab.utils.extension.intentToUserHome
 import com.uts.homelab.viewmodel.MainViewModel
@@ -27,15 +28,18 @@ class SplashAnimated : AppCompatActivity() {
 
 
     @Singleton
-    var dataStoreManager:DataStoreManager? = DataStoreManager(this)
+    var dataStoreManager: DataStoreManager? = DataStoreManager(this)
 
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
+
+    private var time = 0
+    private var case = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingSplashAnimatedBinding = ActivitySplashAnimatedBinding.inflate(layoutInflater)
         setContentView(bindingSplashAnimatedBinding.root)
 
-        val countDownTimer: CountDownTimer = object : CountDownTimer(3500, 1000) {
+        val countDownTimer: CountDownTimer = object : CountDownTimer(time.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
 
@@ -45,42 +49,50 @@ class SplashAnimated : AppCompatActivity() {
 
             override fun onFinish() {
                 lifecycleScope.launch {
-                    val res = viewModel.isGetNewInstall().firstOrNull()
-                    if (res == null || res == false) {
-                        viewModel.isSetNewInstall(false)
-                        FirebaseAuth.getInstance().signOut()
-                        startActivity(Intent(this@SplashAnimated, MainActivity::class.java))
-                    } else {
-
-                        val auth = FirebaseAuth.getInstance()
-                        val currentUser = auth.currentUser
-
-                        if (currentUser != null) {
-                            if (!auth.currentUser!!.email!!.contains("@homelab")) {
-                                intentToUserHome()
-                            } else if (auth.currentUser!!.email!!.contains("@homelab")
-                                && auth.currentUser!!.email!!.contains("admin")
-                            ) {
-                                intentToAdminHome()
-                            } else {
-                                intentToNurseHome()
-                            }
-
-                        } else {
-                            startActivity(Intent(this@SplashAnimated, MainActivity::class.java))
-                        }
-                    }
-                    finish()
-
+                   when(case){
+                       -1 -> intentToMain()
+                       1 -> intentToUserHome()
+                       2 -> intentToNurseHome()
+                       3 -> intentToAdminHome()
+                        else -> print("")
+                   }
                 }
-
-
             }
 
 
         }
 
-        countDownTimer.start()
+        lifecycleScope.launch {
+            val res = viewModel.isGetNewInstall().firstOrNull()
+            if (res == null || res == false) {
+                viewModel.isSetNewInstall(false)
+                FirebaseAuth.getInstance().signOut()
+                time = 3500
+                countDownTimer.start()
+            } else {
+
+                val auth = FirebaseAuth.getInstance()
+                val currentUser = auth.currentUser
+
+                if (currentUser == null) {
+                    FirebaseAuth.getInstance().signOut()
+                    time = 3500
+                    countDownTimer.start()
+                } else {
+                    viewModel.isSetPetitionParallel(currentUser.email!!,false)
+                }
+            }
+        }
+
+        viewModel.isProgress.observe(this){
+            if(!it.first){
+                case = it.second
+                time = 2500
+                countDownTimer.start()
+            }
+        }
+
+
     }
 
     override fun onDestroy() {

@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "adminSession")
 data class AdminSession (
     @PrimaryKey
-    val id: String,
-    val name:String,
-    val email:String,
+    val id: String = "",
+    val name:String = "",
+    val email:String = "",
     val phone:String = "",
-    val ip:String = "",
-    val lastDate:String = "",
-    val lastHour:String = "",
+    var ip:String = "",
+    var lastDate:String = "",
+    var lastHour:String = "",
     val rol:String =""
 )

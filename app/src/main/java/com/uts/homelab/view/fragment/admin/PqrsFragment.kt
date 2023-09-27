@@ -15,9 +15,10 @@ import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.view.adapter.AdapterPQRS
 import com.uts.homelab.viewmodel.AdminViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
-
+@AndroidEntryPoint
 class PqrsFragment : Fragment() {
     private lateinit var binding: FragmentPqrsBinding
     private val viewModel: AdminViewModel by activityViewModels()

@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.uts.homelab.model.AdminModel
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerCommentType
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,31 +21,66 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
     //MODULE ADMIN
     val isUserAuth = MutableLiveData<AdminSession>()
     val intentToLogin = MutableLiveData<Unit>()
+
     //MODULE ALL
     val messageToast = MutableLiveData<Int>()
     val isProgress = MutableLiveData<Pair<Boolean, Int>>()
     val informationFragment = MutableLiveData<String>()
+
     //MODULE LOCATION
     val listNurseLocation = MutableLiveData<ArrayList<NurseLocation>>()
     val modelNurseLocation = MutableLiveData<NurseLocation>()
     val uidChange = MutableLiveData<WorkingDayNurse>()
+
     //MODULE ONLY LOCATION
     val rvNurseWorkingAdapter = MutableLiveData<List<NurseWorkingAdapter>>()
+
     //MODULE PQRS
-     val rvCommentType = MutableLiveData<List<CommentType>>()
+    val rvCommentType = MutableLiveData<List<CommentType>>()
+
+    //MODULE LABORATORY
+    val rvAppointmentUserModel = MutableLiveData<List<AppointmentUserModel>>()
+
 
     private val onCall = { modelWorking: WorkingDayNurse ->
         Log.i("ONCALL", "PASAMOS")
         uidChange.value = modelWorking
     }
 
-    fun getTextUI() {
+    fun getTextUI(isProgressView: Boolean) {
+        if (isProgressView) {
+            isProgress.value = Pair(true, 1)
+        }
+
         viewModelScope.launch {
             when (val res = adminModel.getModelData()) {
                 is ManagerError.Success -> {
                     isUserAuth.postValue(res.modelSuccess as AdminSession)
+                    if (isProgressView) {
+                        isProgress.value = Pair(false, 0)
+                    }
                 }
                 is ManagerError.Error -> {
+                    if (isProgressView) {
+                        isProgress.value = Pair(true, 0)
+                    }
+                    informationFragment.postValue(res.error)
+
+                }
+            }
+        }
+    }
+
+    fun getProfileInfo() {
+        isProgress.value = Pair(true, 1)
+        viewModelScope.launch {
+            when (val res = adminModel.updateModelDataFirestore()) {
+                is ManagerError.Success -> {
+                    isProgress.value = Pair(false, 0)
+                    getTextUI(true)
+                }
+                is ManagerError.Error -> {
+                    isProgress.value = Pair(false, 0)
                     informationFragment.postValue(res.error)
                 }
             }
@@ -126,27 +162,27 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
         isProgress.value = Pair(true, 1)
 
         viewModelScope.launch {
-            when (val res = adminModel.getNurseAvailableByListIds(listOf(workingDay),true)) {
+            when (val res = adminModel.getNurseAvailableByListIds(listOf(workingDay))) {
                 is ManagerError.Success -> {
                     isProgress.postValue(Pair(false, 0))
                     modelNurseLocation.postValue((res.modelSuccess as ArrayList<NurseLocation>)[0])
                 }
                 is ManagerError.Error -> {
-                   Log.e(javaClass.name,res.error)
+                    Log.e(javaClass.name, res.error)
                 }
 
             }
         }
     }
 
-    fun getAllNurseWorkingDay(){
-        isProgress.value = Pair(true,1)
+    fun getAllNurseWorkingDay() {
+        isProgress.value = Pair(true, 1)
 
         viewModelScope.launch {
             when (val res = adminModel.getAllWorkingDay()) {
                 is ManagerError.Success -> {
                     isProgress.postValue(Pair(false, 0))
-                    rvNurseWorkingAdapter.postValue(res.modelSuccess as ArrayList<NurseWorkingAdapter> )
+                    rvNurseWorkingAdapter.postValue(res.modelSuccess as ArrayList<NurseWorkingAdapter>)
                 }
                 is ManagerError.Error -> {
                     isProgress.postValue(Pair(false, 0))
@@ -155,8 +191,9 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
             }
         }
     }
-    fun getAllPQRS(){
-        isProgress.value = Pair(true,1)
+
+    fun getAllPQRS() {
+        isProgress.value = Pair(true, 1)
 
         viewModelScope.launch {
             when (val res = adminModel.getAllOpinionPQRS()) {
@@ -171,6 +208,31 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
             }
         }
     }
+
+    fun getAppointmentLaboratory() {
+        isProgress.value = Pair(true, 1)
+
+        viewModelScope.launch {
+            when (val res = adminModel.getAppointmentLaboratory()) {
+                is ManagerAppointmentUserModel.Success -> {
+                    isProgress.postValue(Pair(false, 0))
+                    rvAppointmentUserModel.postValue(res.modelSuccess)
+                }
+                is ManagerAppointmentUserModel.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                }
+
+            }
+        }
+    }
+
+    fun setUpdateLastConnection() {
+        viewModelScope.launch {
+            adminModel.setDateTimeLastConnection()
+        }
+    }
+
+
     fun initAsync() {
         adminModel.getNursesChangeWorkingDay(onCall)
     }

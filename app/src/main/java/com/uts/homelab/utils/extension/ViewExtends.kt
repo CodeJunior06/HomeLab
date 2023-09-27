@@ -27,6 +27,11 @@ fun Activity.intentToNurseHome() {
     finish()
 }
 
+fun Activity.intentToMain(){
+    startActivity(Intent(this,MainActivity::class.java))
+    finish()
+}
+
 fun Fragment.toastMessage(message: String) {
     val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG)
     toast.show()

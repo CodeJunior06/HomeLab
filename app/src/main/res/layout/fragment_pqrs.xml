@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blue_hospital"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.admin.SearchNurseFragment">
+    tools:context=".view.fragment.admin.PqrsFragment">
 
     <TextView
         android:layout_width="match_parent"

@@ -3,7 +3,8 @@ package com.uts.homelab.utils
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.Log
+import java.net.InetAddress
+import java.net.NetworkInterface
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Singleton
@@ -150,6 +151,19 @@ class Utils {
     }
 
     companion object {
+
+        fun getCurrentDateTime(): String {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val date = Date()
+            return dateFormat.format(date)
+        }
+
+        fun getCurrentTime(): String {
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val calendar = Calendar.getInstance()
+            return timeFormat.format(calendar.time)
+        }
+
         fun messageErrorConverter(code: Int): String {
             return when (code) {     -1 -> "La dirección de correo electrónico está mal formateada"
                 -2 -> "La contraseña debe tener al menos 6 caracteres"
@@ -191,6 +205,30 @@ class Utils {
             drawable.setBounds(0, 0, bitmap.width, bitmap.height)
             drawable.draw(canvas)
             return bitmap
+        }
+
+        fun getIPAddress(): String {
+            try {
+                val interfaces: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
+                while (interfaces.hasMoreElements()) {
+                    val networkInterface = interfaces.nextElement()
+                    val addresses: Enumeration<InetAddress> = networkInterface.inetAddresses
+                    while (addresses.hasMoreElements()) {
+                        val address = addresses.nextElement()
+                        if (!address.isLoopbackAddress) {
+                            if (address.hostAddress.contains(":")) {
+                                // IPv6
+                                continue
+                            }
+                            // IPv4 address found
+                            return address.hostAddress ?: ""
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return "N.A"
         }
     }
 }

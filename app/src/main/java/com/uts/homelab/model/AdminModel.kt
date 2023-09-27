@@ -8,6 +8,7 @@ import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.datastore.DataStoreManager
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerCommentType
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,24 @@ class AdminModel @Inject constructor(
                     ManagerError.Success(it)
                 },
                 onFailure = { ManagerError.Error(Utils.messageErrorConverter(Cons.ROOM_GET_ERROR)) }
+            )
+        }
+    }
+
+    suspend fun updateModelDataFirestore(): ManagerError {
+        return withContext(Dispatchers.IO) {
+            kotlin.runCatching {
+
+                val resRoom = room.adminSessionDao().getAdminAuth()
+                resRoom.ip = Utils.getIPAddress()
+
+                room.adminSessionDao().updateAdmin(resRoom)
+                firebaseRepository.updateAdmin(resRoom)
+            }.fold(
+                onSuccess = {
+                    ManagerError.Success(it)
+                },
+                onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
             )
         }
     }
@@ -103,13 +122,13 @@ class AdminModel @Inject constructor(
         }.fold(
             onSuccess = {
                 val modelWorking = it.toObjects(WorkingDayNurse::class.java).toList()
-                getNurseAvailableByListIds(modelWorking,true)
+                getNurseAvailableByListIds(modelWorking)
             },
             onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
 
-     suspend fun getNurseAvailableByListIds(modelWorking: List<WorkingDayNurse>,isConvertNurseLocation:Boolean): ManagerError{
+     suspend fun getNurseAvailableByListIds(modelWorking: List<WorkingDayNurse>): ManagerError{
 
         return kotlin.runCatching {
             val lstUid = ArrayList<String>()
@@ -167,6 +186,7 @@ class AdminModel @Inject constructor(
                     lstWorkingDay.forEach{
                         if(nurse.uid == it.id){
                             val model = NurseWorkingAdapter()
+                            model.uidNurse = it.id
                             model.active = it.active
                             model.name = nurse.name
                             model.lastName = nurse.lastName
@@ -205,6 +225,38 @@ class AdminModel @Inject constructor(
                 },
                 onFailure = { ManagerCommentType.Error(Utils.messageErrorConverter(it.message!!)) }
             )
+
+    }
+
+    suspend fun getAppointmentLaboratory(): ManagerAppointmentUserModel {
+
+        return kotlin.runCatching {
+            firebaseRepository.getAppointmentStateLaboratory()
+        }.fold(
+            onSuccess = {
+                val lstModelWorking = it.toObjects(AppointmentUserModel::class.java).toList()
+                ManagerAppointmentUserModel.Success(lstModelWorking)
+            },
+            onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
+        )
+
+    }
+
+    suspend fun setDateTimeLastConnection(): ManagerError {
+
+        return kotlin.runCatching {
+
+            val resAdmin = room.adminSessionDao().getAdminAuth()
+            resAdmin.lastDate = Utils().getCurrentDate()
+            resAdmin.lastHour = Utils.getCurrentTime()
+
+            firebaseRepository.updateAdmin(resAdmin)
+        }.fold(
+            onSuccess = {
+               ManagerError.Success(1)
+            },
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
+        )
 
     }
 

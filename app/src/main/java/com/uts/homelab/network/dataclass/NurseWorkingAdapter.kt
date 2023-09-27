@@ -1,6 +1,7 @@
 package com.uts.homelab.network.dataclass
 
 class NurseWorkingAdapter {
+    var uidNurse = ""
     var name = ""
     var lastName = ""
     var phone = ""

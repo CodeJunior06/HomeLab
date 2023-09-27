@@ -1,9 +1,6 @@
 package com.uts.homelab.network.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.uts.homelab.network.dataclass.AdminSession
 
 @Dao
@@ -16,4 +13,6 @@ interface AdminSessionDAO {
     suspend fun deleteAdminAuth(idUserSession: String)
     @Insert(entity = AdminSession::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAdmin(user: AdminSession)
+    @Update(entity = AdminSession::class,OnConflictStrategy.REPLACE)
+    suspend fun updateAdmin(user:AdminSession)
 }

@@ -81,7 +81,7 @@ class MainModel @Inject constructor(
         )
     }
 
-    suspend fun setSession(email: Any): Result<ManagerError> {
+    suspend fun setSession(email: Any,insert:Boolean): Result<ManagerError> {
         return runCatching {
             val reqAdmin = CoroutineScope(Dispatchers.IO).async {
                 firebaseRepository.isUserAdminFirestore(
@@ -105,30 +105,39 @@ class MainModel @Inject constructor(
             if (resUser.isEmpty && resNurse.isEmpty && resAdmin.isEmpty) {
                 ManagerError.Error("User Not Register")
             }
+
             if (!resUser.isEmpty) {
+
                 val response = resUser.toObjects(UserRegister::class.java)[0]
-                roomRepository.userSessionDao()
-                    .insertNurseSession(response)
+                if(insert){
+                    roomRepository.userSessionDao()
+                        .insertNurseSession(response)
+                }else{
+                    roomRepository.userSessionDao().updateUserSession(response)
+                }
+
                 ManagerError.Success(1)
             } else if (!resNurse.isEmpty) {
-                roomRepository.nurseSessionDao()
-                    .insertNurseSession(resNurse.toObjects(NurseRegister::class.java)[0])
+                if(insert){
+                    roomRepository.nurseSessionDao()
+                        .insertNurseSession(resNurse.toObjects(NurseRegister::class.java)[0])
+                }else{
+                    roomRepository.nurseSessionDao().updateNurseSession(resNurse.toObjects(NurseRegister::class.java)[0])
+                }
+
                 ManagerError.Success(2)
             } else {
-                roomRepository.adminSessionDao().insertAdmin(querySnapshot(resAdmin))
+                val response = resAdmin.toObjects(AdminSession::class.java)[0]
+                if(insert){
+                    roomRepository.adminSessionDao().insertAdmin(response)
+                }else{
+                    roomRepository.adminSessionDao().updateAdmin(response)
+                }
                 ManagerError.Success(3)
             }
         }.onFailure {
             ManagerError.Error(it.message!!)
         }
-    }
-
-    private fun querySnapshot(document: QuerySnapshot): AdminSession {
-        return AdminSession(
-            document.documents[0].get("id").toString(),
-            document.documents[0].get("name").toString(),
-            document.documents[0].get("email").toString()
-        )
     }
 
     suspend fun isTrueSetNewInstall(bool: Boolean) {

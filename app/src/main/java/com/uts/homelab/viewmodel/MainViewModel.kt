@@ -87,7 +87,7 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
             when (val response = mainModel.getUserAuth(email, password)) {
                 is ManagerError.Success -> {
                     isProgress.value = Pair(true, 2)
-                    isSetPetitionParallel(response.modelSuccess as String)
+                    isSetPetitionParallel(response.modelSuccess as String,true)
                 }
                 is ManagerError.Error -> {
                     isProgress.postValue(Pair(false, 0))
@@ -97,16 +97,18 @@ class MainViewModel @Inject constructor(private val mainModel: MainModel) : View
         }
     }
 
-    private suspend fun isSetPetitionParallel(email:String) {
-        when (val response = mainModel.setSession(email).getOrThrow() ){
-            is ManagerError.Success -> {
-                isProgress.postValue(Pair(false, response.modelSuccess as Int))
-            }
-            is ManagerError.Error -> {
-                isProgress.postValue(Pair(false, 0))
-                informationFragment.postValue(response.error)
-            }
-        }
+      fun isSetPetitionParallel(email:String, insert:Boolean) {
+          viewModelScope.launch{
+              when (val response = mainModel.setSession(email,insert).getOrThrow() ){
+                  is ManagerError.Success -> {
+                      isProgress.postValue(Pair(false, response.modelSuccess as Int))
+                  }
+                  is ManagerError.Error -> {
+                      isProgress.postValue(Pair(false, 0))
+                      informationFragment.postValue(response.error)
+                  }
+              }
+          }
     }
 
     fun isSetNewInstall(bool:Boolean) {

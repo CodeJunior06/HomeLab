@@ -23,8 +23,9 @@ interface IFirebaseRepository {
 
     suspend fun getToken(): String
 
-    suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<Void>
+    suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<*>
     suspend fun isUserAdminFirestore(email: Any): QuerySnapshot
+    suspend fun updateAdmin(adminSession:AdminSession) : Task<*>
     suspend fun isUserNurseFirestore(email: Any): QuerySnapshot
     suspend fun isUserPatientFirestore(email: Any): QuerySnapshot
     suspend fun getNurseAvailable(): QuerySnapshot
@@ -37,6 +38,7 @@ interface IFirebaseRepository {
 
     suspend fun getAppointmentByDate(date:String,typeUser:String) : QuerySnapshot
     suspend fun getAppointmentAllByUser() : QuerySnapshot
+    suspend fun getAppointmentStateLaboratory() : QuerySnapshot
 
 
     fun closeSession()

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
+import com.uts.homelab.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -41,7 +42,7 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<Void> {
+    override suspend fun setAppointmentToFirestore(appointmentUserModel: AppointmentUserModel): Task<*> {
         return withContext(Dispatchers.IO) {
             firestore.collection("Appointment").document().set(appointmentUserModel)
         }
@@ -93,7 +94,14 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun isUserAdminFirestore(email: Any): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Admins").whereEqualTo("email", email).get().await()
+            firestore.collection(Constants.COLLECT_ADMIN).whereEqualTo("email", email).get().await()
+        }
+    }
+
+    override suspend fun updateAdmin(adminSession: AdminSession): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_ADMIN).document(isUserAdminFirestore(auth.currentUser!!.email!!).documents[0].id).set(adminSession,
+                SetOptions.merge())
         }
     }
 
@@ -135,13 +143,19 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun getAppointmentByDate(date: String, typeUser: String): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Appointment").whereEqualTo(typeUser, auth.uid).whereEqualTo("date",date).get().await()
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo(typeUser, auth.uid).whereEqualTo("date",date).get().await()
         }
     }
 
     override suspend fun getAppointmentAllByUser(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Appointment").whereEqualTo("uidUser", auth.uid).get().await()
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("uidUser", auth.uid).get().await()
+        }
+    }
+
+    override suspend fun getAppointmentStateLaboratory(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("state", State.LABORATORY.name).get().await()
         }
     }
 
