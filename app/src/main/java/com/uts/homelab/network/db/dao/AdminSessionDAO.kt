@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.uts.homelab.network.db.entity.AdminSession
+import com.uts.homelab.network.dataclass.AdminSession
 
 @Dao
 interface AdminSessionDAO {

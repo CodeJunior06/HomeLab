@@ -32,10 +32,10 @@ class ProfileUserViewModel @Inject constructor(private val model: UserModel) : V
         modelUser.value = userModel
     }
 
-    fun setMessageOpinion(type: String, it: String) {
+    fun setMessageOpinion(type: String, it: String, title: String) {
         progressDialog.value = true
         viewModelScope.launch {
-            when (model.setOpinion(type, it)) {
+            when (model.setOpinion(type, it,title)) {
                 is ManagerError.Success -> {
                     progressDialog.postValue(false)
                 }

@@ -4,11 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import com.uts.homelab.network.dataclass.Job
-import com.uts.homelab.network.dataclass.NurseRegister
-import com.uts.homelab.network.dataclass.AppointmentUserModel
-import com.uts.homelab.network.dataclass.UserRegister
-import com.uts.homelab.network.dataclass.WorkingDayNurse
+import com.uts.homelab.network.dataclass.*
 
 interface IFirebaseRepository {
     suspend fun isSetAuthentication(email: String, password: String): AuthResult
@@ -36,16 +32,22 @@ interface IFirebaseRepository {
 
     suspend fun getIdsNursesAvailable(list:ArrayList<String>): QuerySnapshot
 
+    suspend fun getAllNurses(): QuerySnapshot
+
+
     suspend fun getAppointmentByDate(date:String,typeUser:String) : QuerySnapshot
     suspend fun getAppointmentAllByUser() : QuerySnapshot
 
 
     fun closeSession()
-    suspend fun setTypeComment(model: Map<String, String?>) : Task<*>
+    suspend fun setTypeComment(commentType: CommentType) : Task<*>
+    suspend fun getAllTypeComment() :QuerySnapshot
     suspend fun requestChangePassword(email: String)
     suspend fun updateDataUserFirestore(register: UserRegister) : Task<*>
     suspend fun getJournal() : QuerySnapshot
     suspend fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String) : Task<*>
 
-    suspend fun getNursesByJournal() : QuerySnapshot
+    suspend fun getNursesActiveByJournal() : QuerySnapshot
+    suspend fun getAllNursesByJournal() : QuerySnapshot
+
 }

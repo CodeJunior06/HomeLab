@@ -1,5 +1,9 @@
 package com.uts.homelab.utils
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Singleton
@@ -20,6 +24,22 @@ class Utils {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date()
         return dateFormat.format(currentDate)
+    }
+    fun dateToLong(dateString: String): Long {
+        try {
+            // Define el formato de fecha deseado
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+            // Parsea la fecha en formato "yyyy-MM-dd" a un objeto Date
+            val date = dateFormat.parse(dateString)
+
+            // Obtiene la representación en milisegundos desde la época
+            return date?.time ?: 0
+        } catch (e: Exception) {
+            // Maneja cualquier error de análisis de fecha
+            e.printStackTrace()
+        }
+        return 0
     }
 
     fun getCurrentDate(time: Long): String {
@@ -159,6 +179,18 @@ class Utils {
           }
 
             return messageErrorConverter(code)
+        }
+
+         fun getBitmapFromXml(drawable: Drawable): Bitmap? {
+            val bitmap = Bitmap.createBitmap(
+                80,
+                80,
+                Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, bitmap.width, bitmap.height)
+            drawable.draw(canvas)
+            return bitmap
         }
     }
 }

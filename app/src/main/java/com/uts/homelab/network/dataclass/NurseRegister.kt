@@ -9,11 +9,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "nurseSession")
 class NurseRegister : Parcelable {
-    var name: String? = ""
-    var lastName: String? = ""
-    var email: String? = ""
-    var valueDocument: String? = ""
-    var gender: String? = ""
+    var name: String = ""
+    var lastName: String = ""
+    var email: String = ""
+    var valueDocument: String = ""
+    var gender: String = ""
     @PrimaryKey(autoGenerate = false)
     var uid: String = ""
     var address: String = ""
@@ -22,4 +22,6 @@ class NurseRegister : Parcelable {
     var age: Int = 0
     var newNurse = true
     var idVehicle:String = ""
+    var phone = ""
+    var rol = ""
 }

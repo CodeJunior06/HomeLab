@@ -1,4 +1,4 @@
-package com.uts.homelab.viewmodel.userViewmodel
+package com.uts.homelab.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

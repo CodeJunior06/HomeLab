@@ -2,5 +2,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="stroke_card">3dp</dimen>
     <dimen name="stroke_card_0">0dp</dimen>
+    <dimen name="stroke_width">2dp</dimen>
+    <dimen name="stroke_width_0">0dp</dimen>
 
 </resources>

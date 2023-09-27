@@ -9,10 +9,14 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.uts.homelab.databinding.FragmentOpinionBinding
+import com.uts.homelab.utils.Opinion
 
-class OpinionFragment(private val type:String,private val onCall:(message:String)->Unit ) : DialogFragment() {
+class OpinionFragment(
+    private val type: String,
+    private val onCall: (message: String, title: String) -> Unit
+) : DialogFragment() {
 
-    private lateinit var binding:FragmentOpinionBinding
+    private lateinit var binding: FragmentOpinionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,20 +42,24 @@ class OpinionFragment(private val type:String,private val onCall:(message:String
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.typeComentary.text = if(type.equals("Problem")){
-            "PROBLEMA"
-        }else{
-            "MEJORA U OBSERVACION"
+        if (type == Opinion.PROBLEM.name) {
+            binding.typeComentary.text = "PROBLEMA"
+        } else {
+            binding.typeComentary.text = "MEJORA U OBSERVACION"
         }
-       binding.btnCancel.setOnClickListener {
-           dismiss()
-       }
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
 
         binding.btnSend.setOnClickListener {
-            if(binding.editTextTextMultiLine.text.isEmpty()){
-                Toast.makeText(requireContext(),"No has llenado la caja de comentarios",Toast.LENGTH_LONG).show()
-            }else{
-                onCall(binding.editTextTextMultiLine.text.toString())
+            if (binding.editTextTextMultiLine.text.isEmpty() || binding.title.text.toString().isEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    "No has llenado la caja de comentarios o el titulo",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                onCall(binding.editTextTextMultiLine.text.toString(), binding.title.text.toString())
             }
         }
 

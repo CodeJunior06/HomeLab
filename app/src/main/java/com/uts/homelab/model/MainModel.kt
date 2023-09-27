@@ -6,7 +6,8 @@ import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.network.db.DataBaseHome
-import com.uts.homelab.network.db.entity.AdminSession
+import com.uts.homelab.network.dataclass.AdminSession
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.CoroutineScope
@@ -45,6 +46,7 @@ class MainModel @Inject constructor(
             modelUser.lastName = valueRegister[1]
             modelUser.email = firebaseUser.email!!
             modelUser.uid = firebaseUser.uid
+            modelUser.rol = Rol.USER.name
 
             firebaseRepository.setRegisterUserToFirestore(
                 modelUser

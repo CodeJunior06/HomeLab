@@ -76,15 +76,6 @@
             </intent-filter>
         </receiver>-->
 
-        <receiver
-            android:name=".utils.Permisos"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.location.PROVIDERS_CHANGED" />
-            </intent-filter>
-        </receiver>
-
     </application>
 
 </manifest>

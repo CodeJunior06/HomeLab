@@ -127,6 +127,12 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    override suspend fun getAllNurses(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_NURSE).get().await()
+        }
+    }
+
     override suspend fun getAppointmentByDate(date: String, typeUser: String): QuerySnapshot {
         return withContext(Dispatchers.IO) {
             firestore.collection("Appointment").whereEqualTo(typeUser, auth.uid).whereEqualTo("date",date).get().await()
@@ -143,9 +149,15 @@ class FirebaseRepository @Inject constructor(
         auth.signOut()
     }
 
-    override suspend fun setTypeComment(model: Map<String, String?>): Task<*> {
+    override suspend fun setTypeComment(commentType: CommentType): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Opinion").document().set(model)
+            firestore.collection("Opinion").document().set(commentType)
+        }
+    }
+
+    override suspend fun getAllTypeComment(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("Opinion").get().await()
         }
     }
 
@@ -173,9 +185,15 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun getNursesByJournal(): QuerySnapshot {
+    override suspend fun getNursesActiveByJournal(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
             firestore.collection("WorkingDay").whereEqualTo("active",true).get().await()
+        }
+    }
+
+    override suspend fun getAllNursesByJournal(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_WORKING_DAY).get().await()
         }
     }
 
@@ -187,13 +205,13 @@ class FirebaseRepository @Inject constructor(
 
             for (dc in snapshot!!.documentChanges) {
                 when (dc.type) {
-                    DocumentChange.Type.ADDED -> Log.d(javaClass.name, "New document from WorkingDay: ${dc.document.id}")
+                    DocumentChange.Type.ADDED -> Log.i(javaClass.name, "New document from WorkingDay: ${dc.document.id}")
                     DocumentChange.Type.MODIFIED ->{
-                        Log.d(javaClass.name, "Modified document from WorkingDay: ${dc.document.id}")
+                        Log.i(javaClass.name, "Modified document from WorkingDay: ${dc.document.id}")
                         val model = dc.document.toObject(WorkingDayNurse::class.java)
                         onCall(model)
                     }
-                    DocumentChange.Type.REMOVED -> Log.d(javaClass.name, "Removed document from WorkingDay: ${dc.document.id}")
+                    DocumentChange.Type.REMOVED -> Log.i(javaClass.name, "Removed document from WorkingDay: ${dc.document.id}")
                 }
             }
 

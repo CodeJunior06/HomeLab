@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAdminBinding
 import com.uts.homelab.utils.extension.intentToMain
 import com.uts.homelab.utils.extension.toastMessage
@@ -42,6 +43,16 @@ class AdminFragment : Fragment() {
         }
         binding.cardProfile.setOnClickListener {
             findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToAdminProfileFragment())
+        }
+        binding.cardOnlyLocation.setOnClickListener {
+            findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToSearchNurseFragment())
+        }
+        binding.cardIncidents.setOnClickListener {
+            findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToPqrsFragment())
+        }
+
+        binding.cardLaboratory.setOnClickListener {
+            findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToResultExamFragment())
         }
 
 

@@ -1,11 +1,9 @@
 package com.uts.homelab.view.fragment.user.profile
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,7 +16,6 @@ import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.utils.extension.intentToMain
 import com.uts.homelab.viewmodel.ProfileUserViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 
@@ -65,10 +62,10 @@ class ProfileUserFragment : Fragment() {
         }
 
         binding.mejoras.setOnClickListener{
-            getDialogOpinion(Opinion.Improvement.name)
+            getDialogOpinion(Opinion.IMPROVEMENT.name)
         }
         binding.reportProblem.setOnClickListener{
-            getDialogOpinion(Opinion.Problem.name)
+            getDialogOpinion(Opinion.PROBLEM.name)
         }
         binding.changePassword.setOnClickListener {
             viewModel.setRequestChangePassword()
@@ -79,9 +76,9 @@ class ProfileUserFragment : Fragment() {
     }
 
     private fun getDialogOpinion(type:String){
-        opinionFragment = OpinionFragment(type){
+        opinionFragment = OpinionFragment(type){ message, title ->
             opinionFragment.dismiss()
-            viewModel.setMessageOpinion(type,it)
+            viewModel.setMessageOpinion(type,message,title)
         }
 
         opinionFragment.show(childFragmentManager,"OpinionDialog ${javaClass.name}")

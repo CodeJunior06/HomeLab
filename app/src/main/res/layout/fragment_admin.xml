@@ -359,7 +359,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/blue_hospital_light"
+            android:backgroundTint="@color/white_two"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp"
             app:strokeWidth="0.5dp">

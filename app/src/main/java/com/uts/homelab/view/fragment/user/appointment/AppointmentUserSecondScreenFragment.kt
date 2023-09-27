@@ -20,7 +20,7 @@ import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.view.adapter.AdapterNurseAvailable
-import com.uts.homelab.viewmodel.userViewmodel.AppointmentUserViewModel
+import com.uts.homelab.viewmodel.AppointmentUserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

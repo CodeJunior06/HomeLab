@@ -19,6 +19,15 @@
         <action
             android:id="@+id/action_adminFragment_to_adminProfileFragment"
             app:destination="@id/adminProfileFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_searchNurseFragment"
+            app:destination="@id/searchNurseFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_pqrsFragment"
+            app:destination="@id/pqrsFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_resultExamFragment"
+            app:destination="@id/resultExamFragment" />
     </fragment>
     <fragment
         android:id="@+id/nurseAdminFragment"
@@ -35,4 +44,18 @@
         android:name="com.uts.homelab.view.fragment.admin.AdminProfileFragment"
         android:label="fragment_admin_profile"
         tools:layout="@layout/fragment_admin_profile" />
+    <fragment
+        android:id="@+id/searchNurseFragment"
+        android:name="com.uts.homelab.view.fragment.admin.SearchNurseFragment"
+        android:label="fragment_search_nurse"
+        tools:layout="@layout/fragment_search_nurse" />
+    <fragment
+        android:id="@+id/pqrsFragment"
+        android:name="com.uts.homelab.view.fragment.admin.PqrsFragment"
+        android:label="PqrsFragment" />
+    <fragment
+        android:id="@+id/resultExamFragment"
+        android:name="com.uts.homelab.view.fragment.admin.ResultExamFragment"
+        android:label="fragment_result_exam"
+        tools:layout="@layout/fragment_result_exam" />
 </navigation>

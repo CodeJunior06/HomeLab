@@ -6,7 +6,10 @@
     <color name="blue_marine">#004DA4</color>
     <color name="blue_hospital">#67A9C8</color>
 
-    <color name="blue_hospital_light">#FEFFFF</color>
+    <color name="blue_hospital_light">#8F98D7F4</color>
+
+
+    <color name="white_two">#FEFFFF</color>
 
     <color name="background_editText">#E9E8E8</color>
 
@@ -15,6 +18,10 @@
     <color name="gray_light">#BC9A9999</color>
 
     <color name="green">#00A442</color>
+    <color name="green_light">#3600A410</color>
+    <color name="red_light">#36A4005A</color>
+
+
 
 
 </resources>

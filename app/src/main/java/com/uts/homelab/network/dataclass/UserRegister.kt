@@ -23,15 +23,6 @@ class UserRegister() : Parcelable{
      var address: String = ""
     var geolocation: Geolocation = Geolocation()
     var newUser: Boolean = true
-
-/*    init {
-        phone = 0
-        age = 0
-        gender = ""
-        eps = ""
-        address = ""
-        geolocation = Geolocation()
-        newUser = true
-    }*/
+    var rol:String = ""
 }
 

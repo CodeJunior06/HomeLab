@@ -244,12 +244,19 @@ class UserModel @Inject constructor(
         )
     }
 
-    suspend fun setOpinion(type: String, it: String) : ManagerError {
-        val model = mapOf(
-            "uidUser" to firebaseRepository.getAuth().currentUser!!.uid,
-            "message" to it,
-            "type" to type
-        )
+    suspend fun setOpinion(type: String, message: String, title: String) : ManagerError {
+        val model = CommentType()
+        val utils = Utils()
+        val roomModel = roomRepository.userSessionDao().getUserAuth()
+
+        model.id = roomModel.uid
+        model.message = message
+        model.type = type
+        model.name = roomModel.name + " " + roomModel.lastName
+        model.title = title
+        model.rol = roomModel.rol
+        model.ts = utils.dateToLong(utils.getCurrentDate())
+
         return runCatching {
                 firebaseRepository.setTypeComment(model).await()
 
