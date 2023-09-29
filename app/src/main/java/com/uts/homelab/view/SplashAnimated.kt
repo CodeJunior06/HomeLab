@@ -39,7 +39,7 @@ class SplashAnimated : AppCompatActivity() {
         bindingSplashAnimatedBinding = ActivitySplashAnimatedBinding.inflate(layoutInflater)
         setContentView(bindingSplashAnimatedBinding.root)
 
-        val countDownTimer: CountDownTimer = object : CountDownTimer(time.toLong(), 1000) {
+        val countDownTimer: CountDownTimer = object : CountDownTimer(3500, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
 
@@ -85,6 +85,7 @@ class SplashAnimated : AppCompatActivity() {
         }
 
         viewModel.isProgress.observe(this){
+            if(it == null) return@observe
             if(!it.first){
                 case = it.second
                 time = 2500
@@ -98,5 +99,6 @@ class SplashAnimated : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dataStoreManager = null
+        viewModel.isProgress.value == null
     }
 }

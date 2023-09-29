@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.uts.homelab.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NurseHistoryFragment : Fragment() {
 
 

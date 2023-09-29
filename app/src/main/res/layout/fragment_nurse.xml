@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".view.fragment.nurse.NurseFragment">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/llTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -24,8 +25,8 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BIENVENIDO"
-                android:textColor="@color/blue_marine"
+                android:text="Bienvenido"
+                android:textColor="@color/blue_hospital"
                 android:textSize="45sp"
                 android:textStyle="bold" />
 
@@ -33,57 +34,65 @@
             <TextView
                 android:id="@+id/nameNurse"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="NAME NURSE"
                 android:textColor="@color/black"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <!-- TODO: Update blank fragment layout -->
 
         </LinearLayout>
 
         <LinearLayout
-
+            android:id="@+id/llDiv"
+            android:layout_below="@id/llTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/btnProfile"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
-                app:cardCornerRadius="10dp">
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-                <LinearLayout
-
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnProfile"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp">
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="5"
+                    android:backgroundTint="#67A9C8"
+                    app:cardCornerRadius="10dp">
 
-                    <!-- Media -->
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/enfermero"
-                        app:tint="@color/white" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
 
-                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <!-- Media -->
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_horizontal"
+
+                            android:src="@drawable/enfermero"
+                            app:layout_constraintBottom_toTopOf="@+id/textView2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
 
                         <TextView
 
+                            android:id="@+id/textView2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="5dp"
@@ -91,145 +100,141 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
 
-                    </LinearLayout>
 
 
-                </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/btnHistory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
-                app:cardCornerRadius="10dp">
+                </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                    <!-- Media -->
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/result_exams"
-                        app:tint="@color/white" />
+                    android:layout_margin="10dp"
+                    android:layout_weight="5"
+                    android:backgroundTint="#67A9C8"
+                    app:cardCornerRadius="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-                        <TextView
+                        <!-- Media -->
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+
+                            android:src="@drawable/result_exams"
+                            app:tint="@color/white" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingVertical="5dp"
-                            android:text="Historial de visitas"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingVertical="5dp"
+                                android:text="Historial de visitas"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
+
 
         <LinearLayout
+
+            android:layout_below="@id/llDiv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Visitas de hoy"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"
-
-                />
-
-            <TextView
-
-                android:id="@+id/countVisit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/oval"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="2dp"
-                android:text="0"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold"
-
-                />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/llVisit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llDiv"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ahora mismo no tienes visitas"
-                    android:textAlignment="center"
-                    android:textColor="@color/blue_marine"
+                    android:text="Visitas de hoy"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+
+                    />
+
+                <TextView
+
+                    android:id="@+id/countVisit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/oval"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="0"
+                    android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/messageLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="CARGANDO DISPONIBILIDAD . . ."
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-            <LinearLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/messageLoading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="CARGANDO DISPONIBILIDAD . . ."
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
                 android:id="@+id/rvAppointment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

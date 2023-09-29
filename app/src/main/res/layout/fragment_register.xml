@@ -9,27 +9,29 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        >
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            app:cardBackgroundColor="@color/blue_hospital"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CardContainerNavTop"
+            app:strokeWidth="0dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:contentDescription="TODO"
-                android:src="@drawable/home_lab_logo" />
+                android:src="@drawable/logo_registro2" />
 
 
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,32 +40,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="40dp"
-                android:text="Registro"
-                android:textAlignment="center"
-                android:textColor="@color/blue_marine"
-
-                android:textSize="35sp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="110dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-               >
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,15 +59,15 @@
 
 
                     <EditText
-                        android:nextFocusForward="@id/et_lastName"
-                        android:layout_width="match_parent"
                         android:id="@+id/et_name"
+                        android:layout_width="match_parent"
                         android:layout_height="57dp"
                         android:background="@drawable/edit_text_round"
                         android:drawableStart="@drawable/ic_person"
                         android:drawablePadding="15dp"
                         android:hint="Nombres"
                         android:inputType="text"
+                        android:nextFocusForward="@id/et_lastName"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
 
@@ -95,15 +81,15 @@
 
 
                     <EditText
-                        android:nextFocusForward="@id/et_email"
-                        android:layout_width="match_parent"
                         android:id="@+id/et_lastName"
+                        android:layout_width="match_parent"
                         android:layout_height="57dp"
                         android:background="@drawable/edit_text_round"
                         android:drawableStart="@drawable/ic_person"
                         android:drawablePadding="15dp"
                         android:hint="Apellidos"
                         android:inputType="text"
+                        android:nextFocusForward="@id/et_email"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
 
@@ -118,9 +104,6 @@
 
 
                     <EditText
-                        android:inputType="textEmailAddress"
-                        android:nextFocusUp="@id/et_numberDocument"
-                        android:nextFocusForward="@id/et_pass"
                         android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="57dp"
@@ -128,6 +111,9 @@
                         android:drawableStart="@drawable/ic_email"
                         android:drawablePadding="15dp"
                         android:hint="Correo electronico"
+                        android:inputType="textEmailAddress"
+                        android:nextFocusUp="@id/et_numberDocument"
+                        android:nextFocusForward="@id/et_pass"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
 
@@ -143,14 +129,14 @@
 
                     <EditText
                         android:id="@+id/et_pass"
-                        android:nextFocusForward="@id/et_passwordRetry"
                         android:layout_width="match_parent"
                         android:layout_height="57dp"
                         android:background="@drawable/edit_text_round"
                         android:drawableStart="@drawable/ic_lock"
                         android:drawablePadding="15dp"
-                        android:inputType="textPassword"
                         android:hint="Contraseña"
+                        android:inputType="textPassword"
+                        android:nextFocusForward="@id/et_passwordRetry"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
 
@@ -165,19 +151,18 @@
 
                     <EditText
                         android:id="@+id/et_passwordRetry"
-                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="57dp"
                         android:background="@drawable/edit_text_round"
                         android:drawableStart="@drawable/ic_lock"
                         android:drawablePadding="15dp"
-                        android:inputType="textPassword"
                         android:hint="Confirmar contraseña"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
                         android:paddingHorizontal="15dp"
                         android:textColorHint="@color/black" />
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -196,9 +181,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
                         android:text="Regresar "
-                        android:textColor="@color/blue_marine"
-                        android:textSize="17dp"
-                        android:textStyle="bold"
+
+                        android:textSize="17sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -207,9 +191,8 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRegister"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="5"
-                        android:backgroundTint="@color/blue_marine"
                         android:text="Registro"
                         android:textSize="17sp"
                         app:cornerRadius="22dp"

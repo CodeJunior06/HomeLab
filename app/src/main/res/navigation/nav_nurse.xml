@@ -35,7 +35,11 @@
         android:id="@+id/nurse_profile"
         android:name="com.uts.homelab.view.fragment.nurse.NurseProfileFragment"
         android:label="@string/title_profile_nurse"
-        tools:layout="@layout/fragment_nurse_profile" />
+        tools:layout="@layout/fragment_nurse_profile" >
+        <action
+            android:id="@+id/action_nurse_profile_to_dataNurseProfileFragment"
+            app:destination="@id/dataNurseProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nurseDataFragment"
@@ -49,5 +53,10 @@
 
 
     </fragment>
+    <fragment
+        android:id="@+id/dataNurseProfileFragment"
+        android:name="com.uts.homelab.view.fragment.nurse.DataNurseProfileFragment"
+        android:label="fragment_data_nurse_profile"
+        tools:layout="@layout/fragment_data_nurse_profile" />
 
 </navigation>

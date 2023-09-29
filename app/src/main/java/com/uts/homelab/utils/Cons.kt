@@ -2,6 +2,8 @@ package com.uts.homelab.utils
 
 object Cons {
     const val VIEW_DIALOG_INFORMATION:String = "view_dialog_information"
+    const val UPDATE_DATA_NURSE:String = "update_nurse"
+    const val UPDATE_PASSWORD:String = "update_password"
 
 
 

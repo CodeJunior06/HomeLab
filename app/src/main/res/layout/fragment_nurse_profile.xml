@@ -8,12 +8,12 @@
 
     <LinearLayout
         android:id="@+id/tp"
-        android:background="@drawable/path2"
         android:layout_width="match_parent"
-        android:paddingBottom="40dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:background="@drawable/path2"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
 
         <ImageView
             android:id="@+id/imgGender"
@@ -27,28 +27,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nameNurse"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3.7"
                 android:text="Santiago Rueda Pedrozo"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/expNurse"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="6.3"
-                android:text="     |     22 Meses"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="7dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Experiencia   "
+                    android:textColor="@color/blue_marine2"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/expNurse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="22 Meses"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -56,64 +72,64 @@
         android:id="@+id/cardWorkingDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        android:layout_marginVertical="30dp"
+        android:layout_below="@+id/tp"
         android:layout_marginHorizontal="50dp"
-        android:layout_below="@+id/tp">
+        android:layout_marginTop="30dp"
+        app:cardBackgroundColor="@color/blue_hospital_light2"
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:padding="10dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Jornada de trabajo "
+                android:text="Jornada de trabajo"
+                android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:layout_width="match_parent"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Estado"/>
+                    android:layout_marginEnd="5dp"
+
+
+                    android:text="Estado -"
+                    android:textAlignment="viewEnd"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/state"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Estado"/>
-                
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Fecha"/>
-                <TextView
-                    android:id="@+id/dateInit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:text="Estado"/>
+                    android:text="Estado"
+                    android:textStyle="bold" />
 
             </LinearLayout>
-            <Button
+
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnJornaly"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 
@@ -124,114 +140,181 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/cardWorkingDay"
+        android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1.5"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/editData"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/change_data" />
+                <androidx.constraintlayout.widget.ConstraintLayout
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Editar datos"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/change_data"
+                        app:layout_constraintBottom_toTopOf="@+id/textView9"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Editar datos"
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/changeLocation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/changePassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/change_location" />
+                <androidx.constraintlayout.widget.ConstraintLayout
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Cambiar Direccion"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/change_password"
+                        app:layout_constraintBottom_toTopOf="@+id/textView10"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cambiar Contraseña"
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1.5"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
 
             <LinearLayout
                 android:id="@+id/reportProblem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/report_problem" />
+                <androidx.constraintlayout.widget.ConstraintLayout
 
-                <TextView
-                    android:textAlignment="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="reportar problema"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/report_problem"
+                        app:layout_constraintBottom_toTopOf="@+id/textView12"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="reportar problema"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/btn_exit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/exit_session" />
+                <androidx.constraintlayout.widget.ConstraintLayout
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="cerrar session"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/exit_session"
+                        app:layout_constraintBottom_toTopOf="@+id/textView13"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="cerrar session"
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
         </LinearLayout>

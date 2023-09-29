@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentNurseBinding
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.TypeView
@@ -35,17 +37,26 @@ class NurseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.white)
         viewModel.init()
         observers()
 
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToNurseProfile())
         }
+
+        binding.btnHistory.setOnClickListener {
+            findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToNurseHistory())
+        }
     }
 
     private fun observers() {
         viewModel.nurseModel.observe(viewLifecycleOwner) {
-            binding.nameNurse.text = it.name!!
+            if(it == null) return@observe
+            binding.nameNurse.text = it.name
              this.navDirections = NurseFragmentDirections.actionNurseFragmentToNurseDataFragment(it)
         }
 
@@ -55,7 +66,7 @@ class NurseFragment : Fragment() {
             informationDialog = InformationFragment()
             if (it == Cons.VIEW_DIALOG_INFORMATION) {
                 informationDialog.getInstance(
-                    "ATENCION",
+                    getString(R.string.attention),
                     "Hemos detectado que faltan datos para continuar con el procesos",
                     "Ir a llenar"
                 ) {

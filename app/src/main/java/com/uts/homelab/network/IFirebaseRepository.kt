@@ -16,7 +16,7 @@ interface IFirebaseRepository {
 
     suspend fun setRegisterWorkingNurse(model: WorkingDayNurse) : Task<*>
     suspend fun setRegisterAvailableAppointment(modelJob: Job) : Task<*>
-    suspend fun updateNurseFirestore(map: Map<String,Any>): Task<*>
+    suspend fun updateNurseFirestore(map: NurseRegister): Task<*>
     suspend fun updateUserFirestore(map: Map<String,Any>): Task<*>
 
     suspend fun updateAvailableFirestore(job: Job, uidNurse: String): Task<*>

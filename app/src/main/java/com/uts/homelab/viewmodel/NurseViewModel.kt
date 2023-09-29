@@ -24,7 +24,7 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
     val progressDialog = MutableLiveData<Boolean>()
 
     //MORE DATA
-    val intentToMainNurse = MutableLiveData<Unit>()
+    val intent = MutableLiveData<Unit>()
     //PROFILE
     val modelWorkingDay = MutableLiveData<WorkingDayNurse>()
     val isService = MutableLiveData<Boolean>()
@@ -66,7 +66,7 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
             when (val response = model.setRegisterNurse(nurseData, nurseModel.value!!)) {
                 is ManagerError.Success -> {
                     progressDialog.postValue(false)
-                    intentToMainNurse.postValue(Unit)
+                    intent.postValue(Unit)
                 }
                 is ManagerError.Error -> {
                     progressDialog.postValue(false)
@@ -79,7 +79,14 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
 
     fun deleteNurseSession() {
         viewModelScope.launch {
-            model.deleteSessionRoom()
+            when(val res =model.deleteSessionRoom()){
+                is ManagerError.Success ->{
+                    intent.postValue(Unit)
+                }
+                is ManagerError.Error -> {
+                    informationFragment.postValue(res.error)
+                }
+            }
         }
     }
 
@@ -140,6 +147,65 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
             }
 
         }
+    }
+
+    fun updateDataProfile(values: Array<String?>) {
+        if (Utils().isEmptyValues(values)){
+            return
+        }
+        progressDialog.value = true
+        viewModelScope.launch {
+            when (val response = model.updateDataNurseFirestore(nurseModel.value!!, values)){
+                is ManagerError.Success -> {
+                    progressDialog.postValue(false)
+                    nurseModel.postValue(response.modelSuccess as NurseRegister)
+                    informationFragment.postValue(Cons.UPDATE_DATA_NURSE)
+
+                }
+                is ManagerError.Error -> {
+                    progressDialog.postValue(false)
+                    informationFragment.postValue(response.error)
+                }
+
+            }
+
+        }
+
+    }
+
+    fun changePassword() {
+        progressDialog.value = true
+
+        viewModelScope.launch {
+
+            when(val res = model.sendRequestChangePassword()){
+                is ManagerError.Success -> {
+                    progressDialog.postValue(false)
+                    informationFragment.postValue(Cons.UPDATE_PASSWORD)
+                }
+                is ManagerError.Error -> {
+                    progressDialog.postValue(false)
+                    informationFragment.postValue(res.error)
+
+                }
+            }
+        }
+    }
+
+    fun setMessageOpinion(type: String, message: String, title: String) {
+        progressDialog.value = true
+        viewModelScope.launch {
+            when (val res = model.setOpinion(type, message,title)) {
+                is ManagerError.Success -> {
+                    progressDialog.postValue(false)
+                }
+                is ManagerError.Error -> {
+                    progressDialog.postValue(false)
+                    informationFragment.postValue(res.error)
+                }
+            }
+        }
+
     }
 
 }

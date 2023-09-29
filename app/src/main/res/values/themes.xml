@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.HomeLab" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/blue_marine</item>
+        <item name="colorPrimary">@color/blue_hospital</item>
         <item name="colorSecondaryContainer">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/blue_marine</item>
+        <item name="android:navigationBarColor">@color/blue_hospital_light</item>
     </style>
 
     <style name="CardContainerNavBottom">
@@ -14,10 +14,18 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <style name="CardContainerNavTop">
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomRight">30dp</item>
+        <item name="cornerSizeBottomLeft">30dp</item>
+    </style>
+
     <style name="Theme.HomeLab" parent="Base.Theme.HomeLab" />
 
     <!--Thema por defecto y mirar nuevas funcionalidades-->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/blue_marine</item>
+        <item name="colorPrimary">@color/blue_hospital</item>
+        <item name="android:statusBarColor">@color/blue_hospital</item>
     </style>
 </resources>

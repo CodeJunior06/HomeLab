@@ -68,9 +68,9 @@ class FirebaseRepository @Inject constructor(
     }
 
 
-    override suspend fun updateNurseFirestore(map: Map<String, Any>): Task<*> {
+    override suspend fun updateNurseFirestore(map: NurseRegister): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Nurses").document(auth.uid!!).update(map)
+            firestore.collection("Nurses").document(auth.uid!!).set(map,SetOptions.merge())
         }
     }
 

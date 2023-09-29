@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_hospital"
+    tools:context=".view.fragment.nurse.DataNurseProfileFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:text="Ver y Editar datos"
+        android:textColor="@color/white"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/only_corner_top"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:text="Nombre"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/nameNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="3"
+                    android:text="Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/typeDocumentNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:textStyle="bold"
+                    android:text="Numero Documento"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/DocumentNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="3"
+                    android:text="Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="3"
+                    android:text="Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:text="Direccion"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/AddressNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="3"
+                    android:text="Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Ubicacion"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnChangeLocation"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="3"
+                    android:text="Cambiar localizacion"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Edad"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/AgeNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="15dp"
+                    android:layout_weight="3"
+                    android:nextFocusForward="@id/phoneNurse"
+                    android:background="@drawable/edit_text_round"
+                    android:text="  Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Telefono"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/phoneNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="15dp"
+                    android:layout_weight="3"
+                    android:nextFocusForward="@id/expNurse"
+                    android:background="@drawable/edit_text_round"
+                    android:hint="  Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:text="Experiencia "
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/expNurse"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="15dp"
+                    android:layout_weight="3"
+                    android:nextFocusForward="@id/idMotorcycle"
+                    android:background="@drawable/edit_text_round"
+                    android:hint="  Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="7"
+                    android:text="ID Moto"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/idMotorcycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="3"
+                    android:paddingStart="15dp"
+                    android:imeOptions="actionDone"
+                    android:background="@drawable/edit_text_round"
+                    android:hint="  Ver y Editar datos"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="70dp"
+                android:layout_marginTop="20dp"
+                android:text="Si tienes datos para actualizar dar click en el boton"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="7"
+                android:textAllCaps="true"
+                android:backgroundTint="@color/blue_hospital"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Actualizar"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="16dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -11,7 +11,6 @@ import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,7 +25,6 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentNurseDataBinding
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.utils.extension.toastMessage
-import com.uts.homelab.view.NurseActivity
 import com.uts.homelab.viewmodel.NurseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -103,7 +101,7 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.intentToMainNurse.observe(viewLifecycleOwner){
+        viewModel.intent.observe(viewLifecycleOwner){
 
         }
     }
