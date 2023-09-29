@@ -12,18 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_weight="5.5"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_weight="4.5"
         android:orientation="vertical">
-        <!--    <ImageView
-                android:id="@+id/logo_view"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/home_lab_logo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />-->
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_alignParentTop="true"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,33 +34,32 @@
                 android:layout_height="match_parent"
                 android:text="Hola, "
                 android:textColor="@color/blue_marine"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="45sp"
+                android:textStyle="bold" />
 
 
             <TextView
                 android:id="@+id/nameUser"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
+               android:gravity="bottom"
                 android:text="USUARIO"
                 android:textColor="@color/black"
-                android:textSize="35sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
-
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="@+id/textView3" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
-
+            android:layout_below="@id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+        <LinearLayout
+            android:layout_weight="5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
@@ -73,32 +68,39 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnAddAppointment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
+                android:backgroundTint="@color/blue_hospital"
                 app:cardCornerRadius="10dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:padding="3dp">
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
                         android:src="@drawable/enfermero"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
 
@@ -115,38 +117,43 @@
                     </LinearLayout>
 
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnResult"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
+                android:backgroundTint="@color/blue_hospital"
                 app:cardCornerRadius="10dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="5dp">
+                    android:layout_height="match_parent"
+                    android:padding="3dp">
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
                         android:src="@drawable/result_exams"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:layout_editor_absoluteX="3dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -161,14 +168,15 @@
                     </LinearLayout>
 
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_weight="5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -176,32 +184,38 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnProfile"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
+                android:backgroundTint="@color/blue_hospital"
                 app:cardCornerRadius="10dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:padding="3dp">
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
                         android:src="@drawable/enfermero"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout7"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <TextView
 
@@ -218,38 +232,45 @@
                     </LinearLayout>
 
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnHistoryAppointment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="5"
-                android:backgroundTint="#67A9C8"
+                android:backgroundTint="@color/blue_hospital"
                 app:cardCornerRadius="10dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="5dp">
 
                     <!-- Media -->
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
                         android:src="@drawable/result_exams"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -264,12 +285,12 @@
                     </LinearLayout>
 
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-
+        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>
@@ -278,7 +299,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="4.5"
+        android:layout_weight="5.5"
         android:orientation="vertical">
 
         <LinearLayout

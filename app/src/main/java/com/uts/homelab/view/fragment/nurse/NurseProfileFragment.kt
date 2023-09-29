@@ -110,7 +110,7 @@ class NurseProfileFragment : Fragment() {
             val serviceIntent = Intent(requireContext(), LocationService::class.java)
             serviceIntent.flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             requireActivity().stopService(serviceIntent)
-            
+
             intentToMain()
         }
 
