@@ -16,7 +16,7 @@ import com.uts.homelab.network.dataclass.NurseWorkingAdapter
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.utils.extension.toastMessage
-import com.uts.homelab.view.adapter.AdapterNurseAppointment
+import com.uts.homelab.view.adapter.AdapterNurseWorkingDay
 import com.uts.homelab.viewmodel.AdminViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +52,7 @@ class SearchNurseFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if(query!!.isEmpty()){
-                    binding.rvNurses.adapter = AdapterNurseAppointment(viewModel.rvNurseWorkingAdapter.value!!)
+                    binding.rvNurses.adapter = AdapterNurseWorkingDay(viewModel.rvNurseWorkingAdapter.value!!)
 
                 }else{
                     listNurseWorkingAdapter.clear()
@@ -69,7 +69,7 @@ class SearchNurseFragment : Fragment() {
                     if(listNurseWorkingAdapter.isEmpty()) {
                         toastMessage("NO SE ENCONTRARON RESULTADOS")
                     }else{
-                        binding.rvNurses.adapter = AdapterNurseAppointment(listNurseWorkingAdapter)
+                        binding.rvNurses.adapter = AdapterNurseWorkingDay(listNurseWorkingAdapter)
                     }
 
                 }
@@ -81,7 +81,7 @@ class SearchNurseFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText!!.isEmpty()){
-                    binding.rvNurses.adapter = AdapterNurseAppointment(viewModel.rvNurseWorkingAdapter.value!!)
+                    binding.rvNurses.adapter = AdapterNurseWorkingDay(viewModel.rvNurseWorkingAdapter.value!!)
                 }
                 return true
             }
@@ -110,7 +110,7 @@ class SearchNurseFragment : Fragment() {
         viewModel.rvNurseWorkingAdapter.observe(viewLifecycleOwner){
             if(it == null ) return@observe
             binding.rvNurses.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvNurses.adapter = AdapterNurseAppointment(it)
+            binding.rvNurses.adapter = AdapterNurseWorkingDay(it)
         }
 
         viewModel.informationFragment.observe(viewLifecycleOwner){

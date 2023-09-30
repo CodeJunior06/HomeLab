@@ -8,12 +8,13 @@
 
     <LinearLayout
         android:id="@+id/tp"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/path2"
         android:orientation="vertical"
-        android:paddingBottom="40dp">
+        android:paddingBottom="30dp">
 
         <ImageView
             android:id="@+id/imgGender"

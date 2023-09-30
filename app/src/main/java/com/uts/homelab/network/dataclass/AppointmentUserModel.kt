@@ -17,6 +17,7 @@ class AppointmentUserModel : Parcelable {
     var uidNurse: String = ""
     var state: String = ""
     var idResult: String = ""
+    var step:Int = 0
     var modelNurse:NurseRegister = NurseRegister()
     var modelUser:UserRegister = UserRegister()
 }

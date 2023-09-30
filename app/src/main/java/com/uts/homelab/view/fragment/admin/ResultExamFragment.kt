@@ -45,7 +45,7 @@ class ResultExamFragment : Fragment() {
                 if(dialogProgress.isVisible){
                     dialogProgress.dismiss()
                 }
-                dialogProgress.show(childFragmentManager,"Progress Fragment ${javaClass.name}")
+                dialogProgress.show(childFragmentManager,"Progress Fragment ${javaClass.simpleName}")
             }else{
                 if(dialogProgress.isVisible){
                     dialogProgress.dismiss()
@@ -56,7 +56,7 @@ class ResultExamFragment : Fragment() {
         viewModel.rvAppointmentUserModel.observe(viewLifecycleOwner){
             if(it == null ) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-//            binding.rvAppointment.adapter = AdapterNurseAppointment(it)
+//            binding.rvAppointment.adapter = AdapterNurseWorkingDay(it)
         }
 
         viewModel.informationFragment.observe(viewLifecycleOwner){

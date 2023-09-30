@@ -1,215 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_hospital"
     tools:context=".view.fragment.user.appointment.AppointmentUserSecondScreenFragment">
 
-
-    <ImageView
-        android:id="@+id/logo_view"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_margin="16dp"
-        android:src="@drawable/home_lab_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
-        android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@color/blue_marine"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo_view"
-        tools:text="Solicitud de cita" />
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:text="Toma de muestra"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="20dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home">
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/only_corner_top"
+        android:orientation="vertical">
+
 
 
         <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_home">
 
             <TextView
+                android:id="@+id/text_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="5dp"
-                android:text="Seleccione el tipo de muestra" />
+                android:textAlignment="center"
+                android:textColor="@color/blue_hospital"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:text="Solicitud de cita" />
 
-
-            <Spinner
-                android:id="@+id/sp_typeAppoiment"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="6.5"
-                android:background="@drawable/edit_text_round"
-                android:drawablePadding="15dp"
-                android:nextFocusLeft="@id/et_numberDocument"
-                android:nextFocusDown="@id/et_email"
-                android:paddingHorizontal="15dp"
-                android:textColorHint="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Seleccione el tipo de muestra" />
 
 
-        </LinearLayout>
+                <Spinner
+                    android:id="@+id/sp_typeAppoiment"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="6.5"
+                    android:background="@drawable/edit_text_round"
+                    android:drawablePadding="15dp"
+                    android:nextFocusLeft="@id/et_numberDocument"
+                    android:nextFocusDown="@id/et_email"
+                    android:paddingHorizontal="15dp"
+                    android:textColorHint="@color/black" />
 
-        <!--  <EditText
-              android:id="@+id/et_descriçion"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center|top"
-              android:layout_margin="15dp"
-              android:background="@drawable/edit_text_round"
-              android:drawableStart="@drawable/ic_person"
-              android:drawablePadding="15dp"
-              android:hint="Comentarios y sugerencias"
-              android:inputType="textMultiLine"
-              android:lines="3"
-              android:paddingHorizontal="15dp"
-              android:textColorHint="@color/black" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="5dp"
-            android:paddingHorizontal="15dp"
-            android:text="Selecciona la fecha y la hora que deseas tener la cita" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            <!--  <EditText
+                  android:id="@+id/et_descriçion"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center|top"
+                  android:layout_margin="15dp"
+                  android:background="@drawable/edit_text_round"
+                  android:drawableStart="@drawable/ic_person"
+                  android:drawablePadding="15dp"
+                  android:hint="Comentarios y sugerencias"
+                  android:inputType="textMultiLine"
+                  android:lines="3"
+                  android:paddingHorizontal="15dp"
+                  android:textColorHint="@color/black" />-->
 
             <TextView
-                android:id="@+id/tv_date_selected"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="5"
-                android:background="@drawable/edit_text_round"
-                android:drawablePadding="15dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:hint="Fecha solicitud"
-                android:paddingHorizontal="15dp"
-                android:textColorHint="@color/black" />
-
-            <EditText
-                android:id="@+id/tv_time_selected"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="10dp"
-                android:layout_weight="5"
-                android:background="@drawable/edit_text_round"
-                android:drawablePadding="15dp"
-                android:enabled="false"
-                android:gravity="center_vertical|center_horizontal"
-                android:paddingHorizontal="15dp"
-                android:text="00 : 00" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="8"
-                android:gravity="center_vertical"
-
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="5dp"
                 android:paddingHorizontal="15dp"
-                android:text="¿La cita sera en tu domicilio?"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Selecciona la fecha y la hora que deseas tener la cita" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="2"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radioButtonYes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sí" />
+                <TextView
+                    android:id="@+id/tv_date_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="5"
+                    android:background="@drawable/edit_text_round"
+                    android:drawablePadding="15dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:hint="Fecha solicitud"
+                    android:paddingHorizontal="15dp"
+                    android:textColorHint="@color/black" />
 
-                <RadioButton
-                    android:id="@+id/radioButtonNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No" />
+                <TextView
+                    android:id="@+id/tv_time_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/edit_text_round"
+                    android:drawablePadding="15dp"
+                    android:enabled="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:paddingHorizontal="15dp"
+                    android:text="00 : 00" />
 
-            </RadioGroup>
+            </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/messageLoading"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="CARGANDO DISPONIBILIDAD . . ."
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical"
+
+                    android:paddingHorizontal="15dp"
+                    android:text="¿La cita sera en tu domicilio?"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonYes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sí" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+
+
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_nurses"
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2" />
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/messageLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="CARGANDO DISPONIBILIDAD . . ."
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_nurses"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddAppointment"
+                android:layout_alignParentBottom="true"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agendar Cita"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/blue_hospital"
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/blue_hospital" />
+        </RelativeLayout>
 
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddAppointment"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Agendar Cita"
-        android:layout_marginEnd="20dp"
-        android:textColor="@color/blue_hospital"
-        app:cornerRadius="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/logo_view"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

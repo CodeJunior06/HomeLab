@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_navigation_home_to_resultUserFragment"
             app:destination="@id/resultUserFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_processAppointmentFragment"
+            app:destination="@id/processAppointmentFragment" />
     </fragment>
 
     <fragment
@@ -103,4 +106,33 @@
         android:name="com.uts.homelab.view.fragment.user.profile.DataUserProfileFragment"
         android:label="fragment_data_user_profile"
         tools:layout="@layout/fragment_data_user_profile" />
+    <fragment
+        android:id="@+id/processAppointmentFragment"
+        android:name="com.uts.homelab.view.fragment.user.processappointment.ProcessAppointmentFragment"
+        android:label="fragment_process_appointment"
+        tools:layout="@layout/fragment_process_appointment" >
+
+        <argument
+            android:name="appointmentModel"
+            app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
+        <argument
+            android:name="typeUser"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_processAppointmentFragment_to_processSecondAppointmentFragment"
+            app:destination="@id/processSecondAppointmentFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/processSecondAppointmentFragment"
+        android:name="com.uts.homelab.view.fragment.user.processappointment.ProcessSecondAppointmentFragment"
+        android:label="fragment_process_second_appointment"
+        tools:layout="@layout/fragment_process_second_appointment" >
+
+
+        <argument
+            android:name="appointmentModel"
+            app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
+
+    </fragment>
 </navigation>

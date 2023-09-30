@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
@@ -11,17 +12,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentOptionBinding
+import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.utils.Cons
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
-import com.uts.homelab.utils.TypeView
-import com.uts.homelab.view.adapter.AdapterUserAppointment
+import com.uts.homelab.view.adapter.AdapterAppointment
+import com.uts.homelab.view.adapter.OnResult
 import com.uts.homelab.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AppointmentUserFragment : Fragment() {
+class AppointmentUserFragment : Fragment(), OnResult {
 
     private var _binding: FragmentOptionBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -39,6 +43,9 @@ class AppointmentUserFragment : Fragment() {
 
         _binding = FragmentOptionBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.blue_hospital)
 
 
         viewModel.init()
@@ -74,7 +81,7 @@ class AppointmentUserFragment : Fragment() {
             navDirectionsCompleteData = AppointmentUserFragmentDirections.actionNavigationHomeToUserDataFragment(it!!)
             navDirectionsProfile = AppointmentUserFragmentDirections.actionNavigationHomeToNavigationNotifications(it)
 
-            binding.nameUser.text = it.name
+            binding.nameUser.text = it.name + " " + it.lastName
         }
 
         viewModel.informationFragment.observe(viewLifecycleOwner){
@@ -82,19 +89,19 @@ class AppointmentUserFragment : Fragment() {
             informationDialog = InformationFragment()
             if (it == Cons.VIEW_DIALOG_INFORMATION) {
                 informationDialog!!.getInstance(
-                    "ATENCION",
-                    "Hemos detectado que faltan datos para continuar con el procesos",
-                    "Ir a llenar"
+                        getString(R.string.attention),
+                    "Para continuar, debes terminar el proceso de registro",
+                    "Continuar"
                 ) {
                     informationDialog!!.dismiss()
                     clearObservers()
                     findNavController().navigate(navDirectionsCompleteData)
                 }
             } else {
-                informationDialog!!.getInstance("ATENCION", it)
+                informationDialog!!.getInstance(getString(R.string.attention), it)
             }
 
-            informationDialog!!.show(requireActivity().supportFragmentManager, "gg")
+            informationDialog!!.show(requireActivity().supportFragmentManager, "${javaClass.simpleName} informationDialog")
 
         }
 
@@ -104,9 +111,9 @@ class AppointmentUserFragment : Fragment() {
                 if(it.second==2 || it.second == 3){
                     binding.loading.visibility = View.VISIBLE
                     binding.rvAppointment.visibility = View.GONE
-                    binding.messageLoading.setText("CARGANDO DISPONIBILIDAD . . .")
+                    binding.messageLoading.text = "CARGANDO DISPONIBILIDAD . . ."
                     if(it.second == 3){
-                        binding.messageLoading.setText("No se encuentran citas disponibles para el dia de hoy")
+                        binding.messageLoading.text = "No se encuentran citas disponibles para el dia de hoy"
                     }
                 }
 
@@ -120,9 +127,11 @@ class AppointmentUserFragment : Fragment() {
 
         viewModel.listAppointmentModel.observe(viewLifecycleOwner){
             if(it ==null ) return@observe
+
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN,AdapterUserAppointment.VIEW_USER)
+            binding.rvAppointment.adapter = AdapterAppointment(it, Rol.USER,this)
             binding.countAppointment.text = it.size.toString()
+
             if(it.isEmpty()){
                 viewModel.isProgress.postValue(Pair(true,3))
             }else{
@@ -142,5 +151,13 @@ class AppointmentUserFragment : Fragment() {
         _binding = null
         clearObservers()
 
+    }
+
+    override fun onSuccess(appointmentModel: AppointmentUserModel) {
+        findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToProcessAppointmentFragment(appointmentModel,Rol.USER.name))
+    }
+
+    override fun onCancel() {
+        TODO("Not yet implemented")
     }
 }

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
+import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -70,7 +71,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun updateNurseFirestore(map: NurseRegister): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Nurses").document(auth.uid!!).set(map,SetOptions.merge())
+            firestore.collection("Nurses").document(auth.uid!!).set(map, SetOptions.merge())
         }
     }
 
@@ -100,8 +101,11 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun updateAdmin(adminSession: AdminSession): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_ADMIN).document(isUserAdminFirestore(auth.currentUser!!.email!!).documents[0].id).set(adminSession,
-                SetOptions.merge())
+            firestore.collection(Constants.COLLECT_ADMIN)
+                .document(isUserAdminFirestore(auth.currentUser!!.email!!).documents[0].id).set(
+                adminSession,
+                SetOptions.merge()
+            )
         }
     }
 
@@ -131,7 +135,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun getIdsNursesAvailable(list: ArrayList<String>): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Nurses").whereIn(FieldPath.documentId(),list).get().await()
+            firestore.collection("Nurses").whereIn(FieldPath.documentId(), list).get().await()
         }
     }
 
@@ -143,19 +147,30 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun getAppointmentByDate(date: String, typeUser: String): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo(typeUser, auth.uid).whereEqualTo("date",date).get().await()
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo(typeUser, auth.uid)
+                .whereEqualTo("date", date).get().await()
         }
     }
 
     override suspend fun getAppointmentAllByUser(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("uidUser", auth.uid).get().await()
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("uidUser", auth.uid)
+                .get().await()
         }
     }
 
     override suspend fun getAppointmentStateLaboratory(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("state", State.LABORATORY.name).get().await()
+            firestore.collection(Constants.COLLECT_APPOINTMENT)
+                .whereEqualTo("state", State.LABORATORY.name).get().await()
+        }
+    }
+
+    override suspend fun getAppointmentStateFinish(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_APPOINTMENT)
+                .whereEqualTo("state", State.FINISH.name)
+                .whereEqualTo("uidUser", auth.currentUser!!.email).get().await()
         }
     }
 
@@ -183,25 +198,28 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun updateDataUserFirestore(userRegister: UserRegister): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("Users").document(auth.currentUser!!.uid).set(userRegister, SetOptions.merge())
+            firestore.collection("Users").document(auth.currentUser!!.uid)
+                .set(userRegister, SetOptions.merge())
         }
     }
 
     override suspend fun getJournal(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("WorkingDay").whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            firestore.collection("WorkingDay").whereEqualTo("id", auth.currentUser!!.uid).get()
+                .await()
         }
     }
 
-    override suspend  fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String): Task<*> {
+    override suspend fun updateJournal(workingDayNurse: WorkingDayNurse, idDoc: String): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection("WorkingDay").document(idDoc).set(workingDayNurse, SetOptions.merge())
+            firestore.collection("WorkingDay").document(idDoc)
+                .set(workingDayNurse, SetOptions.merge())
         }
     }
 
     override suspend fun getNursesActiveByJournal(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("WorkingDay").whereEqualTo("active",true).get().await()
+            firestore.collection("WorkingDay").whereEqualTo("active", true).get().await()
         }
     }
 
@@ -219,20 +237,97 @@ class FirebaseRepository @Inject constructor(
 
             for (dc in snapshot!!.documentChanges) {
                 when (dc.type) {
-                    DocumentChange.Type.ADDED -> Log.i(javaClass.name, "New document from WorkingDay: ${dc.document.id}")
-                    DocumentChange.Type.MODIFIED ->{
-                        Log.i(javaClass.name, "Modified document from WorkingDay: ${dc.document.id}")
+                    DocumentChange.Type.ADDED -> Log.i(
+                        javaClass.name,
+                        "New document from WorkingDay: ${dc.document.id}"
+                    )
+                    DocumentChange.Type.MODIFIED -> {
+                        Log.i(
+                            javaClass.name,
+                            "Modified document from WorkingDay: ${dc.document.id}"
+                        )
                         val model = dc.document.toObject(WorkingDayNurse::class.java)
                         onCall(model)
                     }
-                    DocumentChange.Type.REMOVED -> Log.i(javaClass.name, "Removed document from WorkingDay: ${dc.document.id}")
+                    DocumentChange.Type.REMOVED -> Log.i(
+                        javaClass.name,
+                        "Removed document from WorkingDay: ${dc.document.id}"
+                    )
                 }
             }
 
         }
     }
 
-    fun getAuth() : FirebaseAuth{
-        return  auth
+    fun realTimeWorkingDayOnly(onCall: (WorkingDayNurse) -> Unit, uidNurse: String) {
+        firestore.collection(Constants.COLLECT_WORKING_DAY).whereEqualTo("id", uidNurse)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+
+                for (dc in snapshot!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> Log.i(
+                            javaClass.name,
+                            "New document from WorkingDay: ${dc.document.id}"
+                        )
+                        DocumentChange.Type.MODIFIED -> {
+                            Log.i(
+                                javaClass.name,
+                                "Modified document from WorkingDay: ${dc.document.id}"
+                            )
+                            val model = dc.document.toObject(WorkingDayNurse::class.java)
+                            onCall(model)
+                        }
+                        DocumentChange.Type.REMOVED -> Log.i(
+                            javaClass.name,
+                            "Removed document from WorkingDay: ${dc.document.id}"
+                        )
+                    }
+                }
+
+            }
+    }
+
+    fun getAuth(): FirebaseAuth {
+        return auth
+    }
+
+    fun realTimeAppointment(
+        onCall: (AppointmentUserModel) -> Unit,
+        uidNurse: String,
+        uidUser: String
+    ) {
+        firestore.collection(Constants.COLLECT_APPOINTMENT)
+            .whereEqualTo(Constants.APPOINTMENT_UID_USER, uidUser)
+            .whereEqualTo(Constants.APPOINTMENT_UID_NURSE, uidNurse)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+
+                for (dc in snapshot!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> Log.i(
+                            javaClass.name,
+                            "New document from WorkingDay: ${dc.document.id}"
+                        )
+                        DocumentChange.Type.MODIFIED -> {
+                            Log.i(
+                                javaClass.name,
+                                "Modified document from WorkingDay: ${dc.document.id}"
+                            )
+                            val model = dc.document.toObject(AppointmentUserModel::class.java)
+                            onCall(model)
+                        }
+                        DocumentChange.Type.REMOVED -> Log.i(
+                            javaClass.name,
+                            "Removed document from WorkingDay: ${dc.document.id}"
+                        )
+                    }
+                }
+
+            }
     }
 }

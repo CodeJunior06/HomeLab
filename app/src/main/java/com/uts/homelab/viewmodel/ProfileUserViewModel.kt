@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uts.homelab.model.UserModel
 import com.uts.homelab.network.dataclass.UserRegister
+import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -75,14 +76,15 @@ class ProfileUserViewModel @Inject constructor(private val model: UserModel) : V
 
         viewModelScope.launch {
 
-            when( model.updateDataUserFirestore(values,modelUser.value!!)){
+            when( val res = model.updateDataUserFirestore(values,modelUser.value!!)){
                 is ManagerError.Success -> {
                     progressDialog.postValue(false)
-                    informationDialog.postValue("Se han cambiado los datos correctamente")
+                    modelUser.postValue(res.modelSuccess as UserRegister)
+                    informationDialog.postValue(Cons.UPDATE_DATA_USER)
                 }
                 is ManagerError.Error -> {
                     progressDialog.postValue(false)
-
+                    informationDialog.postValue(res.error)
                 }
             }
         }

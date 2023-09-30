@@ -47,7 +47,9 @@
     <string name="emptyPassword">Ingrese una contraseña</string>
     <string name="password_not_equals">La contraseñas no coinciden"</string>
 
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyByG20TFnHcejYKQkJ0Ykpz-bTs4xbVVr4</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDIPZncPRUWkiqMNld8EnQ2gMvHIVWHCoI</string>
+    <string name="google_maps_key2" templateMergeStrategy="preserve" translatable="false">AIzaSyByG20TFnHcejYKQkJ0Ykpz-bTs4xbVVr4</string>
+
 
     <string name="wait">Esperando Respuesta...</string>
 
@@ -61,7 +63,7 @@
 
     <string name="data_update">Los datos fueron actualizados correctamente</string>
 
-    <string name="register_appointment">La Solicitud de la cita ha sido aprobada</string>
+    <string name="register_appointment">La Solicitud para la cita ha sido aprobada</string>
 
     <string name="get_data_user_auth">Obteniendo informacion del usuario...</string>
 

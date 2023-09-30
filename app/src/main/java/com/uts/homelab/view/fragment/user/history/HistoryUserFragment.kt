@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentHistoryBinding
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
-import com.uts.homelab.utils.TypeView
-import com.uts.homelab.view.adapter.AdapterUserAppointment
+import com.uts.homelab.view.adapter.AdapterHistoryAppointment
 import com.uts.homelab.viewmodel.UserViewModel
 import java.util.*
 
@@ -39,13 +42,27 @@ class HistoryUserFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+
+        val onBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                clearObservers()
+                findNavController().popBackStack()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBack)
+
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.blue_hospital)
 
         viewModel.getAllAppointment()
         setObserver()
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
-    private fun clearObsrvers(){
+    private fun clearObservers(){
         viewModel.informationFragment.value = null
         viewModel.listAppointmentModel.value = null
     }
@@ -53,8 +70,9 @@ class HistoryUserFragment : Fragment() {
         viewModel.informationFragment.observe(viewLifecycleOwner){
             if(it == null) return@observe
             informationDialog = InformationFragment()
+
             informationDialog.getInstance(
-                "ATENCION ...",
+                getString(R.string.attention),
                 it
             )
             val timer = Timer()
@@ -72,11 +90,13 @@ class HistoryUserFragment : Fragment() {
         viewModel.listAppointmentModel.observe(viewLifecycleOwner){
             if(it == null) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.HISTORY, AdapterUserAppointment.VIEW_USER)
+            binding.rvAppointment.adapter = AdapterHistoryAppointment(it, Rol.USER)
 
         }
 
         viewModel.progressDialog.observe(viewLifecycleOwner){
+            if(it== null) return@observe
+
             if(it){
                 if(progressDialog.isVisible){
                     progressDialog.dismiss()
@@ -89,10 +109,9 @@ class HistoryUserFragment : Fragment() {
             }
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        clearObsrvers()
+        clearObservers()
         _binding = null
     }
 }

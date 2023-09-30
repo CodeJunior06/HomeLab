@@ -41,6 +41,7 @@ class UserDataFragment : Fragment() , AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.setModel(UserDataFragmentArgs.fromBundle(requireArguments()).userModel)
         spinner()
         setObserver()

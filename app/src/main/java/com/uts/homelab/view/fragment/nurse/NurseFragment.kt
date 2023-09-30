@@ -12,15 +12,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentNurseBinding
+import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.utils.Cons
-import com.uts.homelab.utils.TypeView
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.dialog.InformationFragment
-import com.uts.homelab.view.adapter.AdapterUserAppointment
+import com.uts.homelab.view.adapter.AdapterAppointment
+import com.uts.homelab.view.adapter.OnResult
 import com.uts.homelab.viewmodel.NurseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NurseFragment : Fragment() {
+class NurseFragment : Fragment(),OnResult {
 
     private lateinit var binding: FragmentNurseBinding
     private val viewModel: NurseViewModel by activityViewModels()
@@ -110,8 +112,8 @@ class NurseFragment : Fragment() {
         viewModel.setRecycler.observe(viewLifecycleOwner){
             if(it ==null ) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterUserAppointment(it, TypeView.MAIN,
-                AdapterUserAppointment.VIEW_NURSE)
+            binding.rvAppointment.adapter = AdapterAppointment(it,
+                Rol.NURSE,this)
             binding.countVisit.text = it.size.toString()
             if(it.isEmpty()){
                 viewModel.progressDialogRv.postValue(Pair(true,3))
@@ -125,5 +127,12 @@ class NurseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.informationFragment.value = null
+    }
+
+    override fun onSuccess(appointmentModel: AppointmentUserModel) {
+
+    }
+
+    override fun onCancel() {
     }
 }

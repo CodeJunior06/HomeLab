@@ -69,7 +69,6 @@
                     android:id="@+id/typeDocumentUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:text="Documento"
                     android:textColor="@color/black"
@@ -79,7 +78,6 @@
                     android:id="@+id/DocumentUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="3"
                     android:text="Ver y Editar datos"
                     android:textColor="@color/black"
@@ -95,7 +93,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:text="Email"
                     android:textColor="@color/black"
@@ -106,7 +103,6 @@
                     android:id="@+id/emailUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="3"
                     android:text="Ver y Editar datos"
                     android:textColor="@color/black"
@@ -125,7 +121,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:text="Direccion"
                     android:textColor="@color/black"
@@ -136,7 +131,7 @@
                     android:id="@+id/AddressUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+
                     android:layout_weight="3"
                     android:text="Ver y Editar datos"
                     android:textColor="@color/black"
@@ -147,13 +142,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+
                     android:layout_weight="7"
                     android:text="Fecha Nacimiento"
                     android:textColor="@color/black"
@@ -196,6 +190,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="3"
                     android:background="@drawable/edit_text_round"
+                    android:paddingStart="15dp"
                     android:text="  Ver y Editar datos"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
@@ -210,7 +205,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:text="Telefono"
                     android:textColor="@color/black"
@@ -220,11 +214,12 @@
                 <EditText
                     android:id="@+id/phoneUser"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="35dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="3"
                     android:background="@drawable/edit_text_round"
                     android:hint="  Ver y Editar datos"
+                    android:paddingStart="15dp"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -240,7 +235,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="7"
                     android:text="EPS"
                     android:textColor="@color/black"
@@ -250,7 +245,7 @@
                 <Spinner
                     android:id="@+id/sp_typeIPS"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="3"
                     android:background="@drawable/edit_text_round"
@@ -258,6 +253,7 @@
                     android:nextFocusLeft="@id/et_numberDocument"
                     android:nextFocusDown="@id/et_email"
                     android:paddingHorizontal="15dp"
+                    android:paddingVertical="17dp"
                     android:textColorHint="@color/black" />
             </LinearLayout>
         </LinearLayout>

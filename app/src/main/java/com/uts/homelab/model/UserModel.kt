@@ -5,6 +5,7 @@ import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -63,8 +64,8 @@ class UserModel @Inject constructor(
         val userRegister = modelUser ?: roomRepository.userSessionDao().getUserAuth()
         val map = HashMap<String, Any>()
 
-        userRegister.geolocation.longitude = arrayOf[2]
-        userRegister.geolocation.latitude = arrayOf[1]
+        userRegister.geolocation.longitude = arrayOf[2]!!
+        userRegister.geolocation.latitude = arrayOf[1]!!
         userRegister.address = arrayOf[0]!!
 
         map["geolocation"] = userRegister.geolocation
@@ -146,8 +147,8 @@ class UserModel @Inject constructor(
         appointmentUserModel: AppointmentUserModel?
     ): Any {
         return runCatching {
-            appointmentUserModel!!.geolocation.longitude = arrayOf[2]
-            appointmentUserModel.geolocation.latitude = arrayOf[1]
+            appointmentUserModel!!.geolocation.longitude = arrayOf[2]!!
+            appointmentUserModel.geolocation.latitude = arrayOf[1]!!
             appointmentUserModel.address = arrayOf[0]!!
             firebaseRepository.setAppointmentToFirestore(appointmentUserModel)
         }.fold(
@@ -172,7 +173,7 @@ class UserModel @Inject constructor(
                 val res = it.toObject(Job::class.java)
                 print(res)
 
-                lstNewDataJob.forEach {data ->
+                lstNewDataJob.forEach { data ->
                     run {
                         if (data == uidNurse) {
                             bool = true
@@ -182,7 +183,7 @@ class UserModel @Inject constructor(
                 }
                 val modelNew: Job
                 if (bool) {
-                    res!!.job.add(DataJob().apply { setNurseId(uidNurse,uidUser, date, hour) })
+                    res!!.job.add(DataJob().apply { setNurseId(uidNurse, uidUser, date, hour) })
                     firebaseRepository.updateAvailableFirestore(res, uidNurse)
                 } else {
                     modelNew = res!!.copy(res!!.job)
@@ -191,11 +192,11 @@ class UserModel @Inject constructor(
                         if (itModel.date == date) {
 
 
-                            for(itMap in itModel.hora.map){
+                            for (itMap in itModel.hora.map) {
                                 val splice = hour.split(" : ")[0].toInt()
                                 val lstRangeHour = listOf(splice, splice - 1, splice + 1)
 
-                                for (range in lstRangeHour){
+                                for (range in lstRangeHour) {
                                     if (itMap.key.equals(range.toString())) {
                                         itModel.hora.map[itMap.key] = uidUser
                                     }
@@ -219,15 +220,18 @@ class UserModel @Inject constructor(
         lstNewDataJob = listOfAddNewDataJob
     }
 
-    suspend fun getAppointmentByUser(): ManagerError {
+    suspend fun getAppointmentByUser(): ManagerAppointmentUserModel {
         return runCatching {
-            firebaseRepository.getAppointmentByDate(Utils().getCurrentDate(),Constants.APPOINTMENT_UID_USER)
+            firebaseRepository.getAppointmentByDate(
+                Utils().getCurrentDate(),
+                Constants.APPOINTMENT_UID_USER
+            )
         }.fold(
             onSuccess = {
                 val res = it.toObjects(AppointmentUserModel::class.java).toList()
-                ManagerError.Success(res)
+                ManagerAppointmentUserModel.Success(res)
             },
-            onFailure = { ManagerError.Error(it.message!!) }
+            onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
 
@@ -244,7 +248,7 @@ class UserModel @Inject constructor(
         )
     }
 
-    suspend fun setOpinion(type: String, message: String, title: String) : ManagerError {
+    suspend fun setOpinion(type: String, message: String, title: String): ManagerError {
         val model = CommentType()
         val utils = Utils()
         val roomModel = roomRepository.userSessionDao().getUserAuth()
@@ -258,7 +262,7 @@ class UserModel @Inject constructor(
         model.ts = utils.dateToLong(utils.getCurrentDate())
 
         return runCatching {
-                firebaseRepository.setTypeComment(model).await()
+            firebaseRepository.setTypeComment(model).await()
 
         }.fold(
             onSuccess = {
@@ -268,7 +272,7 @@ class UserModel @Inject constructor(
         )
     }
 
-    suspend  fun sendRequestChangePassword(): ManagerError {
+    suspend fun sendRequestChangePassword(): ManagerError {
         return runCatching {
             firebaseRepository.requestChangePassword(firebaseRepository.getAuth().currentUser?.email!!)
         }.fold(
@@ -277,11 +281,13 @@ class UserModel @Inject constructor(
             },
 
             onFailure = {
-                TODO("ERROR AL ENVIAR EL RESTABLECIMIENTO DE CONTRASEÑA")
-                ManagerError.Error(it.message!!) }
+//                TODO("ERROR AL ENVIAR EL RESTABLECIMIENTO DE CONTRASEÑA")
+                ManagerError.Error(Utils.messageErrorConverter(it.message!!))
+            }
         )
     }
-    suspend fun updateDataUserFirestore(values: Array<String?>,userRegister: UserRegister): Any {
+
+    suspend fun updateDataUserFirestore(values: Array<String?>, userRegister: UserRegister): Any {
 
         userRegister.eps = values[0]!!
         userRegister.phone = values[1]!!.toLong()
@@ -291,12 +297,46 @@ class UserModel @Inject constructor(
         }.fold(
             onSuccess = {
                 roomRepository.userSessionDao().updateUserSession(userRegister)
-                ManagerError.Success("1")
+                ManagerError.Success(userRegister)
             },
 
             onFailure = {
 
-                ManagerError.Error(it.message!!) }
+                ManagerError.Error(Utils.messageErrorConverter(it.message!!))
+            }
         )
+    }
+
+    suspend fun getAllAppointmentStateFinish(): ManagerAppointmentUserModel {
+        return runCatching {
+            firebaseRepository.getAppointmentStateFinish()
+        }.fold(
+            onSuccess = {
+                val res = it.toObjects(AppointmentUserModel::class.java).toList()
+                ManagerAppointmentUserModel.Success(res)
+            },
+            onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
+        )
+    }
+
+    fun initAsyncAppointment(
+        onCall: (AppointmentUserModel) -> Unit,
+        uidNurse: String,
+        uidUser: String
+    ) {
+        try {
+            firebaseRepository.realTimeAppointment(onCall,uidNurse,uidUser)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+    }
+
+    fun initAsyncWorkingDay(onCallWorkingDay: (WorkingDayNurse) -> Unit, uidNurse: String) {
+        try {
+            firebaseRepository.realTimeWorkingDayOnly(onCallWorkingDay,uidNurse)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,6 +45,15 @@ class ProfileUserFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val onBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                clearObservers()
+                findNavController().popBackStack()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBack)
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.blue_hospital)
 
         viewModel.setModel( ProfileUserFragmentArgs.fromBundle(requireArguments()).userModel)
@@ -97,6 +107,8 @@ class ProfileUserFragment : Fragment() {
         }
 
         viewModel.progressDialog.observe(viewLifecycleOwner){
+            if(it==null) return@observe
+
             if(it){
                 if(progressDialog.isVisible){
                     progressDialog.dismiss()
@@ -133,7 +145,8 @@ class ProfileUserFragment : Fragment() {
     }
 
     private fun clearObservers() {
-
+        viewModel.informationDialog.value = null
+        viewModel.progressDialog.value = null
     }
 
 
@@ -141,6 +154,6 @@ class ProfileUserFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        clearObservers()
     }
 }

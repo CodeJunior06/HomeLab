@@ -1,6 +1,6 @@
 package com.uts.homelab.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +8,7 @@ import com.uts.homelab.model.UserModel
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.Job
 import com.uts.homelab.network.dataclass.NurseRegister
+import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,10 +23,8 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
     val rvNurseAvailable = MutableLiveData<List<NurseRegister>>()
 
     val modelAppointment = MutableLiveData<AppointmentUserModel>()
-    private val _text = MutableLiveData<String>().apply {
-        value = "Agendar cita"
-    }
-    val text: LiveData<String> = _text
+    val modelWorkingDay = MutableLiveData<WorkingDayNurse>()
+
 
     fun setAppointment(
         valueAppointment: Array<String?>,
@@ -191,5 +190,22 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
             )
         }
 
+    }
+
+    private val onCall = { appointment: AppointmentUserModel ->
+        Log.i("ONCALL", "PASAMOS")
+        modelAppointment.value = appointment
+    }
+
+    private val onCallWorkingDay = { workingNurse: WorkingDayNurse ->
+        Log.i("ONCALL", "PASAMOS")
+        modelWorkingDay.value = workingNurse
+    }
+
+    fun initAsyncAppointment(uidNurse: String, uidUser: String) {
+        model.initAsyncAppointment(onCall,uidNurse,uidUser)
+    }
+    fun initAsyncWorkingDay(uidNurse: String) {
+        model.initAsyncWorkingDay(onCallWorkingDay,uidNurse)
     }
 }

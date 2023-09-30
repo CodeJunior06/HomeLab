@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<com.google.android.material.card.MaterialCardView
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
     android:layout_marginTop="10dp"
-    app:cardBackgroundColor="#79BFC8C2"
+    app:cardBackgroundColor="@color/blue_hospital_light2"
     app:cardCornerRadius="30dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -20,32 +25,49 @@
 
         <ImageView
             android:id="@+id/imgTypeExam"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/state" />
+            app:layout_constraintTop_toBottomOf="@+id/cardState" />
 
-        <TextView
-            android:id="@+id/state"
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:text="estado"
-            android:textStyle="bold"
+            app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/state"
+                android:paddingStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:background="@color/gray_light"
+                android:padding="5dp"
+                android:text="ESTADO"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/imgTypeExam"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgTypeExam"
-            app:layout_constraintTop_toTopOf="@+id/imgTypeExam">
+            app:layout_constraintTop_toBottomOf="@+id/cardState">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,29 +127,53 @@
                     android:text="Hora del examen" />
             </LinearLayout>
 
-            <LinearLayout
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+            app:layout_constraintStart_toStartOf="@+id/imgTypeExam"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelOrProblem"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="40dp"
+                android:textStyle="bold"
+                android:layout_weight="5"
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/initAppointment"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:backgroundTint="#67A9C8"
-                    android:enabled="false"
-                    android:text="Iniciar"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    app:cornerRadius="16dp" />
+                android:text="Cancelar cita"
+                android:layout_marginEnd="10dp"
+                android:textAllCaps="true"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                app:cornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:iconGravity="textStart"
+                app:strokeColor="@color/red" />
 
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnInitAppointment"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="5"
+                android:text="Iniciar"
+                android:textAllCaps="true"
+                android:textColor="@color/blue_hospital"
+                android:textSize="12sp"
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/blue_hospital" />
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
-
+</LinearLayout>

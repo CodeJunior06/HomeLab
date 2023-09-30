@@ -8,6 +8,7 @@ import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,10 +39,10 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
                 informationFragment.postValue(Cons.VIEW_DIALOG_INFORMATION)
             }else{
                 when (val res = model.getAppointmentByUser()){
-                    is ManagerError.Success -> {
-                        listAppointmentModel.postValue(res.modelSuccess as List<AppointmentUserModel> )
+                    is ManagerAppointmentUserModel.Success -> {
+                        listAppointmentModel.postValue(res.modelSuccess)
                     }
-                    is ManagerError.Error -> {
+                    is ManagerAppointmentUserModel.Error -> {
                         isProgress.postValue(Pair(true,3))
                     }
                 }
@@ -128,6 +129,22 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
                 is ManagerError.Error -> {
                     progressDialog.postValue(false)
                     informationFragment.postValue(response.error)
+                }
+            }
+        }
+    }
+
+    fun getAllAppointmentFinish() {
+        progressDialog.value = true
+        viewModelScope.launch {
+            when(val res = model.getAllAppointmentStateFinish()){
+                is ManagerAppointmentUserModel.Success->{
+                    listAppointmentModel.postValue(res.modelSuccess)
+                    progressDialog.postValue(false)
+                }
+                is ManagerAppointmentUserModel.Error -> {
+                    listAppointmentModel.postValue(emptyList())
+                    progressDialog.postValue(false)
                 }
             }
         }

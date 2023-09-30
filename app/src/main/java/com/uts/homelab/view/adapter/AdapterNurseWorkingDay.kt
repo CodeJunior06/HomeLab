@@ -9,8 +9,8 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.AdapterNurseAppointmentBinding
 import com.uts.homelab.network.dataclass.NurseWorkingAdapter
 
-class AdapterNurseAppointment(private val listData: List<NurseWorkingAdapter>) :
-    RecyclerView.Adapter<AdapterNurseAppointment.ViewHolder>() {
+class AdapterNurseWorkingDay(private val listData: List<NurseWorkingAdapter>) :
+    RecyclerView.Adapter<AdapterNurseWorkingDay.ViewHolder>() {
 
     private var selectedItemPosition = -1
 
