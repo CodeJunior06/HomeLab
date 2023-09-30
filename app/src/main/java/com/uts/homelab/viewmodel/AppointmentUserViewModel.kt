@@ -9,6 +9,7 @@ import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.Job
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.WorkingDayNurse
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -207,5 +208,20 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
     }
     fun initAsyncWorkingDay(uidNurse: String) {
         model.initAsyncWorkingDay(onCallWorkingDay,uidNurse)
+    }
+
+    fun initProcessAppointment() {
+        isProgress.value = Pair(true, 2)
+        viewModelScope.launch {
+            when (val response = model.updateStateAppointment(State.IN_PROGRESS)) {
+                is ManagerError.Success -> {
+
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 2))
+                    informationFragment.postValue(response.error)
+                }
+            }
+        }
     }
 }

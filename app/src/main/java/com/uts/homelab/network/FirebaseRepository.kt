@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
-import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -174,6 +173,12 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    override suspend fun updateAppointmentState(state: State): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_APPOINTMENT).document().set(state)
+        }
+    }
+
     override fun closeSession() {
         auth.signOut()
     }
@@ -330,4 +335,43 @@ class FirebaseRepository @Inject constructor(
 
             }
     }
+
+    fun realTimeAppointmentByNurse(
+        onCall: (AppointmentUserModel) -> Unit,
+        uidNurse: String
+    ) {
+        firestore.collection(Constants.COLLECT_APPOINTMENT)
+            .whereEqualTo(Constants.APPOINTMENT_UID_NURSE, uidNurse)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+
+                for (dc in snapshot!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            Log.i(
+                                javaClass.name,
+                                "New document from WorkingDay: ${dc.document.id}"
+                            )
+                            val model = dc.document.toObject(AppointmentUserModel::class.java)
+                            onCall(model)
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            Log.i(
+                                javaClass.name,
+                                "Modified document from WorkingDay: ${dc.document.id}"
+                            )
+                        }
+                        DocumentChange.Type.REMOVED -> Log.i(
+                            javaClass.name,
+                            "Removed document from WorkingDay: ${dc.document.id}"
+                        )
+                    }
+                }
+
+            }
+    }
+
+
 }

@@ -20,4 +20,6 @@ class AppointmentUserModel : Parcelable {
     var step:Int = 0
     var modelNurse:NurseRegister = NurseRegister()
     var modelUser:UserRegister = UserRegister()
+
+    var dc = ""
 }

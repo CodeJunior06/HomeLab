@@ -70,8 +70,21 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
             binding.btnAction.visibility = View.GONE
             viewModel.initAsyncAppointment(model.uidNurse, model.uidUser)
             viewModel.initAsyncWorkingDay(model.uidNurse)
+            binding.etName.setText(model.modelNurse.name + " " +model.modelNurse.lastName)
+
+        }else{
+            binding.etName.setText(model.modelUser.name + " " +model.modelUser.lastName)
         }
 
+        binding.btnAction.setOnClickListener {
+            //viewModel.initProcessAppointment()
+            toastMessage("CAMBIO DE ESTADO")
+        }
+
+
+
+        binding.etAddress.setText(model.address)
+        binding.etPhone.setText(model.phone.toString())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)

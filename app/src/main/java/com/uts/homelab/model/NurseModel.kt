@@ -6,6 +6,7 @@ import com.uts.homelab.network.db.Constants
 import com.uts.homelab.network.db.DataBaseHome
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.datastore.DataStoreManager
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -126,7 +127,7 @@ class NurseModel @Inject constructor(
 
     }
 
-    suspend fun getAppointment(): ManagerError {
+    suspend fun getAppointment(): ManagerAppointmentUserModel {
         return runCatching {
             firebaseRepository.getAppointmentByDate(
                 Utils().getCurrentDate(),
@@ -135,9 +136,9 @@ class NurseModel @Inject constructor(
         }.fold(
             onSuccess = {
                 val res = it.toObjects(AppointmentUserModel::class.java).toList()
-                ManagerError.Success(res)
+                ManagerAppointmentUserModel.Success(res)
             },
-            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
+            onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
 
@@ -209,6 +210,14 @@ class NurseModel @Inject constructor(
             },
             onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
+    }
+
+    fun initAsyncAppointmentByNurse(onCall: (AppointmentUserModel) -> Unit) {
+        try {
+            firebaseRepository.realTimeAppointmentByNurse(onCall, firebaseRepository.getAuth().uid!!)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
 }

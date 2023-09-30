@@ -39,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/text_home">
 
             <TextView
+                android:background="@color/white"
                 android:id="@+id/text_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +47,7 @@
                 android:textColor="@color/blue_hospital"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                tools:text="Solicitud de cita" />
+                android:text="Solicitud de cita" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
@@ -44,6 +45,9 @@ class NurseFragment : Fragment(),OnResult {
         requireActivity().window.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.white)
         viewModel.init()
+
+        viewModel.initAsyncAppointment()
+
         observers()
 
         binding.btnProfile.setOnClickListener {
@@ -111,10 +115,15 @@ class NurseFragment : Fragment(),OnResult {
 
         viewModel.setRecycler.observe(viewLifecycleOwner){
             if(it ==null ) return@observe
+
+            lstProvider = it.toMutableList() as ArrayList<AppointmentUserModel>
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
+
             binding.rvAppointment.adapter = AdapterAppointment(it,
                 Rol.NURSE,this)
+
             binding.countVisit.text = it.size.toString()
+
             if(it.isEmpty()){
                 viewModel.progressDialogRv.postValue(Pair(true,3))
             }else{
@@ -122,7 +131,24 @@ class NurseFragment : Fragment(),OnResult {
                 binding.rvAppointment.visibility = View.VISIBLE
             }
         }
+
+        viewModel.asyncAppointment.observe(viewLifecycleOwner){
+            if(binding.loading.isVisible){
+                binding.rvAppointment.visibility = View.VISIBLE
+                binding.loading.visibility = View.GONE
+            }
+
+            lstProvider.add(it)
+            binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
+
+            binding.rvAppointment.adapter = AdapterAppointment(lstProvider,
+                Rol.NURSE,this)
+
+            binding.countVisit.text = lstProvider.size.toString()
+        }
     }
+
+    private var lstProvider = arrayListOf<AppointmentUserModel>()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -130,7 +156,7 @@ class NurseFragment : Fragment(),OnResult {
     }
 
     override fun onSuccess(appointmentModel: AppointmentUserModel) {
-
+        findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToProcessAppointmentFragment2(appointmentModel,Rol.NURSE.name))
     }
 
     override fun onCancel() {

@@ -4,6 +4,7 @@ import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
 import com.uts.homelab.network.db.DataBaseHome
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
@@ -339,4 +340,17 @@ class UserModel @Inject constructor(
             e.printStackTrace()
         }
     }
+
+    suspend fun updateStateAppointment(state:State): ManagerError {
+        return runCatching {
+            firebaseRepository.updateAppointmentState(state)
+        }.fold(
+            onSuccess = {
+                ManagerError.Success(1)
+            },
+            onFailure = { ManagerError.Error(it.message!!) }
+        )
+    }
+
+
 }

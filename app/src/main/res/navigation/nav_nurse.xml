@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_nurse_fragment_to_nurse_profile"
             app:destination="@id/nurse_profile" />
+        <action
+            android:id="@+id/action_nurse_fragment_to_processAppointmentFragment2"
+            app:destination="@id/processAppointmentFragment2" />
     </fragment>
     <fragment
         android:id="@+id/nurse_history"
@@ -58,5 +61,33 @@
         android:name="com.uts.homelab.view.fragment.nurse.DataNurseProfileFragment"
         android:label="fragment_data_nurse_profile"
         tools:layout="@layout/fragment_data_nurse_profile" />
+    <fragment
+        android:id="@+id/processAppointmentFragment2"
+        android:name="com.uts.homelab.view.fragment.user.processappointment.ProcessAppointmentFragment"
+        android:label="fragment_process_appointment"
+        tools:layout="@layout/fragment_process_appointment" >
+
+        <argument
+            android:name="appointmentModel"
+            app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
+        <argument
+            android:name="typeUser"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_processAppointmentFragment2_to_processSecondAppointmentFragment2"
+            app:destination="@id/processSecondAppointmentFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/processSecondAppointmentFragment2"
+        android:name="com.uts.homelab.view.fragment.user.processappointment.ProcessSecondAppointmentFragment"
+        android:label="fragment_process_second_appointment"
+        tools:layout="@layout/fragment_process_second_appointment" >
+
+        <argument
+            android:name="appointmentModel"
+            app:argType="com.uts.homelab.network.dataclass.AppointmentUserModel" />
+
+
+    </fragment>
 
 </navigation>

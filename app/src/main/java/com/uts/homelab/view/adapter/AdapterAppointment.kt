@@ -108,20 +108,17 @@ class AdapterAppointment(
 
             }else{
                 val horaDada: LocalTime = LocalTime.of(hour.toInt(), minute.toInt())
-                val horaAntes: LocalTime = horaDada.minusHours(1)
+                val horaAntes: LocalTime = horaDada.minusHours(2)
 
                 val horaActual = LocalTime.now()
                 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
                 val horaFormateada = horaActual.format(formatter)
                 println("Hora actual: $horaFormateada")
-                hour = horaFormateada.split(":")[0]
-                minute = horaFormateada.split(":")[0]
+                val currentHour = horaFormateada.split(":")[0].toInt()
+                val currentMinute = horaFormateada.split(":")[1].toInt()
 
-
-                if ((horaAntes.hour > hour.toInt() && horaAntes.minute > minute.toInt())) {
-                    res = true
-                }
+                res = ( currentHour >= horaAntes.hour )
             }
 
             when(appointmentModel.state){
@@ -151,14 +148,19 @@ class AdapterAppointment(
                         Toast.makeText(binding.root.context, "estas queriendo acceder una hora antes o despues y no es posible", Toast.LENGTH_SHORT).show()
                     }
                 }else{
-                    if(res){
-                        Toast.makeText(binding.root.context, "Puedes ver la actividad una hora antes de lo solicitado", Toast.LENGTH_SHORT).show()
+                    if(!res){
+                        Toast.makeText(binding.root.context, "Puedes iniciar la actividad en dos horas de la hora solicitada", Toast.LENGTH_SHORT).show()
+                    }else{
+                        onResult.onSuccess(appointmentModel)
                     }
 
                 }
 
             }
 
+            binding.btnCancelOrProblem.setOnClickListener {
+                Toast.makeText(binding.root.context, "Accion de eliminar el documento de la coleccion", Toast.LENGTH_SHORT).show()
+            }
 
         }
     }

@@ -1,5 +1,6 @@
 package com.uts.homelab.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +33,8 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
     //MAIN
     val progressDialogRv = MutableLiveData<Pair<Boolean,Int>>()
     val setRecycler =MutableLiveData<List<AppointmentUserModel>>()
+    //ASYNC APPOINTMENT
+    val asyncAppointment =MutableLiveData<AppointmentUserModel>()
 
     fun init() {
         viewModelScope.launch {
@@ -42,10 +46,10 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
 
                 progressDialogRv.value  = Pair(true,2)
                 when(val res = model.getAppointment()) {
-                    is ManagerError.Success ->{
-                        setRecycler.postValue(res.modelSuccess as List<AppointmentUserModel>)
+                    is ManagerAppointmentUserModel.Success ->{
+                        setRecycler.postValue(res.modelSuccess)
                     }
-                    is ManagerError.Error ->{
+                    is ManagerAppointmentUserModel.Error ->{
                         progressDialogRv.value  = Pair(true,3)
                     }
                 }
@@ -206,6 +210,14 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
             }
         }
 
+    }
+
+    private val onCall = { appointment: AppointmentUserModel ->
+        Log.i("ONCALL", "PASAMOS")
+        asyncAppointment.value = appointment
+    }
+    fun initAsyncAppointment() {
+        model.initAsyncAppointmentByNurse(onCall)
     }
 
 }

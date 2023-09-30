@@ -5,6 +5,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.uts.homelab.network.dataclass.*
+import com.uts.homelab.utils.State
 
 interface IFirebaseRepository {
     suspend fun isSetAuthentication(email: String, password: String): AuthResult
@@ -40,6 +41,8 @@ interface IFirebaseRepository {
     suspend fun getAppointmentAllByUser() : QuerySnapshot
     suspend fun getAppointmentStateLaboratory() : QuerySnapshot
     suspend fun getAppointmentStateFinish() : QuerySnapshot
+
+    suspend fun updateAppointmentState(state: State): Task<*>
 
     fun closeSession()
     suspend fun setTypeComment(commentType: CommentType) : Task<*>
