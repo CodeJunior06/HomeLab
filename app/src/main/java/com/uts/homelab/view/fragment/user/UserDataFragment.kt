@@ -179,4 +179,8 @@ class UserDataFragment : Fragment() , AdapterView.OnItemSelectedListener {
         println("")
     }
 
+    fun clear(){
+
+    }
+
 }

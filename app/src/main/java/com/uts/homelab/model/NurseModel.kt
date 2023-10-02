@@ -21,7 +21,6 @@ class NurseModel @Inject constructor(
     }
 
     suspend fun setRegisterNurse(nurseData: Array<String?>, value: NurseRegister): ManagerError {
-        val map = HashMap<String, Any>()
 
         value.age = nurseData[0]!!.toInt()
         value.exp = nurseData[1]!!.toInt()
@@ -31,13 +30,7 @@ class NurseModel @Inject constructor(
         value.geolocation.longitude = nurseData[5]!!
         value.newNurse = false
         value.phone = nurseData[6]!!
-
-        map["geolocation"] = value.geolocation
-        map["age"] = value.age
-        map["exp"] = value.exp
-        map["address"] = value.address
-        map["idVehicle"] = value.idVehicle
-        map["newNurse"] = value.newNurse
+        value.nacimiento = nurseData[7]!!
 
         return kotlin.runCatching {
             firebaseRepository.updateNurseFirestore(value).await()

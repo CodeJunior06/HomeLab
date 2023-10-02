@@ -135,6 +135,8 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
         }
 
         viewModel.isProgress.observe(viewLifecycleOwner) {
+            if(it==null) return@observe
+
             if (it.first) {
 
                 if (it.second == 2 || it.second == 3) {

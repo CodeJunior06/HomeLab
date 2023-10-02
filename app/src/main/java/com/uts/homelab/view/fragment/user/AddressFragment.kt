@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,12 +53,19 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
         val validModel = AddressFragmentArgs.fromBundle(requireArguments()).appointmentModel
         if(validModel.uidUser.isNotEmpty()){
             viewModel.setModelAppointment(validModel)
         }
+        val onBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                clear()
+                findNavController().popBackStack()
+            }
+        }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBack)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -86,6 +94,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         }
 
         setObserver()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setObserver() {
@@ -115,6 +124,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.progressDialog.observe(viewLifecycleOwner) {
+            if(it == null)return@observe
             if (it) {
                 if (progressDialog.isVisible) {
                     progressDialog.dismiss()
@@ -127,6 +137,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
             }
         }
         viewModel.intentToMainUser.observe(viewLifecycleOwner){
+            if(it == null)return@observe
             findNavController().navigate(AddressFragmentDirections.actionAddressFragmentToNavigationHome())
         }
     }
@@ -188,6 +199,12 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l, 15.0f))
         }
 
+    }
+
+    fun clear(){
+        viewModel.informationFragment.value = null
+        viewModel.progressDialog.value = null
+        viewModel.intentToMainUser.value = null
     }
 
 }

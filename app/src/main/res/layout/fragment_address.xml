@@ -37,7 +37,7 @@
                     android:background="@drawable/edit_text_round"
                     android:drawableStart="@drawable/ic_address"
                     android:drawablePadding="15dp"
-                    android:hint="Direccion"
+                    android:hint="Descripcion Direccion"
                     android:inputType="text"
                     android:nextFocusForward="@id/sp_typeDocument"
                     android:paddingHorizontal="15dp"
@@ -62,6 +62,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 app:icon="@drawable/ic_save"
+                android:paddingVertical="10dp"
                 app:iconTint="@color/white"
                 android:enabled="false"
                 app:iconGravity="textStart"
@@ -73,7 +74,7 @@
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:backgroundTint="@color/blue_marine"
+                android:backgroundTint="@color/blue_alianza"
                 android:text="GUARDAR"
                 android:paddingHorizontal="10dp"
                 app:cornerRadius="16dp" />

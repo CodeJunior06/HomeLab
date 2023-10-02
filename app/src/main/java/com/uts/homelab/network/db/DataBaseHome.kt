@@ -12,7 +12,7 @@ import com.uts.homelab.network.db.dao.UserSessionDAO
 
 import com.uts.homelab.network.dataclass.AdminSession
 
-@Database(entities = [AdminSession::class,NurseRegister::class,UserRegister::class,WorkingDayNurse::class], version = 5, exportSchema = false)
+@Database(entities = [AdminSession::class,NurseRegister::class,UserRegister::class,WorkingDayNurse::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 
 abstract class DataBaseHome : RoomDatabase() {

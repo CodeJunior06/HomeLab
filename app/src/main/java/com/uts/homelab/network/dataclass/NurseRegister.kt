@@ -14,6 +14,7 @@ class NurseRegister : Parcelable {
     var email: String = ""
     var valueDocument: String = ""
     var gender: String = ""
+    var nacimiento:String = ""
     @PrimaryKey(autoGenerate = false)
     var uid: String = ""
     var address: String = ""

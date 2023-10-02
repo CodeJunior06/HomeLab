@@ -12,6 +12,7 @@ import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -78,7 +79,8 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
                     binding.etIdVehicule.text.toString(),
                     marker!!.position.latitude.toString(),
                     marker!!.position.longitude.toString(),
-                    binding.etPhone.text.toString()
+                    binding.etPhone.text.toString(),
+                    binding.tvDateNacimiento.text.toString()
                 )
             )
         }
@@ -154,7 +156,7 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.intent.observe(viewLifecycleOwner){
-
+            findNavController().popBackStack()
         }
     }
 

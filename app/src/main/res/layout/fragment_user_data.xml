@@ -140,7 +140,7 @@
                         android:textColorHint="@color/black" />
 
                     <EditText
-                        android:drawableStart="@drawable/ic_phone"
+                        android:drawableStart="@drawable/ic_id"
                         android:id="@+id/et_numberDocument"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                         android:id="@+id/et_age"
                         android:enabled="false"
                         android:layout_width="match_parent"
-                        android:layout_height="57dp"
+                        android:layout_height="match_parent"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="6.5"
                         android:background="@drawable/edit_text_round"
@@ -184,7 +184,7 @@
                         android:id="@+id/et_nacimiento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="16dp"
+                        android:paddingVertical="15dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="5"
                         android:background="@drawable/edit_text_round"
@@ -309,7 +309,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRegister"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="5"
                         android:backgroundTint="@color/blue_hospital"
                         android:text="Siguiente"
