@@ -33,7 +33,7 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
     //MAIN
     val progressDialogRv = MutableLiveData<Pair<Boolean,Int>>()
     val setRecycler =MutableLiveData<List<AppointmentUserModel>>()
-    //ASYNC APPOINTMENT
+    //----ASYNC APPOINTMENT
     val asyncAppointment =MutableLiveData<AppointmentUserModel>()
 
     fun init() {

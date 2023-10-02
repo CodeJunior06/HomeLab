@@ -5,10 +5,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.core.Target
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
 import com.uts.homelab.utils.State
+import com.uts.homelab.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -162,21 +162,22 @@ class FirebaseRepository @Inject constructor(
     override suspend fun getAppointmentStateLaboratory(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
             firestore.collection(Constants.COLLECT_APPOINTMENT)
-                .whereEqualTo("state", State.LABORATORY.name).get().await()
+                .whereEqualTo("state", State.LABORATORIO.name).get().await()
         }
     }
 
     override suspend fun getAppointmentStateFinish(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
             firestore.collection(Constants.COLLECT_APPOINTMENT)
-                .whereEqualTo("state", State.FINISH.name)
+                .whereEqualTo("state", State.FINALIZADO.name)
                 .whereEqualTo("uidUser", auth.currentUser!!.email).get().await()
         }
     }
 
-    override suspend fun updateAppointmentState(state: State): Task<*> {
+    override suspend fun updateAppointmentState(model: AppointmentUserModel): Task<*> {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_APPOINTMENT).document().set(state)
+            firestore.collection(Constants.COLLECT_APPOINTMENT).document(model.dc).set(model,
+                SetOptions.merge())
         }
     }
 
@@ -356,7 +357,11 @@ class FirebaseRepository @Inject constructor(
                                 "New document from WorkingDay: ${dc.document.id}"
                             )
                             val model = dc.document.toObject(AppointmentUserModel::class.java)
-                            onCall(model)
+                            model.dc = dc.document.id
+
+                            if(model.date == Utils().getCurrentDate()){
+                                onCall(model)
+                            }
                         }
                         DocumentChange.Type.MODIFIED -> {
                             Log.i(

@@ -210,15 +210,30 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
         model.initAsyncWorkingDay(onCallWorkingDay,uidNurse)
     }
 
-    fun initProcessAppointment() {
-        isProgress.value = Pair(true, 2)
+    fun initProcessAppointment(model: AppointmentUserModel) {
+        isProgress.value = Pair(true, 1)
         viewModelScope.launch {
-            when (val response = model.updateStateAppointment(State.IN_PROGRESS)) {
+            when (val response = this@AppointmentUserViewModel.model.updateStateAppointment(model,State.CURSO,1)) {
                 is ManagerError.Success -> {
-
+                    isProgress.postValue(Pair (false,1))
                 }
                 is ManagerError.Error -> {
-                    isProgress.postValue(Pair(false, 2))
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(response.error)
+                }
+            }
+        }
+    }
+
+    fun initProcessAppointmentFinishStepOne(model: AppointmentUserModel) {
+        isProgress.value = Pair(true, 1)
+        viewModelScope.launch {
+            when (val response = this@AppointmentUserViewModel.model.updateStateAppointment(model,State.CITA,2)) {
+                is ManagerError.Success -> {
+                    isProgress.postValue(Pair (false,3))
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
                     informationFragment.postValue(response.error)
                 }
             }

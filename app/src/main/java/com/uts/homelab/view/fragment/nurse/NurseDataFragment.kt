@@ -1,6 +1,7 @@
 package com.uts.homelab.view.fragment.nurse
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,7 @@ import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.utils.extension.toastMessage
 import com.uts.homelab.viewmodel.NurseViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -70,16 +72,66 @@ class NurseDataFragment : Fragment(), OnMapReadyCallback {
 
             viewModel.setCompleteRegister(
                 arrayOf(
-                    binding.etEdad.text.toString(),
+                    phone.toString(),
                     binding.etExperiencia.text.toString(),
                     binding.etAddress.text.toString(),
                     binding.etIdVehicule.text.toString(),
                     marker!!.position.latitude.toString(),
-                    marker!!.position.longitude.toString()
+                    marker!!.position.longitude.toString(),
+                    binding.etPhone.text.toString()
                 )
             )
         }
 
+        binding.tvDateNacimiento.setOnClickListener {
+            showDatePickerDialog()
+        }
+       
+
+    }
+
+    private var phone:Int=0
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val selectedDate = "$dayOfMonth / ${month + 1} / $year"
+                calendar.set(year, month, dayOfMonth)
+                phone = calculateAge(calendar.timeInMillis)
+                binding.tvDateNacimiento.text = selectedDate
+            },
+            currentYear,
+            currentMonth,
+            currentDay
+        )
+
+        datePickerDialog.show()
+    }
+
+    private fun calculateAge(selectedDateTimestamp:Long) : Int {
+
+        val fechaNacimiento = Date(selectedDateTimestamp)
+        val fechaActual = Date()
+
+        val calendarNacimiento = Calendar.getInstance()
+        calendarNacimiento.time = fechaNacimiento
+
+        val calendarActual = Calendar.getInstance()
+        calendarActual.time = fechaActual
+
+        var años = calendarActual.get(Calendar.YEAR) - calendarNacimiento.get(Calendar.YEAR)
+
+        // Verificar si la fecha actual aún no ha alcanzado la fecha de nacimiento de este año.
+        if (calendarActual.get(Calendar.DAY_OF_YEAR) < calendarNacimiento.get(Calendar.DAY_OF_YEAR)) {
+            años--
+        }
+
+        return años
     }
 
     private fun observers() {

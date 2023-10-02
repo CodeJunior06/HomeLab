@@ -229,8 +229,17 @@ class UserModel @Inject constructor(
             )
         }.fold(
             onSuccess = {
-                val res = it.toObjects(AppointmentUserModel::class.java).toList()
-                ManagerAppointmentUserModel.Success(res)
+                val lst = arrayListOf<AppointmentUserModel>()
+                for(index in 0 until it.documents.size){
+                   val rta =  it.documents[index].id
+                    val res = it.documents[index].toObject(AppointmentUserModel::class.java)
+                    if (res != null) {
+                        res.dc = rta
+                        lst.add(res)
+                    }
+                }
+
+                ManagerAppointmentUserModel.Success(lst)
             },
             onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
         )
@@ -341,9 +350,11 @@ class UserModel @Inject constructor(
         }
     }
 
-    suspend fun updateStateAppointment(state:State): ManagerError {
+    suspend fun updateStateAppointment(model: AppointmentUserModel, state: State,step:Int): ManagerError {
         return runCatching {
-            firebaseRepository.updateAppointmentState(state)
+            model.state = state.name
+            model.step = step
+            firebaseRepository.updateAppointmentState(model)
         }.fold(
             onSuccess = {
                 ManagerError.Success(1)

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,7 +23,9 @@ import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentProcessAppointmentBinding
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.DirectionsResponse
+import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Rol
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
@@ -34,6 +37,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
@@ -47,7 +52,7 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
     private var bool = false
 
     private var progressDialog: ProgressFragment = ProgressFragment()
-    private var informationDialog: InformationFragment? = null
+    private var informationFragment: InformationFragment? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var model: AppointmentUserModel
@@ -71,20 +76,26 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
             viewModel.initAsyncAppointment(model.uidNurse, model.uidUser)
             viewModel.initAsyncWorkingDay(model.uidNurse)
             binding.etName.setText(model.modelNurse.name + " " +model.modelNurse.lastName)
-
+            binding.etPhone.setText(model.phone.toString())
         }else{
             binding.etName.setText(model.modelUser.name + " " +model.modelUser.lastName)
+            binding.etPhone.setText(model.modelUser.phone.toString())
         }
 
         binding.btnAction.setOnClickListener {
-            //viewModel.initProcessAppointment()
-            toastMessage("CAMBIO DE ESTADO")
+
+            if(binding.btnAction.text == "INICIAR"){
+                viewModel.initProcessAppointment(model)
+            }else{
+                viewModel.initProcessAppointmentFinishStepOne(model)
+            }
+
         }
 
 
 
         binding.etAddress.setText(model.address)
-        binding.etPhone.setText(model.phone.toString())
+
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -97,6 +108,65 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setObservers() {
+
+        viewModel.isProgress.observe(viewLifecycleOwner) {
+            if(it == null) return@observe
+            if (it.first) {
+                if (progressDialog.isVisible) {
+                    progressDialog.dismiss()
+                }
+                progressDialog.show(childFragmentManager, javaClass.name)
+            } else {
+                if (progressDialog.isVisible) {
+                    progressDialog.dismiss()
+                }
+
+                if(it.second==2){
+                    binding.btnAction.setText("Llegue al destino")
+                    binding.btnAction.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue_alianza))
+                }
+
+                if(it.second==3){
+                    model.state = State.CITA.name
+                    model.step = 2
+                    findNavController().navigate(ProcessAppointmentFragmentDirections.actionProcessAppointmentFragmentToProcessSecondAppointmentFragment(model))
+                }
+            }
+        }
+
+        viewModel.informationFragment.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+
+            informationFragment = InformationFragment()
+            if (it == Cons.UPDATE_DATA_NURSE) {
+                informationFragment!!.getInstance(
+                    getString(R.string.correct),
+                    "Se han actualizado correctamente los datos"
+                )
+            } else {
+                informationFragment!!.getInstance(getString(R.string.attention), it)
+            }
+
+            val timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    if (informationFragment!!.isVisible) {
+                        informationFragment!!.dismiss()
+                    }
+                }
+            }, 3500)
+
+            if (informationFragment!!.isVisible) {
+                informationFragment!!.dismiss()
+            }
+
+            informationFragment!!.show(
+                requireActivity().supportFragmentManager,
+                "InformationFragment"
+            )
+        }
+
+
         viewModel.modelAppointment.observe(viewLifecycleOwner) {
 
         }
@@ -136,13 +206,13 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun clear() {
-
+        viewModel.isProgress.value = null
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        clear()
     }
 
     override fun onMapReady(map: GoogleMap) {

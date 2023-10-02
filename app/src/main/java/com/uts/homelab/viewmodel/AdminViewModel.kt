@@ -39,7 +39,7 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
     //MODULE PQRS
     val rvCommentType = MutableLiveData<List<CommentType>>()
 
-    //MODULE LABORATORY
+    //MODULE LABORATORIO
     val rvAppointmentUserModel = MutableLiveData<List<AppointmentUserModel>>()
 
 

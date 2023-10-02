@@ -167,6 +167,7 @@ class NurseProfileFragment : Fragment() {
             if(it.active){
                 viewModel.isService.postValue(true)
             }else{
+                viewModel.isService.postValue(false)
                 binding.state.text = "FUERA DE SERVICIO"
                 binding.btnJornaly.text = "INICAR JORNADA"
                 binding.state.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))

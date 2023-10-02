@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -109,7 +108,7 @@ class AppointmentUserSecondScreenFragment : Fragment(), AdapterView.OnItemSelect
             if (nurseSelect != null) {
                 it.uidNurse = nurseSelect!!.uid
                 it.modelNurse = nurseSelect!!
-                it.state = State.ACTIVE.name
+                it.state = State.ACTIVO.name
                 if (binding.btnAddAppointment.text.equals("Seleccionar Direccion")) {
 
                     it.typeOfExam = valueSpinner

@@ -30,6 +30,7 @@ class NurseModel @Inject constructor(
         value.geolocation.latitude = nurseData[4]!!
         value.geolocation.longitude = nurseData[5]!!
         value.newNurse = false
+        value.phone = nurseData[6]!!
 
         map["geolocation"] = value.geolocation
         map["age"] = value.age
@@ -135,8 +136,16 @@ class NurseModel @Inject constructor(
             )
         }.fold(
             onSuccess = {
-                val res = it.toObjects(AppointmentUserModel::class.java).toList()
-                ManagerAppointmentUserModel.Success(res)
+                val lst = arrayListOf<AppointmentUserModel>()
+                for(index in 0 until it.documents.size){
+                    val rta =  it.documents[index].id
+                    val res = it.documents[index].toObject(AppointmentUserModel::class.java)
+                    if (res != null) {
+                        res.dc = rta
+                        lst.add(res)
+                    }
+                }
+                ManagerAppointmentUserModel.Success(lst)
             },
             onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
         )

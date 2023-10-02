@@ -122,16 +122,16 @@ class AdapterAppointment(
             }
 
             when(appointmentModel.state){
-                State.ACTIVE.name->{
+                State.ACTIVO.name->{
                     binding.state.text = "ACTIVO"
                     binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.blue_hospital))
                 }
-                State.IN_PROGRESS.name->{
+                State.CURSO.name->{
                     binding.state.text = "EN PROGRESO"
                     binding.btnCancelOrProblem.visibility = View.GONE
                     binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.green))
                 }
-                State.CANCELED.name->{
+                State.CANCELADO.name->{
                     binding.state.text = "CANCELADA"
                     binding.btnInitAppointment.visibility = View.GONE
                     binding.btnCancelOrProblem.visibility = View.GONE

@@ -9,12 +9,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.uts.homelab.R
 import com.uts.homelab.databinding.AdapterHistoryAppointmentBinding
-import com.uts.homelab.databinding.AdapterUserAppointmentBinding
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.State
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 class AdapterHistoryAppointment(
     private val listData: List<AppointmentUserModel>,
@@ -54,24 +51,24 @@ class AdapterHistoryAppointment(
             binding.typeExam.text = appointmentModel.typeOfExam
 
             when(appointmentModel.state){
-                State.ACTIVE.name->{
+                State.ACTIVO.name->{
                     binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
                 }
-                State.IN_PROGRESS.name->{
+                State.CURSO.name->{
                     binding.llBtn.visibility = View.GONE
                     binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.green))
                 }
-                State.CANCELED.name->{
+                State.CANCELADO.name->{
                     binding.llBtn.visibility = View.VISIBLE
                     binding.btnCancelOrProblem.setText("Reportar poblema")
                     binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.red))
                 }
-                State.LABORATORY.name->{
+                State.LABORATORIO.name->{
                     binding.llBtn.visibility = View.VISIBLE
                     binding.btnCancelOrProblem.setText("Reportar poblema")
                     binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.yellow))
                 }
-                State.FINISH.name->{
+                State.FINALIZADO.name->{
                     binding.llBtn.visibility = View.GONE
                     binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray))
                 }
