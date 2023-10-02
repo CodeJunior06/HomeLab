@@ -106,6 +106,7 @@ class AppointmentUserFragment : Fragment(), OnResult {
         }
 
         viewModel.isProgress.observe(viewLifecycleOwner) {
+            if(it==null) return@observe
             if (it.first) {
 
                 if(it.second==2 || it.second == 3){
@@ -144,12 +145,15 @@ class AppointmentUserFragment : Fragment(), OnResult {
     }
     private fun clearObservers(){
         viewModel.informationFragment.value = null
+        viewModel.isProgress.value = null
+        viewModel.listAppointmentModel.value = null
+        binding.countAppointment.text = "0"
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         clearObservers()
+        _binding = null
 
     }
 

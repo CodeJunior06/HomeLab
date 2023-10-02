@@ -338,6 +338,7 @@ class FirebaseRepository @Inject constructor(
             }
     }
 
+    var t = ""
     fun realTimeAppointmentByNurse(
         onCall: (AppointmentUserModel) -> Unit,
         uidNurse: String
@@ -352,15 +353,23 @@ class FirebaseRepository @Inject constructor(
                 for (dc in snapshot!!.documentChanges) {
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
+
+                            if(t==dc.document.id){
+                                return@addSnapshotListener
+                            }else{
+                                t= dc.document.id
+                                val model = dc.document.toObject(AppointmentUserModel::class.java)
+                                model.dc = dc.document.id
+
+
+                                if(model.date == Utils().getCurrentDate()){
+                                    onCall(model)
+                            }
+
                             Log.i(
                                 javaClass.name,
-                                "New document from WorkingDay: ${dc.document.id}"
+                                "Santiago Rueda: ${dc.document.id}"
                             )
-                            val model = dc.document.toObject(AppointmentUserModel::class.java)
-                            model.dc = dc.document.id
-
-                            if(model.date == Utils().getCurrentDate()){
-                                onCall(model)
                             }
                         }
                         DocumentChange.Type.MODIFIED -> {
