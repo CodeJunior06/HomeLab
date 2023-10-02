@@ -121,6 +121,8 @@ class AdminModel @Inject constructor(
             firebaseRepository.getNursesActiveByJournal()
         }.fold(
             onSuccess = {
+                val res= it
+                println(res)
                 val modelWorking = it.toObjects(WorkingDayNurse::class.java).toList()
                 getNurseAvailableByListIds(modelWorking)
             },
@@ -142,18 +144,19 @@ class AdminModel @Inject constructor(
                 val lstModelNurse = it.toObjects(NurseRegister::class.java).toList()
 
                     val lstNurseLocation = ArrayList<NurseLocation>()
-                    lstModelNurse.forEachIndexed { index, nurseRegister ->
-                        if(modelWorking[index].id == nurseRegister.uid){
+                    lstModelNurse.forEach {nurseRegister ->
+                        modelWorking.forEach {
+                        if(it.id == nurseRegister.uid){
                             val nurseLocation  = NurseLocation()
-                            nurseLocation.geolocation = modelWorking[index].geolocation
+                            nurseLocation.geolocation = it.geolocation
                             nurseLocation.phone = ""
-                            nurseLocation.uidWorking = modelWorking[index].id
+                            nurseLocation.uidWorking = it.id
                             nurseLocation.nameUser = nurseRegister.name
                             nurseLocation.lastName  = nurseRegister.lastName
                             lstNurseLocation.add(nurseLocation)
                         }
                     }
-
+            }
                     ManagerError.Success(lstNurseLocation)
 
             },
@@ -258,6 +261,14 @@ class AdminModel @Inject constructor(
             onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
 
+    }
+
+    fun stopAsync() {
+        try {
+            firebaseRepository.stopAsyncWorkingDay()
+        }catch (e:Exception){
+            println(e)
+        }
     }
 
 }

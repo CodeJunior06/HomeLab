@@ -41,6 +41,9 @@ class NurseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         validLocation()
+
+        locationManager()
+
     }
 
     private val codeLocation = 101
@@ -119,8 +122,7 @@ class NurseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        locationManager()
-        validLocation()
+
     }
 
     private fun location() {

@@ -169,6 +169,7 @@ class NurseProfileFragment : Fragment() {
             }else{
                 binding.state.text = "FUERA DE SERVICIO"
                 binding.btnJornaly.text = "INICAR JORNADA"
+                binding.state.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
             }
         }
 
@@ -205,6 +206,7 @@ class NurseProfileFragment : Fragment() {
         viewModel.intent.value = null
         viewModel.informationFragment.value = null
         viewModel.progressDialog.value = null
+        viewModel.isService.value = null
     }
 
     override fun onDestroyView() {

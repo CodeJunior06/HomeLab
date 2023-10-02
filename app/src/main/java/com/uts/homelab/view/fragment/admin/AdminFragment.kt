@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -36,9 +37,14 @@ class AdminFragment : Fragment() {
         adminViewModel.getTextUI(false)
         adminViewModel.getAllNurseWorkingDay()
 
+
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.white)
+
         observers()
 
         binding.cardLocation.setOnClickListener {
+            clear()
             findNavController().navigate(AdminFragmentDirections.actionAdminFragmentToNurseAdminFragment())
         }
         binding.cardNurse.setOnClickListener {
@@ -125,10 +131,12 @@ class AdminFragment : Fragment() {
         adminViewModel.isUserAuth.value = null
         adminViewModel.rvNurseWorkingAdapter.value = null
         adminViewModel.uidChange.value = null
+        adminViewModel.stopAsync()
     }
 
     override fun onDestroyView() {
-        clear()
         super.onDestroyView()
+        clear()
+
     }
 }

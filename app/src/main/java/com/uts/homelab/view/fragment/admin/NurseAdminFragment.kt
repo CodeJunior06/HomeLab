@@ -53,6 +53,8 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        viewModel.modelNurseLocation.value = null
+
         val onBack = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 clear()
@@ -118,6 +120,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.modelNurseLocation.observe(viewLifecycleOwner) {
+            if(it==null) return@observe
             markOnMap(it, null)
         }
 
@@ -209,6 +212,7 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
     private fun clear() {
         viewModel.listNurseLocation.value = null
         viewModel.uidChange.value = null
+        viewModel.modelNurseLocation.value = null
     }
 
 }

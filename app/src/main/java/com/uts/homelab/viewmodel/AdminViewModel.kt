@@ -11,6 +11,7 @@ import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerCommentType
 import com.uts.homelab.utils.response.ManagerError
+import com.uts.homelab.view.adapter.OnResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,9 +43,9 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
     val rvAppointmentUserModel = MutableLiveData<List<AppointmentUserModel>>()
 
 
-    private val onCall = { modelWorking: WorkingDayNurse ->
+    private var onCall = { modelWorking: WorkingDayNurse? ->
         Log.i("ONCALL", "PASAMOS")
-        uidChange.value = modelWorking
+            uidChange.value = modelWorking
     }
 
     fun getTextUI(isProgressView: Boolean) {
@@ -234,6 +235,10 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
 
 
     fun initAsync() {
+            onCall(null)
         adminModel.getNursesChangeWorkingDay(onCall)
+    }
+    fun stopAsync() {
+        adminModel.stopAsync()
     }
 }

@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.core.Target
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
 import com.uts.homelab.utils.State
@@ -224,7 +225,7 @@ class FirebaseRepository @Inject constructor(
 
     override suspend fun getNursesActiveByJournal(): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection("WorkingDay").whereEqualTo("active", true).get().await()
+            firestore.collection(Constants.COLLECT_WORKING_DAY).whereEqualTo("active".trim(),true).get().await()
         }
     }
 
@@ -233,9 +234,9 @@ class FirebaseRepository @Inject constructor(
             firestore.collection(Constants.COLLECT_WORKING_DAY).get().await()
         }
     }
-
+    private lateinit var rl:ListenerRegistration
     fun realTimeWorkingDayAllCollection(onCall: (WorkingDayNurse) -> Unit) {
-        firestore.collection(Constants.COLLECT_WORKING_DAY).addSnapshotListener { snapshot, e ->
+        rl = firestore.collection(Constants.COLLECT_WORKING_DAY).addSnapshotListener { snapshot, e ->
             if (e != null) {
                 return@addSnapshotListener
             }
@@ -371,6 +372,10 @@ class FirebaseRepository @Inject constructor(
                 }
 
             }
+    }
+
+    fun stopAsyncWorkingDay() {
+        rl.remove()
     }
 
 

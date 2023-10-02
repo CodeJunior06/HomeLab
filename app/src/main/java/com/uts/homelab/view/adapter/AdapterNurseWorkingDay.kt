@@ -24,23 +24,33 @@ class AdapterNurseWorkingDay(private val listData: List<NurseWorkingAdapter>) :
             binding.idMoto.text = nurseWorking.idMotorcycle
 
             if (nurseWorking.active) {
-                binding.state.text = "En servicio"
+                binding.llState.text = "En servicio"
                 binding.llState.setBackgroundColor(
                     ContextCompat.getColor(
                         binding.root.context,
-                        R.color.green_light
+                        R.color.blue_alianza
                     )
                 )
                 binding.btnGoActivity.visibility = View.VISIBLE
+
+
             } else {
-                binding.state.text = "Fuera de servicio"
+                binding.llState.text = "Fuera de servicio"
                 binding.llState.setBackgroundColor(
                     ContextCompat.getColor(
                         binding.root.context,
-                        R.color.red_light
+                        R.color.red
                     )
                 )
             }
+
+            binding.root.context.resources.getDimensionPixelSize(R.dimen.stroke_width)
+            binding.cardItem.strokeColor =
+                if(nurseWorking.active){
+                    ContextCompat.getColor(binding.root.context, R.color.blue_alianza)
+                }else{
+                    ContextCompat.getColor(binding.root.context, R.color.red)
+                }
 
             binding.cardItem.setOnClickListener {
                 val position = adapterPosition
@@ -50,14 +60,14 @@ class AdapterNurseWorkingDay(private val listData: List<NurseWorkingAdapter>) :
                 }
             }
 
-            if (position == selectedItemPosition) {
+       /*    if (position == selectedItemPosition) {
                 binding.cardItem.strokeWidth =
                     binding.root.context.resources.getDimensionPixelSize(R.dimen.stroke_width)
                 binding.cardItem.strokeColor =
                     if(nurseWorking.active){
-                        ContextCompat.getColor(binding.root.context, R.color.green_light)
+                        ContextCompat.getColor(binding.root.context, R.color.blue_alianza)
                     }else{
-                        ContextCompat.getColor(binding.root.context, R.color.red_light)
+                        ContextCompat.getColor(binding.root.context, R.color.red)
                     }
                 binding.btnGoActivity.isEnabled = true
 
@@ -69,7 +79,7 @@ class AdapterNurseWorkingDay(private val listData: List<NurseWorkingAdapter>) :
                     ContextCompat.getColor(binding.root.context, R.color.white)
                 binding.btnGoActivity.isEnabled = false
 
-            }
+            }*/
 
         }
     }

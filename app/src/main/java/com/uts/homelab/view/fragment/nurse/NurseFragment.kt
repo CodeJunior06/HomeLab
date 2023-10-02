@@ -44,6 +44,7 @@ class NurseFragment : Fragment(),OnResult {
 
         requireActivity().window.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.white)
+
         viewModel.init()
 
         viewModel.initAsyncAppointment()
@@ -133,6 +134,7 @@ class NurseFragment : Fragment(),OnResult {
         }
 
         viewModel.asyncAppointment.observe(viewLifecycleOwner){
+            if(it==null) return@observe
             if(binding.loading.isVisible){
                 binding.rvAppointment.visibility = View.VISIBLE
                 binding.loading.visibility = View.GONE
@@ -153,6 +155,7 @@ class NurseFragment : Fragment(),OnResult {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.informationFragment.value = null
+        viewModel.asyncAppointment.value = null
     }
 
     override fun onSuccess(appointmentModel: AppointmentUserModel) {
