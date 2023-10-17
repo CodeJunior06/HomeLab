@@ -304,7 +304,8 @@ class FirebaseRepository @Inject constructor(
     fun realTimeAppointment(
         onCall: (AppointmentUserModel) -> Unit,
         uidNurse: String,
-        uidUser: String
+        uidUser: String,
+        dc: String
     ) {
         firestore.collection(Constants.COLLECT_APPOINTMENT)
             .whereEqualTo(Constants.APPOINTMENT_UID_USER, uidUser)
@@ -323,7 +324,7 @@ class FirebaseRepository @Inject constructor(
                         DocumentChange.Type.MODIFIED -> {
                             Log.i(
                                 javaClass.name,
-                                "Modified document from WorkingDay: ${dc.document.id}"
+                                "realTimeAppointment modified: ${dc.document.id}"
                             )
                             val model = dc.document.toObject(AppointmentUserModel::class.java)
                             onCall(model)

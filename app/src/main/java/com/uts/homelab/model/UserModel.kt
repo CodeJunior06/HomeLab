@@ -1,24 +1,30 @@
 package com.uts.homelab.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
 import com.uts.homelab.network.db.DataBaseHome
+import com.uts.homelab.utils.Opinion
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository,
-    private val roomRepository: DataBaseHome
+    private val roomRepository: DataBaseHome,
 ) {
 
     suspend fun setAppointmentUserFirestore(
         valueAppointment: Array<String>,
-        appointmentUserModel: AppointmentUserModel
+        appointmentUserModel: AppointmentUserModel,
     ): ManagerError {
         return runCatching {
             appointmentUserModel.typeOfExam = valueAppointment[0]
@@ -145,7 +151,7 @@ class UserModel @Inject constructor(
 
     suspend fun saveAppointment(
         arrayOf: Array<String?>,
-        appointmentUserModel: AppointmentUserModel?
+        appointmentUserModel: AppointmentUserModel?,
     ): Any {
         return runCatching {
             appointmentUserModel!!.geolocation.longitude = arrayOf[2]!!
@@ -230,8 +236,8 @@ class UserModel @Inject constructor(
         }.fold(
             onSuccess = {
                 val lst = arrayListOf<AppointmentUserModel>()
-                for(index in 0 until it.documents.size){
-                   val rta =  it.documents[index].id
+                for (index in 0 until it.documents.size) {
+                    val rta = it.documents[index].id
                     val res = it.documents[index].toObject(AppointmentUserModel::class.java)
                     if (res != null) {
                         res.dc = rta
@@ -246,13 +252,48 @@ class UserModel @Inject constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAppointmentAllByUser(): ManagerError {
         return runCatching {
             firebaseRepository.getAppointmentAllByUser()
         }.fold(
             onSuccess = {
-                val res = it.toObjects(AppointmentUserModel::class.java).toList()
-                ManagerError.Success(res)
+                /*
+                for (item in it.documents) {
+
+                    val hour = item.get("hour").toString().split(" : ")[0]
+                    val minute = item.get("hour").toString().split(" : ")[1]
+
+                    val horaDada: LocalTime = LocalTime.of(hour.toInt(), minute.toInt())
+                    val horaDespues: LocalTime = horaDada.plusHours(2)
+
+                    val horaActual = LocalTime.now()
+                    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+                    val horaFormateada = horaActual.format(formatter)
+                    val currentHour = horaFormateada.split(":")[0].toInt()
+
+                    if (horaDespues.hour <= currentHour) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val modelUpdate = item.toObject(AppointmentUserModel::class.java)
+                            modelUpdate!!.dc = item.id
+                            updateStateAppointment(modelUpdate.)
+                        }
+                    }
+                }
+                */
+
+                val lst = arrayListOf<AppointmentUserModel>()
+                for(index in 0 until it.documents.size){
+                    val rta =  it.documents[index].id
+                    val res = it.documents[index].toObject(AppointmentUserModel::class.java)
+                    if (res != null) {
+                        res.dc = rta
+                        lst.add(res)
+                    }
+                }
+
+                ManagerError.Success(lst)
             },
             onFailure = { ManagerError.Error(it.message!!) }
         )
@@ -301,7 +342,7 @@ class UserModel @Inject constructor(
 
         userRegister.eps = values[0]!!
         userRegister.phone = values[1]!!.toLong()
-        userRegister.age = values[2]!!.toInt()
+
         return runCatching {
             firebaseRepository.updateDataUserFirestore(userRegister)
         }.fold(
@@ -311,7 +352,6 @@ class UserModel @Inject constructor(
             },
 
             onFailure = {
-
                 ManagerError.Error(Utils.messageErrorConverter(it.message!!))
             }
         )
@@ -332,11 +372,12 @@ class UserModel @Inject constructor(
     fun initAsyncAppointment(
         onCall: (AppointmentUserModel) -> Unit,
         uidNurse: String,
-        uidUser: String
+        uidUser: String,
+        dc: String,
     ) {
         try {
-            firebaseRepository.realTimeAppointment(onCall,uidNurse,uidUser)
-        }catch (e:Exception){
+            firebaseRepository.realTimeAppointment(onCall, uidNurse, uidUser, dc)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -344,13 +385,17 @@ class UserModel @Inject constructor(
 
     fun initAsyncWorkingDay(onCallWorkingDay: (WorkingDayNurse) -> Unit, uidNurse: String) {
         try {
-            firebaseRepository.realTimeWorkingDayOnly(onCallWorkingDay,uidNurse)
-        }catch (e:Exception){
+            firebaseRepository.realTimeWorkingDayOnly(onCallWorkingDay, uidNurse)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    suspend fun updateStateAppointment(model: AppointmentUserModel, state: State,step:Int): ManagerError {
+    suspend fun updateStateAppointment(
+        model: AppointmentUserModel,
+        state: State,
+        step: Int,
+    ): ManagerError {
         return runCatching {
             model.state = state.name
             model.step = step
@@ -363,5 +408,38 @@ class UserModel @Inject constructor(
         )
     }
 
+    suspend  fun setOpinionAppointment(modelAppointment: AppointmentUserModel, title: String, message: String): Any {
+        val model = CommentType()
+        val utils = Utils()
+        val roomModel = roomRepository.userSessionDao().getUserAuth()
 
+        model.id = roomModel.uid
+        model.message = message
+        model.type = Opinion.PROBLEMAPPOINTMENT.name
+        model.name = roomModel.name + " " + roomModel.lastName
+        model.title = title
+        model.rol = roomModel.rol
+        model.ts = utils.dateToLong(utils.getCurrentDate())
+        if(model.rol == Rol.USER.name) {
+            model.idEnd = modelAppointment.modelNurse.uid
+            model.nameEnd =
+                modelAppointment.modelNurse.name + " " + modelAppointment.modelNurse.lastName
+            model.typeEnd = modelAppointment.modelNurse.rol
+        }else{
+            model.idEnd = modelAppointment.modelUser.uid
+            model.nameEnd =
+                modelAppointment.modelUser.name + " " + modelAppointment.modelUser.lastName
+            model.typeEnd = modelAppointment.modelUser.rol
+        }
+
+        return runCatching {
+            firebaseRepository.setTypeComment(model).await()
+
+        }.fold(
+            onSuccess = {
+                ManagerError.Success("1")
+            },
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!))}
+        )
+    }
 }

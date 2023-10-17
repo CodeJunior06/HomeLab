@@ -7,6 +7,7 @@ import com.uts.homelab.model.UserModel
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.utils.Cons
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
@@ -148,5 +149,24 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
                 }
             }
         }
+    }
+
+    fun updateStateAppointment(appointmentModel: AppointmentUserModel,state: State) {
+        isProgress.value = Pair(true,1)
+        viewModelScope.launch {
+            when(val res = model.updateStateAppointment(appointmentModel,state,0)){
+                is ManagerError.Success->{
+                    isProgress.postValue(Pair(false,1))
+                }
+                is ManagerError.Error -> {
+                    informationFragment.postValue(res.error)
+                    isProgress.postValue(Pair(false,0))
+                }
+            }
+        }
+    }
+
+    fun sendReportDelayAppointment(model: AppointmentUserModel) {
+
     }
 }

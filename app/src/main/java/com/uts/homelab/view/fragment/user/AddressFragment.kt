@@ -138,6 +138,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         }
         viewModel.intentToMainUser.observe(viewLifecycleOwner){
             if(it == null)return@observe
+            clear()
             findNavController().navigate(AddressFragmentDirections.actionAddressFragmentToNavigationHome())
         }
     }
@@ -198,6 +199,12 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l, 15.0f))
         }
+
+    }
+
+    override fun onDestroyView() {
+        clear()
+        super.onDestroyView()
 
     }
 

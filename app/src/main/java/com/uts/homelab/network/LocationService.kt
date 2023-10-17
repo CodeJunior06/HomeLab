@@ -101,10 +101,10 @@ class LocationService : Service() {
 
         // Configurar la detección de ubicación
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
             .setWaitForAccurateLocation(false)
-            .setMinUpdateIntervalMillis(1000)
-            .setMaxUpdateDelayMillis(1000)
+            .setMinUpdateIntervalMillis(10000)
+            .setMaxUpdateDelayMillis(10000)
             .build()
 
         locationCallback = object : LocationCallback() {
@@ -123,7 +123,7 @@ class LocationService : Service() {
                         Log.d("Latitude new ", this@LocationService.latitud.toString())
                         Log.d("Longitude new ", this@LocationService.longitud.toString())
 
-                        if (!methodAproximate()) return
+                        //if (!methodAproximate()) return
                         latLng = LatLng(latitud, longitud)
 
                         serviceScope.launch {

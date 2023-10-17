@@ -97,14 +97,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="5dp"
+                android:layout_marginVertical="10dp"
                 android:paddingHorizontal="15dp"
                 android:text="Selecciona la fecha y la hora que deseas tener la cita" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+
                 android:orientation="horizontal">
 
                 <TextView
@@ -220,11 +220,12 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="Agendar Cita"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/blue_hospital"
+                android:textColor="@color/blue_alianza"
                 app:cornerRadius="16dp"
-                app:strokeColor="@color/blue_hospital" />
+                app:strokeColor="@color/blue_alianza" />
         </RelativeLayout>
 
     </LinearLayout>

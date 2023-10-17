@@ -9,6 +9,7 @@ import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.network.dataclass.Job
 import com.uts.homelab.network.dataclass.NurseRegister
 import com.uts.homelab.network.dataclass.WorkingDayNurse
+import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.State
 import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.response.ManagerError
@@ -203,8 +204,8 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
         modelWorkingDay.value = workingNurse
     }
 
-    fun initAsyncAppointment(uidNurse: String, uidUser: String) {
-        model.initAsyncAppointment(onCall,uidNurse,uidUser)
+    fun initAsyncAppointment(uidNurse: String, uidUser: String, dc: String) {
+        model.initAsyncAppointment(onCall,uidNurse,uidUser,dc)
     }
     fun initAsyncWorkingDay(uidNurse: String) {
         model.initAsyncWorkingDay(onCallWorkingDay,uidNurse)
@@ -214,6 +215,36 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
         isProgress.value = Pair(true, 1)
         viewModelScope.launch {
             when (val response = this@AppointmentUserViewModel.model.updateStateAppointment(model,State.CURSO,1)) {
+                is ManagerError.Success -> {
+                    isProgress.postValue(Pair (false,2))
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(response.error)
+                }
+            }
+        }
+    }
+
+    fun initProcessAppointmentFinishStepOne(modelAppointment: AppointmentUserModel) {
+        isProgress.value = Pair(true, 1)
+        viewModelScope.launch {
+            when (val response = model.updateStateAppointment(modelAppointment,State.CITA,2)) {
+                is ManagerError.Success -> {
+                    isProgress.postValue(Pair (false,3))
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(response.error)
+                }
+            }
+        }
+    }
+
+    fun updateProcessAppointment(modelAppointment: AppointmentUserModel) {
+        isProgress.value = Pair(true, 1)
+        viewModelScope.launch {
+            when (val response = model.updateStateAppointment(modelAppointment,State.LABORATORIO,3)) {
                 is ManagerError.Success -> {
                     isProgress.postValue(Pair (false,1))
                 }
@@ -225,12 +256,13 @@ class AppointmentUserViewModel @Inject constructor(private val model: UserModel)
         }
     }
 
-    fun initProcessAppointmentFinishStepOne(model: AppointmentUserModel) {
+    fun setProblemAppointment(modelAppointment: AppointmentUserModel,title:String,message:String){
         isProgress.value = Pair(true, 1)
         viewModelScope.launch {
-            when (val response = this@AppointmentUserViewModel.model.updateStateAppointment(model,State.CITA,2)) {
+            when (val response = model.setOpinionAppointment(modelAppointment,title,message)) {
                 is ManagerError.Success -> {
-                    isProgress.postValue(Pair (false,3))
+                    isProgress.postValue(Pair (false,0))
+                    informationFragment.postValue(Cons.SEND_OPINION)
                 }
                 is ManagerError.Error -> {
                     isProgress.postValue(Pair(false, 0))

@@ -17,6 +17,7 @@ import com.uts.homelab.databinding.FragmentOptionBinding
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Rol
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.view.adapter.AdapterAppointment
@@ -32,13 +33,13 @@ class AppointmentUserFragment : Fragment(), OnResult {
     private val viewModel: UserViewModel by activityViewModels()
 
     private var progressDialog: ProgressFragment = ProgressFragment()
-    private var informationDialog: InformationFragment? = null
+    private var informationDialog: InformationFragment = InformationFragment()
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentOptionBinding.inflate(inflater, container, false)
@@ -52,12 +53,13 @@ class AppointmentUserFragment : Fragment(), OnResult {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         binding.btnAddAppointment.setOnClickListener {
-         findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToAppointmentUserSecondScreenFragment())
+            findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToAppointmentUserSecondScreenFragment())
         }
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(navDirectionsProfile)
         }
         binding.btnHistoryAppointment.setOnClickListener {
+            clearObservers()
             findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToNavigationDashboard())
         }
 
@@ -72,24 +74,28 @@ class AppointmentUserFragment : Fragment(), OnResult {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private lateinit var  navDirectionsCompleteData:NavDirections
-    private lateinit var  navDirectionsProfile:NavDirections
+    private lateinit var navDirectionsCompleteData: NavDirections
+    private lateinit var navDirectionsProfile: NavDirections
 
 
     private fun setObserver() {
-        viewModel.userModel.observe(viewLifecycleOwner){
-            navDirectionsCompleteData = AppointmentUserFragmentDirections.actionNavigationHomeToUserDataFragment(it!!)
-            navDirectionsProfile = AppointmentUserFragmentDirections.actionNavigationHomeToNavigationNotifications(it)
+        viewModel.userModel.observe(viewLifecycleOwner) {
+            navDirectionsCompleteData =
+                AppointmentUserFragmentDirections.actionNavigationHomeToUserDataFragment(it!!)
+            navDirectionsProfile =
+                AppointmentUserFragmentDirections.actionNavigationHomeToNavigationNotifications(it)
 
             binding.nameUser.text = it.name + " " + it.lastName
         }
 
-        viewModel.informationFragment.observe(viewLifecycleOwner){
-            if(it == null ) return@observe
+        viewModel.informationFragment.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+
             informationDialog = InformationFragment()
             if (it == Cons.VIEW_DIALOG_INFORMATION) {
+
                 informationDialog!!.getInstance(
-                        getString(R.string.attention),
+                    getString(R.string.attention),
                     "Para continuar, debes terminar el proceso de registro",
                     "Continuar"
                 ) {
@@ -101,41 +107,58 @@ class AppointmentUserFragment : Fragment(), OnResult {
                 informationDialog!!.getInstance(getString(R.string.attention), it)
             }
 
-            informationDialog!!.show(requireActivity().supportFragmentManager, "${javaClass.simpleName} informationDialog")
+            informationDialog!!.show(
+                requireActivity().supportFragmentManager,
+                "${javaClass.simpleName} informationDialog"
+            )
 
         }
 
         viewModel.isProgress.observe(viewLifecycleOwner) {
-            if(it==null) return@observe
+            if (it == null) return@observe
             if (it.first) {
-
-                if(it.second==2 || it.second == 3){
+                if (it.second == 2 || it.second == 3) {
                     binding.loading.visibility = View.VISIBLE
                     binding.rvAppointment.visibility = View.GONE
                     binding.messageLoading.text = "CARGANDO DISPONIBILIDAD . . ."
-                    if(it.second == 3){
-                        binding.messageLoading.text = "No se encuentran citas disponibles para el dia de hoy"
+                    if (it.second == 3) {
+                        binding.messageLoading.text =
+                            "No se encuentran citas disponibles para el dia de hoy"
                     }
+                } else {
+
+                    if (progressDialog.isVisible || progressDialog.isAdded) {
+                        progressDialog.dismiss()
+                        progressDialog = ProgressFragment()
+                    }
+                    progressDialog.showNow(childFragmentManager, "progress ${javaClass.name}")
                 }
 
             } else {
-                if(it.second==2){
+                if (progressDialog.isVisible) {
+                    progressDialog.dismiss()
+                }
+
+                if (it.second == 1) {
+                    viewModel.init()
+                }
+                if (it.second == 2) {
                     binding.loading.visibility = View.GONE
                     binding.rvAppointment.visibility = View.VISIBLE
                 }
             }
         }
 
-        viewModel.listAppointmentModel.observe(viewLifecycleOwner){
-            if(it ==null ) return@observe
+        viewModel.listAppointmentModel.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
 
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvAppointment.adapter = AdapterAppointment(it, Rol.USER,this)
+            binding.rvAppointment.adapter = AdapterAppointment(it, Rol.USER, this)
             binding.countAppointment.text = it.size.toString()
 
-            if(it.isEmpty()){
-                viewModel.isProgress.postValue(Pair(true,3))
-            }else{
+            if (it.isEmpty()) {
+                viewModel.isProgress.postValue(Pair(true, 3))
+            } else {
                 binding.loading.visibility = View.GONE
                 binding.rvAppointment.visibility = View.VISIBLE
             }
@@ -143,7 +166,8 @@ class AppointmentUserFragment : Fragment(), OnResult {
 
 
     }
-    private fun clearObservers(){
+
+    private fun clearObservers() {
         viewModel.informationFragment.value = null
         viewModel.isProgress.value = null
         viewModel.listAppointmentModel.value = null
@@ -157,11 +181,26 @@ class AppointmentUserFragment : Fragment(), OnResult {
 
     }
 
-    override fun onSuccess(appointmentModel: AppointmentUserModel) {
-        findNavController().navigate(AppointmentUserFragmentDirections.actionNavigationHomeToProcessAppointmentFragment(appointmentModel,Rol.USER.name))
-    }
+    override fun onResponse(appointmentModel: AppointmentUserModel, state: State?) {
 
-    override fun onCancel() {
-        TODO("Not yet implemented")
+        if (state != null) {
+            viewModel.updateStateAppointment(appointmentModel, state)
+        } else {
+            if (appointmentModel.state == State.CITA.name) {
+                findNavController().navigate(
+                    AppointmentUserFragmentDirections.actionNavigationHomeToProcessSecondAppointmentFragment(
+                        Rol.USER.name, appointmentModel
+                    )
+                )
+            } else {
+                findNavController().navigate(
+                    AppointmentUserFragmentDirections.actionNavigationHomeToProcessAppointmentFragment(
+                        appointmentModel,
+                        Rol.USER.name
+                    )
+                )
+            }
+
+        }
     }
 }

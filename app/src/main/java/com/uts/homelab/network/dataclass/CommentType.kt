@@ -8,4 +8,7 @@ class CommentType {
     var type = ""
     var ts = 0L
     var rol = ""
+    var idEnd = ""
+    var nameEnd =""
+    var typeEnd = ""
 }

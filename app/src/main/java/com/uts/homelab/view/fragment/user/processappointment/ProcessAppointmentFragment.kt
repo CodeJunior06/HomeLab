@@ -73,26 +73,25 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
 
         if (typeUser == Rol.USER.name) {
             binding.btnAction.visibility = View.GONE
-            viewModel.initAsyncAppointment(model.uidNurse, model.uidUser)
-            viewModel.initAsyncWorkingDay(model.uidNurse)
-            binding.etName.setText(model.modelNurse.name + " " +model.modelNurse.lastName)
+            viewModel.initAsyncAppointment(model.uidNurse, model.uidUser, model.dc)
+
+            binding.etName.setText(model.modelNurse.name + " " + model.modelNurse.lastName)
             binding.etPhone.setText(model.phone.toString())
-        }else{
-            binding.etName.setText(model.modelUser.name + " " +model.modelUser.lastName)
+        } else {
+            binding.etName.setText(model.modelUser.name + " " + model.modelUser.lastName)
             binding.etPhone.setText(model.modelUser.phone.toString())
         }
 
+
+
         binding.btnAction.setOnClickListener {
 
-            if(binding.btnAction.text == "INICIAR"){
+            if (binding.btnAction.text == "INICIAR") {
                 viewModel.initProcessAppointment(model)
-            }else{
+            } else {
                 viewModel.initProcessAppointmentFinishStepOne(model)
             }
-
         }
-
-
 
         binding.etAddress.setText(model.address)
 
@@ -105,12 +104,48 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
         setObservers()
 
         super.onViewCreated(view, savedInstanceState)
+        printState(model.state)
+    }
+
+    private fun printState(state: String) {
+        when (state) {
+            State.CURSO.name -> {
+                viewModel.initAsyncWorkingDay(model.uidNurse)
+                binding.btnAction.text = "Llegue al destino"
+                binding.btnAction.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.blue_alianza
+                    )
+                )
+            }
+            State.CITA.name -> {
+                model.state = State.CITA.name
+                model.step = 2
+                try {
+                    clear()
+                    findNavController().navigate(
+                        ProcessAppointmentFragmentDirections.actionProcessAppointmentFragmentToProcessSecondAppointmentFragment(
+                            typeUser,
+                            model
+                        )
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        printState(model.state)
     }
 
     private fun setObservers() {
 
         viewModel.isProgress.observe(viewLifecycleOwner) {
-            if(it == null) return@observe
+            if (it == null) return@observe
             if (it.first) {
                 if (progressDialog.isVisible) {
                     progressDialog.dismiss()
@@ -121,15 +156,26 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
                     progressDialog.dismiss()
                 }
 
-                if(it.second==2){
-                    binding.btnAction.setText("Llegue al destino")
-                    binding.btnAction.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.blue_alianza))
+                if (it.second == 2) {
+                    binding.btnAction.text = "Llegue al destino"
+                    binding.btnAction.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.blue_alianza
+                        )
+                    )
                 }
 
-                if(it.second==3){
+                if (it.second == 3) {
                     model.state = State.CITA.name
                     model.step = 2
-                    findNavController().navigate(ProcessAppointmentFragmentDirections.actionProcessAppointmentFragmentToProcessSecondAppointmentFragment(model))
+                    clear()
+                    findNavController().navigate(
+                        ProcessAppointmentFragmentDirections.actionProcessAppointmentFragmentToProcessSecondAppointmentFragment(
+                            typeUser,
+                            model
+                        )
+                    )
                 }
             }
         }
@@ -168,9 +214,11 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
 
 
         viewModel.modelAppointment.observe(viewLifecycleOwner) {
-
+            if (it == null) return@observe
+            printState(it.state)
         }
         viewModel.modelWorkingDay.observe(viewLifecycleOwner) {
+            if(it==null)return@observe
 
             val l = LatLng(it.geolocation.latitude.toDouble(), it.geolocation.longitude.toDouble())
             if (markerNurse == null) {
@@ -207,6 +255,7 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
 
     private fun clear() {
         viewModel.isProgress.value = null
+        viewModel.modelAppointment.value = null
 
     }
 
@@ -271,8 +320,8 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
 
 
             val lDestine = LatLng(
-                model.geolocation.latitude!!.toDouble(),
-                model.geolocation.longitude!!.toDouble()
+                model.geolocation.latitude.toDouble(),
+                model.geolocation.longitude.toDouble()
             )
 
             marker = googleMap.addMarker(

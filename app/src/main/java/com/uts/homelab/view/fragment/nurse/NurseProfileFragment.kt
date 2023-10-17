@@ -1,6 +1,8 @@
 package com.uts.homelab.view.fragment.nurse
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentNurseProfileBinding
@@ -24,6 +29,7 @@ import com.uts.homelab.utils.extension.intentToMain
 import com.uts.homelab.view.fragment.user.profile.OpinionFragment
 import com.uts.homelab.viewmodel.NurseViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
 import java.security.Provider.Service
 import java.util.*
 

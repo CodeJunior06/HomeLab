@@ -68,7 +68,7 @@ class DataUserProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         binding.updateData.setOnClickListener {
-            viewModel.updateData(arrayOf( valueEPS,binding.phoneUser.text.toString(),binding.AgeUser.text.toString()))
+            viewModel.updateData(arrayOf( valueEPS,binding.phoneUser.text.toString()))
         }
 
         setObserver()
@@ -108,7 +108,6 @@ class DataUserProfileFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun spinner() {
-
 
         val adapterTypeEPS = ArrayAdapter(
             requireContext(),

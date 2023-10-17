@@ -1,9 +1,8 @@
 package com.uts.homelab.view.adapter
 
 import com.uts.homelab.network.dataclass.AppointmentUserModel
+import com.uts.homelab.utils.State
 
 interface OnResult {
-
-    fun onSuccess(appointmentModel: AppointmentUserModel)
-    fun onCancel()
+    fun onResponse(appointmentModel: AppointmentUserModel, state:State?)
 }

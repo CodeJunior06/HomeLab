@@ -36,8 +36,8 @@ class AdapterAppointment(
 
         @RequiresApi(Build.VERSION_CODES.O)
         private fun getView(typeUser: Rol, appointmentModel: AppointmentUserModel) {
-            var hour = appointmentModel.hour.split(" : ")[0]
-            var minute = appointmentModel.hour.split(" : ")[1]
+            val hour = appointmentModel.hour.split(" : ")[0]
+            val minute = appointmentModel.hour.split(" : ")[1]
 
             binding.name.text =
                 if (typeUser == Rol.USER)
@@ -79,12 +79,12 @@ class AdapterAppointment(
                     )
                 )
             }
-            var res = false
+            val res: Boolean
             var res2 = false
             if (typeUser == Rol.USER) {
                 val horaDada: LocalTime = LocalTime.of(hour.toInt(), minute.toInt())
                 val horaAntes: LocalTime = horaDada.minusHours(1)
-                val horaDespues: LocalTime = horaDada.plusHours(1)
+                val horaDespues: LocalTime = horaDada.plusHours(3)
 
                 val horaActual = LocalTime.now()
                 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -103,12 +103,15 @@ class AdapterAppointment(
                     }
                     if(res2){
                         binding.btnInitAppointment.visibility = View.GONE
+                        if(appointmentModel.state==State.ACTIVO.name){
+                            onResult.onResponse(appointmentModel,State.RECHAZADO)
+                        }
                     }
                 }
 
             }else{
                 val horaDada: LocalTime = LocalTime.of(hour.toInt(), minute.toInt())
-                val horaAntes: LocalTime = horaDada.minusHours(2)
+                val horaAntes: LocalTime = horaDada.minusHours(1)
 
                 val horaActual = LocalTime.now()
                 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -127,7 +130,7 @@ class AdapterAppointment(
                     binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.blue_hospital))
                 }
                 State.CURSO.name->{
-                    binding.state.text = "EN PROGRESO"
+                    binding.state.text = "EN CAMINO"
                     binding.btnCancelOrProblem.visibility = View.GONE
                     binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.green))
                 }
@@ -137,13 +140,25 @@ class AdapterAppointment(
                     binding.btnCancelOrProblem.visibility = View.GONE
                     binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.red))
                 }
+                State.CITA.name->{
+                    binding.state.text = "EN CITA"
+                    binding.btnCancelOrProblem.visibility = View.GONE
+                    binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.yellow))
+                }
+
+                 State.FINALIZADO.name,State.LABORATORIO.name  ->{
+                    binding.state.text = appointmentModel.state
+                    binding.btnInitAppointment.visibility = View.GONE
+                    binding.btnCancelOrProblem.visibility = View.GONE
+                    binding.state.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.gray))
+                }
             }
 
 
             binding.btnInitAppointment.setOnClickListener {
                 if (typeUser == Rol.USER) {
                     if(res2 || res){
-                        onResult.onSuccess(appointmentModel)
+                        onResult.onResponse(appointmentModel,null)
                     }else{
                         Toast.makeText(binding.root.context, "estas queriendo acceder una hora antes o despues y no es posible", Toast.LENGTH_SHORT).show()
                     }
@@ -151,7 +166,7 @@ class AdapterAppointment(
                     if(!res){
                         Toast.makeText(binding.root.context, "Puedes iniciar la actividad en dos horas de la hora solicitada", Toast.LENGTH_SHORT).show()
                     }else{
-                        onResult.onSuccess(appointmentModel)
+                        onResult.onResponse(appointmentModel,null)
                     }
 
                 }
@@ -159,6 +174,7 @@ class AdapterAppointment(
             }
 
             binding.btnCancelOrProblem.setOnClickListener {
+                onResult.onResponse(appointmentModel,State.CANCELADO)
                 Toast.makeText(binding.root.context, "Accion de eliminar el documento de la coleccion", Toast.LENGTH_SHORT).show()
             }
 

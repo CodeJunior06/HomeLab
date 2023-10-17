@@ -6,5 +6,6 @@ enum class State {
     CITA,
     LABORATORIO,
     CANCELADO,
-    FINALIZADO
+    FINALIZADO,
+    RECHAZADO
 }

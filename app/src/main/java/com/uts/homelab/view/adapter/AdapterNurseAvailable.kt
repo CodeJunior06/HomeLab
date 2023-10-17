@@ -28,9 +28,9 @@ class AdapterNurseAvailable(private val listData: List<NurseRegister>,private va
 
             if (position == selectedItemPosition) {
                 binding.cardItem.strokeWidth =
-                    binding.root.context.resources.getDimensionPixelSize(R.dimen.stroke_card)
+                    binding.root.context.resources.getDimensionPixelSize(R.dimen.stroke_width)
                 binding.cardItem.strokeColor =
-                    ContextCompat.getColor(binding.root.context, R.color.black)
+                    ContextCompat.getColor(binding.root.context, R.color.blue_alianza)
 
             } else {
                 binding.cardItem.strokeWidth =

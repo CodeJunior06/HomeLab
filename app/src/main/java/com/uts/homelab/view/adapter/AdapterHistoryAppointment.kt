@@ -15,7 +15,8 @@ import com.uts.homelab.utils.State
 
 class AdapterHistoryAppointment(
     private val listData: List<AppointmentUserModel>,
-    private val typeUser: Rol
+    private val typeUser: Rol,
+    private val onCall: (modelAppointment:AppointmentUserModel,case:Int) -> Unit
 ) :
     RecyclerView.Adapter<AdapterHistoryAppointment.ViewHolder>() {
 
@@ -23,16 +24,16 @@ class AdapterHistoryAppointment(
         private val binding by lazy { AdapterHistoryAppointmentBinding.bind(view) }
 
 
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun render(appointmentModel: AppointmentUserModel) {
-            getView(typeUser,appointmentModel)
-
+            getView(typeUser, appointmentModel)
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
         private fun getView(typeUser: Rol, appointmentModel: AppointmentUserModel) {
-            var hour = appointmentModel.hour.split(" : ")[0]
-            var minute = appointmentModel.hour.split(" : ")[0]
+            val hour = appointmentModel.hour.split(" : ")[0]
+            val minute = appointmentModel.hour.split(" : ")[1]
 
             binding.name.text =
                 if (typeUser == Rol.USER)
@@ -47,36 +48,96 @@ class AdapterHistoryAppointment(
                 }"
 
             binding.state.text = appointmentModel.state
-            binding.dateExam.text = appointmentModel.date + "  " +hour + ":" + minute
+            binding.dateExam.text = appointmentModel.date + "  " + hour + ":" + minute
             binding.typeExam.text = appointmentModel.typeOfExam
 
-            when(appointmentModel.state){
-                State.ACTIVO.name->{
-                    binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
-                }
-                State.CURSO.name->{
-                    binding.llBtn.visibility = View.GONE
-                    binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.green))
-                }
-                State.CANCELADO.name->{
+            when (appointmentModel.state) {
+                State.ACTIVO.name -> {
                     binding.llBtn.visibility = View.VISIBLE
-                    binding.btnCancelOrProblem.setText("Reportar poblema")
-                    binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.red))
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.white
+                        )
+                    )
                 }
-                State.LABORATORIO.name->{
-                    binding.llBtn.visibility = View.VISIBLE
-                    binding.btnCancelOrProblem.setText("Reportar poblema")
-                    binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.yellow))
-                }
-                State.FINALIZADO.name->{
+                State.CURSO.name -> {
                     binding.llBtn.visibility = View.GONE
-                    binding.state.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray))
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.green
+                        )
+                    )
                 }
+
+                State.LABORATORIO.name -> {
+                    binding.llBtn.visibility = View.VISIBLE
+                    binding.btnCancelOrProblem.text = "Reportar demora"
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.yellow
+                        )
+                    )
+                }
+                State.FINALIZADO.name -> {
+                    binding.llBtn.visibility = View.GONE
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.gray
+                        )
+                    )
+                }
+                State.CITA.name -> {
+                    binding.llBtn.visibility = View.GONE
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.orange
+                        )
+                    )
+
+                }
+                State.CANCELADO.name -> {
+                    binding.llBtn.visibility = View.GONE
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.red
+                        )
+                    )
+                }
+                State.RECHAZADO.name -> {
+                    binding.llBtn.visibility = View.VISIBLE
+                    binding.btnCancelOrProblem.text = "Reprogramar Cita"
+                    binding.state.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.red
+                        )
+                    )
+
+                }
+            }
+
+            binding.btnCancelOrProblem.setOnClickListener {
+                    val state = when (binding.btnCancelOrProblem.text) {
+                        "Cancelar cita" -> {
+                            1
+                        }
+                        "Reportar demora" -> {
+                            2
+                        }
+                        else -> 3
+                    }
+                onCall(appointmentModel,state)
             }
 
 
 
-            if(typeUser == Rol.USER){
+            if (typeUser == Rol.USER) {
                 /*binding.imgTypeExam.setImageDrawable(
                     if (appointmentModel.modelNurse.gender.equals("F", true)) ContextCompat.getDrawable(
                         binding.root.context,
@@ -86,16 +147,17 @@ class AdapterHistoryAppointment(
                         R.drawable.nurse_men
                     )
                 )*/
-            }else{
-               /* binding.imgTypeExam.setImageDrawable(
-                    if (appointmentModel.modelNurse.gender.equals("F", true)) ContextCompat.getDrawable(
-                        binding.root.context,
-                        R.drawable.women_user
-                    ) else ContextCompat.getDrawable(
-                        binding.root.context,
-                        R.drawable.men_user
-                    )
-                )*/
+            } else {
+                /* binding.imgTypeExam.setImageDrawable(
+                     if (appointmentModel.modelNurse.gender.equals("F", true)) ContextCompat.getDrawable(
+                         binding.root.context,
+                         R.drawable.women_user
+                     ) else ContextCompat.getDrawable(
+                         binding.root.context,
+                         R.drawable.men_user
+                     )
+                 )*/
+                binding.llBtn.visibility = View.GONE
             }
 
 

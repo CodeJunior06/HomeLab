@@ -6,6 +6,8 @@ object Cons {
     const val UPDATE_DATA_NURSE:String = "update_nurse"
     const val UPDATE_PASSWORD:String = "update_password"
     const val DOWNLOAD_RESULT:String = "Se ha descargado en archivo PDF los resultados"
+    const val SEND_OPINION = "Se ha enviado correctamente el problema al administrador"
+    const val FINISH_VISIT_APPOINTMENT = "Se ha completado exitosamente la visita de toma de muestra"
 
 
 

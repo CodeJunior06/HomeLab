@@ -1,5 +1,8 @@
 package com.uts.homelab.model
 
+import android.annotation.SuppressLint
+import android.content.Context
+import com.google.android.gms.location.LocationServices
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
@@ -8,14 +11,18 @@ import com.uts.homelab.utils.Utils
 import com.uts.homelab.utils.datastore.DataStoreManager
 import com.uts.homelab.utils.response.ManagerAppointmentUserModel
 import com.uts.homelab.utils.response.ManagerError
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class NurseModel @Inject constructor(
+    @ApplicationContext context:Context,
     private val firebaseRepository: FirebaseRepository,
     private val roomRepository: DataBaseHome,
     private val dataStore: DataStoreManager
 ) {
+        private val    fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
     suspend fun initView(): NurseRegister {
         return roomRepository.nurseSessionDao().getUserAuth()
     }
@@ -80,6 +87,7 @@ class NurseModel @Inject constructor(
     }
 
     private var idDoc = ""
+    @SuppressLint("MissingPermission")
     suspend fun getJournalByNurse(): ManagerError {
         return kotlin.runCatching {
             firebaseRepository.getJournal()
@@ -87,6 +95,11 @@ class NurseModel @Inject constructor(
             onSuccess = {
                 val model = it.documents[0].toObject(WorkingDayNurse::class.java)!!
                 idDoc = it.documents[0].id
+
+                val l = fusedLocationClient.lastLocation.await()
+                model.geolocation.latitude = l.latitude.toString()
+                model.geolocation.longitude = l.longitude.toString()
+                firebaseRepository.updateJournal(model,idDoc)
                 roomRepository.nurseSessionDao().insertNurseWorkingDay(model)
                 ManagerError.Success(model)
             }, onFailure = {

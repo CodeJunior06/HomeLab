@@ -16,6 +16,7 @@ import com.uts.homelab.databinding.FragmentNurseBinding
 import com.uts.homelab.network.dataclass.AppointmentUserModel
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.Rol
+import com.uts.homelab.utils.State
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.view.adapter.AdapterAppointment
 import com.uts.homelab.view.adapter.OnResult
@@ -158,10 +159,7 @@ class NurseFragment : Fragment(),OnResult {
         viewModel.asyncAppointment.value = null
     }
 
-    override fun onSuccess(appointmentModel: AppointmentUserModel) {
-        findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToProcessAppointmentFragment2(appointmentModel,Rol.NURSE.name))
-    }
-
-    override fun onCancel() {
+    override fun onResponse(appointmentModel: AppointmentUserModel, state: State?) {
+        findNavController().navigate(NurseFragmentDirections.actionNurseFragmentToProcessAppointmentFragment(appointmentModel,Rol.NURSE.name))
     }
 }
