@@ -57,7 +57,7 @@ class ProcessSecondAppointmentFragment : Fragment() {
 
         binding.btnEnd.setOnClickListener {
             if(binding.btnEnd.text.toString() == "Regresar al menu"){
-                findNavController().navigate(ProcessSecondAppointmentFragmentDirections.actionProcessSecondAppointmentFragmentToNavigationHome())
+                findNavController().navigate(ProcessSecondAppointmentFragmentDirections.actionProcessSecondAppointmentFragmentToNavigationInit())
             }else{
                 viewModel.updateProcessAppointment(model)
             }
@@ -117,7 +117,7 @@ class ProcessSecondAppointmentFragment : Fragment() {
 
                     if (it == Cons.FINISH_VISIT_APPOINTMENT) {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            findNavController().navigate(ProcessSecondAppointmentFragmentDirections.actionProcessSecondAppointmentFragmentToNavigationHome())
+                            findNavController().navigate(ProcessSecondAppointmentFragmentDirections.actionProcessSecondAppointmentFragmentToNavigationInit())
                         }
                     }
                 }

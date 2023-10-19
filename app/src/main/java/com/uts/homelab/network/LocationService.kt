@@ -123,7 +123,7 @@ class LocationService : Service() {
                         Log.d("Latitude new ", this@LocationService.latitud.toString())
                         Log.d("Longitude new ", this@LocationService.longitud.toString())
 
-                        //if (!methodAproximate()) return
+                        if (!methodAproximate()) return
                         latLng = LatLng(latitud, longitud)
 
                         serviceScope.launch {
