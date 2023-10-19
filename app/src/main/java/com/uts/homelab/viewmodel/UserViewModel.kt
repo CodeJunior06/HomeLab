@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uts.homelab.model.UserModel
 import com.uts.homelab.network.dataclass.AppointmentUserModel
+import com.uts.homelab.network.dataclass.ResultAppointment
 import com.uts.homelab.network.dataclass.UserRegister
 import com.uts.homelab.utils.Cons
 import com.uts.homelab.utils.State
@@ -27,6 +28,8 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
     val intentToMainUser = MutableLiveData<Unit>()
 
     val isProgress = MutableLiveData<Pair<Boolean, Int>>()
+
+    val resultAppointment = MutableLiveData<ResultAppointment>()
 
     private var appointmentUserModel: AppointmentUserModel? = null
 
@@ -166,7 +169,34 @@ class UserViewModel @Inject constructor(private val model: UserModel) : ViewMode
         }
     }
 
-    fun sendReportDelayAppointment(model: AppointmentUserModel) {
+    fun sendReportDelayAppointment(appointmentUserModel: AppointmentUserModel) {
+        isProgress.value = Pair(true,1)
+        viewModelScope.launch {
+            when(val res = model.sendOpinionDelayAppointment(appointmentUserModel)){
+                is ManagerError.Success->{
+                    isProgress.postValue(Pair(false,1))
+                }
+                is ManagerError.Error -> {
+                    informationFragment.postValue(res.error)
+                    isProgress.postValue(Pair(false,0))
+                }
+            }
+        }
+    }
 
+    fun getResultAppointment(dc: String) {
+        isProgress.value = Pair(true,1)
+        viewModelScope.launch {
+            when(val res = model.getResulAppointmentByDocumentId(dc)){
+                is ManagerError.Success->{
+                    isProgress.postValue(Pair(false,1))
+                    resultAppointment.postValue(res.modelSuccess as ResultAppointment)
+                }
+                is ManagerError.Error -> {
+                    informationFragment.postValue(res.error)
+                    isProgress.postValue(Pair(false,0))
+                }
+            }
+        }
     }
 }

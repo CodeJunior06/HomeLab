@@ -2,6 +2,7 @@ package com.uts.homelab.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.google.firebase.firestore.ktx.toObject
 import com.uts.homelab.network.FirebaseRepository
 import com.uts.homelab.network.dataclass.*
 import com.uts.homelab.network.db.Constants
@@ -284,8 +285,8 @@ class UserModel @Inject constructor(
                 */
 
                 val lst = arrayListOf<AppointmentUserModel>()
-                for(index in 0 until it.documents.size){
-                    val rta =  it.documents[index].id
+                for (index in 0 until it.documents.size) {
+                    val rta = it.documents[index].id
                     val res = it.documents[index].toObject(AppointmentUserModel::class.java)
                     if (res != null) {
                         res.dc = rta
@@ -408,7 +409,11 @@ class UserModel @Inject constructor(
         )
     }
 
-    suspend  fun setOpinionAppointment(modelAppointment: AppointmentUserModel, title: String, message: String): Any {
+    suspend fun setOpinionAppointment(
+        modelAppointment: AppointmentUserModel,
+        title: String,
+        message: String
+    ): Any {
         val model = CommentType()
         val utils = Utils()
         val roomModel = roomRepository.userSessionDao().getUserAuth()
@@ -420,12 +425,12 @@ class UserModel @Inject constructor(
         model.title = title
         model.rol = roomModel.rol
         model.ts = utils.dateToLong(utils.getCurrentDate())
-        if(model.rol == Rol.USER.name) {
+        if (model.rol == Rol.USER.name) {
             model.idEnd = modelAppointment.modelNurse.uid
             model.nameEnd =
                 modelAppointment.modelNurse.name + " " + modelAppointment.modelNurse.lastName
             model.typeEnd = modelAppointment.modelNurse.rol
-        }else{
+        } else {
             model.idEnd = modelAppointment.modelUser.uid
             model.nameEnd =
                 modelAppointment.modelUser.name + " " + modelAppointment.modelUser.lastName
@@ -439,7 +444,53 @@ class UserModel @Inject constructor(
             onSuccess = {
                 ManagerError.Success("1")
             },
-            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!))}
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
+        )
+    }
+
+    suspend fun getResulAppointmentByDocumentId(dc: String): ManagerError {
+        return runCatching {
+            firebaseRepository.getResultAppointment(dc)
+
+        }.fold(
+            onSuccess = {
+                val model = it.toObject<ResultAppointment>()!!
+                ManagerError.Success(model)
+            },
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
+        )
+    }
+
+    suspend fun sendOpinionDelayAppointment(appointmentUserModel: AppointmentUserModel): Any {
+        val model = CommentType()
+        val utils = Utils()
+
+        model.id = appointmentUserModel.uidUser
+        model.message =
+            "Por favor dar respuesta lo mas rapido posible para continuar el procedimiento"
+        model.type = Opinion.PROBLEMAPPOINTMENT.name
+        model.name =
+            appointmentUserModel.modelUser.name + " " + appointmentUserModel.modelUser.lastName
+        model.title = "Retraso en los resultados de la prueba ${appointmentUserModel.typeOfExam}"
+        model.rol = Rol.USER.name
+        model.ts = utils.dateToLong(utils.getCurrentDate())
+
+        model.idEnd = appointmentUserModel.modelNurse.uid
+        model.nameEnd =
+            appointmentUserModel.modelNurse.name + " " + appointmentUserModel.modelNurse.lastName
+        model.typeEnd = appointmentUserModel.modelNurse.rol
+
+
+
+
+        return runCatching {
+            firebaseRepository.setTypeComment(model).await()
+
+        }.fold(
+            onSuccess = {
+                ManagerError.Success("1")
+            },
+            onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
 }

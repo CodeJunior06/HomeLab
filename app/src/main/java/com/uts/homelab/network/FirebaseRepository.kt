@@ -170,7 +170,7 @@ class FirebaseRepository @Inject constructor(
         return withContext(Dispatchers.IO) {
             firestore.collection(Constants.COLLECT_APPOINTMENT)
                 .whereEqualTo("state", State.FINALIZADO.name)
-                .whereEqualTo("uidUser", auth.currentUser!!.email).get().await()
+                .whereEqualTo("uidUser", auth.currentUser!!.uid).get().await()
         }
     }
 
@@ -239,6 +239,12 @@ class FirebaseRepository @Inject constructor(
     override suspend fun setResultAppointment(resultAppointment: ResultAppointment): Task<*> {
         return withContext(Dispatchers.IO) {
             firestore.collection(Constants.COLLECT_RESULT_APPOINTMENT).document(resultAppointment.appointmentUserModel.dc).set(resultAppointment)
+        }
+    }
+
+    override suspend fun getResultAppointment(dc: String): DocumentSnapshot {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_RESULT_APPOINTMENT).document(dc).get().await()
         }
     }
 

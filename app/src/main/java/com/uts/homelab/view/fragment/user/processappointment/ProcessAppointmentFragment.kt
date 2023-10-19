@@ -256,7 +256,7 @@ class ProcessAppointmentFragment : Fragment(), OnMapReadyCallback {
     private fun clear() {
         viewModel.isProgress.value = null
         viewModel.modelAppointment.value = null
-
+        viewModel.modelWorkingDay.value = null
     }
 
     override fun onDestroyView() {

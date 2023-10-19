@@ -1,8 +1,11 @@
 package com.uts.homelab.network.dataclass
 
-data class ResultAppointment(
-    var description:String = "",
-    var result:String = "",
-    var tsResult:String = "",
-    val appointmentUserModel: AppointmentUserModel
-)
+ class ResultAppointment{
+     var description:String = ""
+     var result:String = ""
+     var tsResult:String = ""
+     var appointmentUserModel: AppointmentUserModel = AppointmentUserModel()
+
+
+ }
+

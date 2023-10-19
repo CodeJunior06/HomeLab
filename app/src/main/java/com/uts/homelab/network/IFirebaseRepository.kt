@@ -55,5 +55,5 @@ interface IFirebaseRepository {
     suspend fun getAllNursesByJournal() : QuerySnapshot
 
     suspend fun setResultAppointment(resultAppointment: ResultAppointment): Task<*>
-
+    suspend fun getResultAppointment(dc:String) : DocumentSnapshot
 }
