@@ -239,53 +239,55 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/data"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRegresar"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="5"
+                    android:paddingVertical="13dp"
+                    android:text="Regresar "
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textColor="@color/blue_hospital"
+                    android:textSize="16dp"
+                    app:cornerRadius="16dp" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRegister"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:backgroundTint="@color/blue_hospital"
+                    android:paddingVertical="13dp"
+                    android:text="Registrar"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:cornerRadius="16dp" />
+
+
+            </LinearLayout>
         </LinearLayout>
+
+
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/llButtons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/data"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegresar"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="5"
-            android:paddingVertical="13dp"
-            android:text="Regresar "
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:textColor="@color/blue_hospital"
-            android:textSize="16dp"
-            app:cornerRadius="16dp" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegister"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:backgroundTint="@color/blue_hospital"
-            android:paddingVertical="13dp"
-            android:text="Registrar"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:cornerRadius="16dp" />
-
-
-    </LinearLayout>
 
 
 </RelativeLayout>

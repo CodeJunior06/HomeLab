@@ -185,10 +185,11 @@ class ResultUserFragment : Fragment() {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val image = Image.getInstance(stream.toByteArray())
             image.alignment = Element.ALIGN_CENTER
+            image.setDpi(100,100)
             document.add(image)
             // Agregar el título al PDF
             val titleFont = Font(Font.FontFamily.TIMES_ROMAN, 27f, Font.BOLD)
-            val titleParagraph = Paragraph("Resultado de la muestra", titleFont)
+            val titleParagraph = Paragraph("Resultado de la muestra de ${resultAppointment.appointmentUserModel.typeOfExam}", titleFont)
             titleParagraph.alignment = Element.ALIGN_CENTER
             titleParagraph.spacingBefore = 10f // Espacio después del título
             document.add(titleParagraph)
@@ -204,6 +205,16 @@ class ResultUserFragment : Fragment() {
             titleParagraphResult.alignment = Element.ALIGN_LEFT
             titleParagraphResult.spacingBefore = 10f // Espacio después del título
             document.add(titleParagraphResult)
+
+            val titleParagraphResult1 = Paragraph("PACIENTE: "+resultAppointment.appointmentUserModel.modelUser.name + " "+ resultAppointment.appointmentUserModel.modelUser.lastName, titleResult)
+            titleParagraphResult1.alignment = Element.ALIGN_LEFT
+            titleParagraphResult1.spacingBefore = 10f // Espacio después del título
+            document.add(titleParagraphResult1)
+
+            val titleParagraphResult2 = Paragraph("ENFERMERO: "+resultAppointment.appointmentUserModel.modelNurse.name + " "+ resultAppointment.appointmentUserModel.modelNurse.lastName, titleResult)
+            titleParagraphResult2.alignment = Element.ALIGN_LEFT
+            titleParagraphResult2.spacingBefore = 10f // Espacio después del título
+            document.add(titleParagraphResult2)
 
             document.close()
 

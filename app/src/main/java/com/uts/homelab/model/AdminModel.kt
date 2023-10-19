@@ -288,10 +288,10 @@ class AdminModel @Inject constructor(
         return kotlin.runCatching {
             val model = ResultAppointment()
             model.appointmentUserModel = appointment
-            model.description = ""
+            model.description = "Hola Santi, Cris me pregunto algo sobre un desarrollo que quería preguntarte, no es lo de la webviews, es otro pero no recuerdo cual, si puedes le actualizas como va eso. Por el lado del webview ya le dije que voy a intentarlo ver yo mañana ya que igual no has visto mucho de webviews y estas full con Vivo, sino me da tiempo, el mismo Cris nos va a apoyar con eso de Webview para igual no saturarte con muchas cosas ok."
             model.result =
                 "es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen"
-            model.tsResult = Utils.getCurrentTime()
+            model.tsResult = Utils.getCurrentDateTime()
 
             firebaseRepository.setResultAppointment(model)
         }.fold(
@@ -301,6 +301,7 @@ class AdminModel @Inject constructor(
             onFailure = { ManagerError.Error(Utils.messageErrorConverter(it.message!!)) }
         )
     }
+
 
     private suspend fun updateStateAppointment(appointment: AppointmentUserModel): ManagerError {
 

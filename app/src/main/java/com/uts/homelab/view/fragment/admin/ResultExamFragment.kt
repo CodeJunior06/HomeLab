@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentResultExamBinding
@@ -32,6 +35,17 @@ class ResultExamFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val onBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                clear()
+                findNavController().popBackStack()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBack)
+
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.blue_hospital)
 
         viewModel.getAppointmentLaboratory()
         setObserver()
@@ -57,6 +71,8 @@ class ResultExamFragment : Fragment() {
 
         viewModel.rvAppointmentUserModel.observe(viewLifecycleOwner){
             if(it == null ) return@observe
+
+            binding.countPending.text = it.size.toString()
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
             binding.rvAppointment.adapter = AdapterUserResult(it,Rol.ADMIN){
                 viewModel.sendResult(it)
@@ -92,6 +108,16 @@ class ResultExamFragment : Fragment() {
                 "InformationFragment"
             )
         }
+    }
+    fun clear(){
+     viewModel.rvAppointmentUserModel.value = null
+     viewModel.informationFragment.value = null
+     viewModel.isProgress.value =null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clear()
     }
 
 }
