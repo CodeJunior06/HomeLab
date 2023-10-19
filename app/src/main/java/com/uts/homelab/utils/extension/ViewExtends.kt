@@ -16,6 +16,7 @@ fun Activity.toastMessage(message: String) {
 
 fun Activity.intentToUserHome() {
     startActivity(Intent(this, UserActivity::class.java))
+    finish()
 }
 
 fun Activity.intentToAdminHome() {

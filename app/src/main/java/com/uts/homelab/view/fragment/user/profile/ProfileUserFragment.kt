@@ -103,6 +103,7 @@ class ProfileUserFragment : Fragment() {
         }
 
         viewModel.exitSession.observe(viewLifecycleOwner){
+            if(it == null) return@observe
             intentToMain()
         }
 

@@ -73,7 +73,6 @@
                     android:id="@+id/typeDocumentNurse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:textStyle="bold"
                     android:text="Numero Documento"
@@ -84,7 +83,8 @@
                     android:id="@+id/DocumentNurse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
+
                     android:layout_weight="3"
                     android:text="Ver y Editar datos"
                     android:textColor="@color/black"
@@ -152,34 +152,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:text="Ubicacion"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnChangeLocation"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="3"
-                    android:text="Cambiar localizacion"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
@@ -228,6 +200,7 @@
                     android:layout_marginEnd="10dp"
                     android:paddingStart="15dp"
                     android:layout_weight="3"
+                    android:inputType="number"
                     android:nextFocusForward="@id/expNurse"
                     android:background="@drawable/edit_text_round"
                     android:hint="  Ver y Editar datos"
@@ -259,6 +232,7 @@
                     android:layout_marginEnd="10dp"
                     android:paddingStart="15dp"
                     android:layout_weight="3"
+                    android:inputType="number"
                     android:nextFocusForward="@id/idMotorcycle"
                     android:background="@drawable/edit_text_round"
                     android:hint="  Ver y Editar datos"
@@ -277,7 +251,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="7"
                     android:text="ID Moto"
                     android:textColor="@color/black"
