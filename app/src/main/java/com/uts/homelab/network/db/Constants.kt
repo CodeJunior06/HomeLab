@@ -7,6 +7,7 @@ class Constants {
         const val COLLECT_ADMIN = "Admins"
         const val COLLECT_APPOINTMENT = "Appointment"
         const val COLLECT_WORKING_DAY = "WorkingDay"
+        const val COLLECT_RESULT_APPOINTMENT = "ResultAppointment"
         const val APPOINTMENT_UID_NURSE = "uidNurse"
         const val APPOINTMENT_UID_USER = "uidUser"
 

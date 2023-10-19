@@ -2,13 +2,47 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/blue_hospital"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.nurse.NurseHistoryFragment">
+    tools:context=".view.fragment.user.ResultUserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hello_blank_fragment" />
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="30dp"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/only_corner_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:id="@+id/text_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_history"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/blue_hospital"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="8dp" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:id="@+id/rvAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </FrameLayout>

@@ -9,8 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentResultExamBinding
+import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.dialog.InformationFragment
 import com.uts.homelab.utils.dialog.ProgressFragment
+import com.uts.homelab.view.adapter.AdapterUserResult
 import com.uts.homelab.viewmodel.AdminViewModel
 import java.util.*
 
@@ -56,7 +58,9 @@ class ResultExamFragment : Fragment() {
         viewModel.rvAppointmentUserModel.observe(viewLifecycleOwner){
             if(it == null ) return@observe
             binding.rvAppointment.layoutManager = LinearLayoutManager(requireContext())
-//            binding.rvAppointment.adapter = AdapterNurseWorkingDay(it)
+            binding.rvAppointment.adapter = AdapterUserResult(it,Rol.ADMIN){
+                viewModel.sendResult(it)
+            }
         }
 
         viewModel.informationFragment.observe(viewLifecycleOwner){

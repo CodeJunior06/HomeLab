@@ -206,7 +206,7 @@ class NurseModel @Inject constructor(
     suspend fun setOpinion(type: String, message: String, title: String): Any {
         val model = CommentType()
         val utils = Utils()
-        val roomModel = roomRepository.userSessionDao().getUserAuth()
+        val roomModel = roomRepository.nurseSessionDao().getUserAuth()
 
         model.id = roomModel.uid
         model.message = message
@@ -234,5 +234,28 @@ class NurseModel @Inject constructor(
             e.printStackTrace()
         }
     }
+
+    suspend fun getAllAppointmentByNurse(): ManagerAppointmentUserModel {
+            return runCatching {
+                firebaseRepository.getAllAppointment(Constants.APPOINTMENT_UID_NURSE)
+            }.fold(
+                onSuccess = {
+
+                    val lst = arrayListOf<AppointmentUserModel>()
+                    for(index in 0 until it.documents.size){
+                        val rta =  it.documents[index].id
+                        val res = it.documents[index].toObject(AppointmentUserModel::class.java)
+                        if (res != null) {
+                            res.dc = rta
+                            lst.add(res)
+                        }
+                    }
+
+                    ManagerAppointmentUserModel.Success(lst)
+                },
+                onFailure = { ManagerAppointmentUserModel.Error(Utils.messageErrorConverter(it.message!!)) }
+            )
+        }
+
 
 }

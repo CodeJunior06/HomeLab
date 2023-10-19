@@ -255,7 +255,7 @@ class UserModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAppointmentAllByUser(): ManagerError {
         return runCatching {
-            firebaseRepository.getAppointmentAllByUser()
+            firebaseRepository.getAllAppointment(Constants.APPOINTMENT_UID_USER)
         }.fold(
             onSuccess = {
                 /*

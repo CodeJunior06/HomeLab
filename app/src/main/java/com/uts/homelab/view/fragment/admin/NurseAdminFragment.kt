@@ -28,8 +28,15 @@ import com.uts.homelab.databinding.FragmentNurseAdminBinding
 import com.uts.homelab.network.dataclass.NurseLocation
 import com.uts.homelab.network.dataclass.WorkingDayNurse
 import com.uts.homelab.utils.Utils
+import com.uts.homelab.utils.dialog.InformationFragment
+import com.uts.homelab.utils.dialog.ProgressFragment
 import com.uts.homelab.viewmodel.AdminViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class NurseAdminFragment : Fragment(), OnMapReadyCallback {
@@ -39,12 +46,13 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val map = mapOf<String, Marker>()
-
     private val viewModel: AdminViewModel by activityViewModels()
+
+    private val progressDialog = ProgressFragment()
+    private val informationFragment = InformationFragment()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentNurseAdminBinding.inflate(inflater, container, false)
         return binding.root
@@ -101,11 +109,11 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 5))
             viewModel.initAsync()
 
-            googleMap.setOnInfoWindowClickListener {
-                val nurse = it.tag as NurseLocation
+            googleMap.setOnInfoWindowClickListener { marker ->
+                val nurse = marker.tag as NurseLocation
                 val l = LatLng(
-                    nurse.geolocation.latitude!!.toDouble(),
-                    nurse.geolocation.longitude!!.toDouble()
+                    nurse.geolocation.latitude.toDouble(),
+                    nurse.geolocation.longitude.toDouble()
                 )
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(l, 17F))
             }
@@ -120,16 +128,61 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.modelNurseLocation.observe(viewLifecycleOwner) {
-            if(it==null) return@observe
+            if (it == null) return@observe
             markOnMap(it, null)
+        }
+
+        viewModel.informationFragment.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+
+
+            informationFragment.getInstance(
+                getString(R.string.attention),
+                it
+            )
+
+            val timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    informationFragment.dismiss()
+                }
+            }, 3000)
+
+            informationFragment.showNow(
+                childFragmentManager,
+                javaClass.simpleName
+            )
+        }
+        viewModel.isProgress.observe(viewLifecycleOwner){
+            if (it == null) return@observe
+
+            when (it.first) {
+                true -> {
+                    if (progressDialog.fragmentManager !=null) {
+                        progressDialog.dismissNow()
+                    }
+
+                    progressDialog.showNow(
+                        requireActivity().supportFragmentManager,
+                        "ProgressDialog"
+                    )
+                }
+                false -> {
+                    if (progressDialog.isVisible) {
+                        progressDialog.dismiss()
+                    }
+
+                }
+            }
+
         }
 
     }
 
     private fun markOnMap(nurseLocation: NurseLocation, builder: LatLngBounds.Builder?) {
         val l = LatLng(
-            nurseLocation.geolocation.latitude!!.toDouble(),
-            nurseLocation.geolocation.longitude!!.toDouble()
+            nurseLocation.geolocation.latitude.toDouble(),
+            nurseLocation.geolocation.longitude.toDouble()
         )
         val mark = googleMap.addMarker(
             MarkerOptions()
@@ -165,8 +218,8 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
             if (it.first.uidWorking == workingDay.id) {
                 bool = true
                 val l = LatLng(
-                    workingDay.geolocation.latitude!!.toDouble(),
-                    workingDay.geolocation.longitude!!.toDouble()
+                    workingDay.geolocation.latitude.toDouble(),
+                    workingDay.geolocation.longitude.toDouble()
                 )
                 it.second.position = l
 
@@ -213,6 +266,8 @@ class NurseAdminFragment : Fragment(), OnMapReadyCallback {
         viewModel.listNurseLocation.value = null
         viewModel.uidChange.value = null
         viewModel.modelNurseLocation.value = null
+        viewModel.informationFragment.value = null
+        viewModel.isProgress.value = null
     }
 
 }

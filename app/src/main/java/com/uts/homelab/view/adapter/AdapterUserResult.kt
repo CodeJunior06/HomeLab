@@ -33,7 +33,11 @@ class AdapterUserResult(
         @RequiresApi(Build.VERSION_CODES.O)
         private fun getView(typeUser: Rol, appointmentModel: AppointmentUserModel) {
             val hour = appointmentModel.hour.split(" : ")[0]
-            val minute = appointmentModel.hour.split(" : ")[0]
+            val minute = appointmentModel.hour.split(" : ")[1]
+
+            if(typeUser == Rol.ADMIN){
+                binding.btnDowloadPdf.text = "Enviar Resultados"
+            }
 
             binding.name.text =
                 if (typeUser == Rol.USER)

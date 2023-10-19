@@ -57,7 +57,7 @@
     <string name="register_user_firestore">Registrando Usuario en el sistema...</string>
 
     <string name="is_user_add">El usuario fue registrado con satisfaccion</string>
-    <string name="is_nurse_add">El enfermero fue registrado con satisfaccion</string>
+    <string name="is_nurse_add">El enfermero fue registrado con satisfacción</string>
     <string name="attention">Atención</string>
     <string name="correct">Exito</string>
 

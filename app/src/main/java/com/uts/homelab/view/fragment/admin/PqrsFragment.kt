@@ -5,10 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentPqrsBinding
+import com.uts.homelab.network.dataclass.CommentType
 import com.uts.homelab.utils.Opinion
 import com.uts.homelab.utils.Rol
 import com.uts.homelab.utils.dialog.InformationFragment
@@ -30,18 +34,28 @@ class PqrsFragment : Fragment() {
     private var typeOpinion: String? = null
     private var boolTypeOpinion: Int = 0
 
+    private var listAllCommentType = listOf<CommentType>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentPqrsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.blue_hospital)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            clear()
+            findNavController().popBackStack()
+        }
+
         viewModel.getAllPQRS()
-        setObserver()
+        seeObserver()
 
 
         binding.cardNurse.setOnClickListener {
@@ -57,6 +71,7 @@ class PqrsFragment : Fragment() {
             }
             binding.cardNurse.alpha = 1.0f
             binding.cardUser.alpha = 0.5f
+            changeRv()
         }
         binding.cardUser.setOnClickListener {
             if (typeRol.isNullOrEmpty()) {
@@ -65,12 +80,13 @@ class PqrsFragment : Fragment() {
             } else {
                 if (boolTypeRol == 1) {
                     boolTypeRol = 2
-                    typeRol =Rol.USER.name
+                    typeRol = Rol.USER.name
 
                 }
             }
             binding.cardUser.alpha = 1.0f
             binding.cardNurse.alpha = 0.5f
+            changeRv()
         }
 
         binding.itemProblem.setOnClickListener {
@@ -87,6 +103,8 @@ class PqrsFragment : Fragment() {
             binding.itemProblem.alpha = 1.0f
             binding.itemImprovement.alpha = 0.5f
             binding.itemProblemAppointment.alpha = 0.5f
+
+            changeRv()
         }
 
         binding.itemImprovement.setOnClickListener {
@@ -102,6 +120,7 @@ class PqrsFragment : Fragment() {
             binding.itemImprovement.alpha = 1.0f
             binding.itemProblem.alpha = 0.5f
             binding.itemProblemAppointment.alpha = 0.5f
+            changeRv()
         }
 
         binding.itemProblemAppointment.setOnClickListener {
@@ -117,11 +136,35 @@ class PqrsFragment : Fragment() {
             binding.itemProblemAppointment.alpha = 1.0f
             binding.itemProblem.alpha = 0.5f
             binding.itemImprovement.alpha = 0.5f
+            changeRv()
         }
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun setObserver() {
+    private fun changeRv() {
+        val lstTemporal = arrayListOf<CommentType>()
+        viewModel.lstAllCommentType.value!!.forEach {
+
+            if (typeRol == null) {
+                if (it.type == (typeOpinion ?: "")) {
+                    lstTemporal.add(it)
+                }
+            } else if (typeOpinion == null) {
+                if (it.rol == (typeRol ?: "")) {
+                    lstTemporal.add(it)
+                }
+            } else {
+                if (it.rol == (typeRol ?: "") && it.type == (typeOpinion ?: "")) {
+                    lstTemporal.add(it)
+                }
+            }
+
+
+        }
+        viewModel.rvCommentType.value = lstTemporal
+    }
+
+    private fun seeObserver() {
         viewModel.isProgress.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
@@ -175,6 +218,8 @@ class PqrsFragment : Fragment() {
 
         viewModel.rvCommentType.observe(viewLifecycleOwner) {
             if (it == null) return@observe
+
+
             binding.rvCommentType.layoutManager = LinearLayoutManager(requireContext())
             binding.rvCommentType.adapter = AdapterPQRS(it)
         }
@@ -183,7 +228,10 @@ class PqrsFragment : Fragment() {
     }
 
     private fun clear() {
-        TODO("Not yet implemented")
+        viewModel.isProgress.value = null
+        viewModel.rvCommentType.value = null
+        viewModel.informationFragment.value = null
+        viewModel.lstAllCommentType.value = null
     }
 
 

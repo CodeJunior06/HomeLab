@@ -152,9 +152,9 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    override suspend fun getAppointmentAllByUser(): QuerySnapshot {
+    override suspend fun getAllAppointment(typeUser: String): QuerySnapshot {
         return withContext(Dispatchers.IO) {
-            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo("uidUser", auth.uid)
+            firestore.collection(Constants.COLLECT_APPOINTMENT).whereEqualTo(typeUser, auth.uid)
                 .get().await()
         }
     }
@@ -235,6 +235,13 @@ class FirebaseRepository @Inject constructor(
             firestore.collection(Constants.COLLECT_WORKING_DAY).get().await()
         }
     }
+
+    override suspend fun setResultAppointment(resultAppointment: ResultAppointment): Task<*> {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(Constants.COLLECT_RESULT_APPOINTMENT).document(resultAppointment.appointmentUserModel.dc).set(resultAppointment)
+        }
+    }
+
     private lateinit var rl:ListenerRegistration
     fun realTimeWorkingDayAllCollection(onCall: (WorkingDayNurse) -> Unit) {
         rl = firestore.collection(Constants.COLLECT_WORKING_DAY).addSnapshotListener { snapshot, e ->
@@ -253,6 +260,7 @@ class FirebaseRepository @Inject constructor(
                             javaClass.name,
                             "Modified document from WorkingDay: ${dc.document.id}"
                         )
+
                         val model = dc.document.toObject(WorkingDayNurse::class.java)
                         onCall(model)
                     }

@@ -37,7 +37,7 @@ interface IFirebaseRepository {
 
 
     suspend fun getAppointmentByDate(date:String,typeUser:String) : QuerySnapshot
-    suspend fun getAppointmentAllByUser() : QuerySnapshot
+    suspend fun getAllAppointment(typeUser: String) : QuerySnapshot
     suspend fun getAppointmentStateLaboratory() : QuerySnapshot
     suspend fun getAppointmentStateFinish() : QuerySnapshot
 
@@ -53,5 +53,7 @@ interface IFirebaseRepository {
 
     suspend fun getNursesActiveByJournal() : QuerySnapshot
     suspend fun getAllNursesByJournal() : QuerySnapshot
+
+    suspend fun setResultAppointment(resultAppointment: ResultAppointment): Task<*>
 
 }

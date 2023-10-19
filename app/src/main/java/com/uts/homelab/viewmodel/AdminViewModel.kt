@@ -38,6 +38,7 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
 
     //MODULE PQRS
     val rvCommentType = MutableLiveData<List<CommentType>>()
+    val lstAllCommentType = MutableLiveData<List<CommentType>>()
 
     //MODULE LABORATORIO
     val rvAppointmentUserModel = MutableLiveData<List<AppointmentUserModel>>()
@@ -153,6 +154,7 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
                 is ManagerError.Error -> {
                     isProgress.postValue(Pair(false, 0))
                     informationFragment.postValue(res.error)
+                    initAsync()
                 }
 
             }
@@ -166,7 +168,12 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
             when (val res = adminModel.getNurseAvailableByListIds(listOf(workingDay))) {
                 is ManagerError.Success -> {
                     isProgress.postValue(Pair(false, 0))
-                    modelNurseLocation.postValue((res.modelSuccess as ArrayList<NurseLocation>)[0])
+                    val rta = res.modelSuccess as ArrayList<NurseLocation>
+
+                    if(rta.isNotEmpty()){
+                        modelNurseLocation.postValue(res.modelSuccess[0])
+                    }
+
                 }
                 is ManagerError.Error -> {
                     Log.e(javaClass.name, res.error)
@@ -201,6 +208,7 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
                 is ManagerCommentType.Success -> {
                     isProgress.postValue(Pair(false, 0))
                     rvCommentType.postValue(res.modelSuccess)
+                    lstAllCommentType.postValue(res.modelSuccess)
                 }
                 is ManagerCommentType.Error -> {
                     isProgress.postValue(Pair(false, 0))
@@ -240,5 +248,23 @@ class AdminViewModel @Inject constructor(private val adminModel: AdminModel) : V
     }
     fun stopAsync() {
         adminModel.stopAsync()
+    }
+
+    fun sendResult(appointmentModel: AppointmentUserModel) {
+        isProgress.value = Pair(true, 1)
+
+        viewModelScope.launch {
+            when (val res = adminModel.createResultAppointment(appointmentModel)) {
+                is ManagerError.Success -> {
+                    isProgress.postValue(Pair(false, 0))
+                    getAppointmentLaboratory()
+                }
+                is ManagerError.Error -> {
+                    isProgress.postValue(Pair(false, 0))
+                    informationFragment.postValue(res.error)
+                }
+
+            }
+        }
     }
 }

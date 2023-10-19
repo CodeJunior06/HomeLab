@@ -56,6 +56,23 @@ class NurseViewModel @Inject constructor(private val model:NurseModel): ViewMode
             }
         }
     }
+    fun getAllAppointment() {
+        progressDialog.value = true
+        viewModelScope.launch {
+            when (val res = model.getAllAppointmentByNurse()) {
+                is ManagerAppointmentUserModel.Success -> {
+                    setRecycler.postValue(res.modelSuccess)
+                    progressDialog.postValue(false)
+                }
+                is ManagerAppointmentUserModel.Error -> {
+                    setRecycler.postValue(emptyList())
+                    progressDialog.postValue(false)
+                    informationFragment.postValue("No has realizado la primera cita")
+                }
+            }
+        }
+    }
+
 
     fun setModel(nurseModel: NurseRegister?) {
         this.nurseModel.value = nurseModel!!

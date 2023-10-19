@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.uts.homelab.R
 import com.uts.homelab.databinding.FragmentAdminProfileBinding
@@ -32,14 +34,21 @@ class AdminProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.blue_hospital)
 
-        adminViewModel.getProfileInfo()
-
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            clear()
+            findNavController().popBackStack()
+        }
         binding.btnExit.setOnClickListener {
             adminViewModel.deleteUserSession()
         }
 
+        binding.btnGoBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        adminViewModel.getProfileInfo()
         setObserver()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -64,7 +73,6 @@ class AdminProfileFragment : Fragment() {
             when (it.first) {
                 true -> {
                     if (progressDialog.isVisible) {
-
                         progressDialog.dismiss()
                     }
                     progressDialog.show(
@@ -73,19 +81,23 @@ class AdminProfileFragment : Fragment() {
                     )
                 }
                 false -> {
-                    if (progressDialog.isVisible) {
                         progressDialog.dismiss()
-                    }
-
                 }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        adminViewModel.isProgress.value  = Pair(false,0)
+    }
+    fun clear(){
+        adminViewModel.isProgress.value = null
+        adminViewModel.isUserAuth.value = null
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-        adminViewModel.isProgress.value = null
     }
 
 }
